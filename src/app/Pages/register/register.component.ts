@@ -3,22 +3,23 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../Shared/services/auth.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, CommonModule,RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './register.component.html',
 })
 export class RegisterComponent {
-  user = {
-    username: '',
-    password: '',
-    email: ''
+  user: User = {
+    name: '',
+    email: '',
+    password: ''
   };
 
-  successMessage: string = '';
-  errorMessage: string = '';
+  successMessage = '';
+  errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 

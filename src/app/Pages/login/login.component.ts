@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../Shared/services/auth.service';
-import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +11,8 @@ import { User } from '../../models/user.model';
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
-  user: User = {
-    username: '',
+  user = {
+    email: '',
     password: ''
   };
 

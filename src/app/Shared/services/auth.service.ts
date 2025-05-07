@@ -13,14 +13,15 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   // Método para hacer login
-  login(user: User): Observable<any> {
-    const endpoint = '/users/login'; 
-    return this.http.post<any>(this.apiUrl + endpoint, user); 
+  
+  login(user: { email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, user);
   }
 
-  register(user: { username: string, password: string, email: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users/`, user);
+  register(user: User): Observable<any> {
+    return this.http.post(`${this.apiUrl}`, user);
   }
+
 
   resetPassword(email: string, newPassword: string): Observable<any> {
     const body = {
