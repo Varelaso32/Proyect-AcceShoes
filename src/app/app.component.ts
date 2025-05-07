@@ -1,25 +1,13 @@
 import { Component } from '@angular/core';
-
-import { BrowserModule } from '@angular/platform-browser';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io'; 
-import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-
-
-const config: SocketIoConfig = {
-  url: 'http://localhost:3000',  // Dirección de tu servidor WebSocket
-  options: {}
-};
+import { NavbarComponent } from '../app/Shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    BrowserModule,
-    CommonModule, 
-    RouterOutlet,
-  ],
+  imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-
-export class AppComponent {}
+export class AppComponent {
+  title = 'AcceShoes';
+}
