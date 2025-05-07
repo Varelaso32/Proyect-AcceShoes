@@ -1,0 +1,45 @@
+<div class="form-signin">
+    <div class="w-50 m-auto text-center">
+      <img
+        class="mb-4 d-block m-auto"
+        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
+        alt=""
+        width="150"
+        height="150"
+      />
+      <h1 class="h3 mb-3 fw-normal">Login</h1>
+  
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control mt-4"
+            id="floatingInput"
+            placeholder="username"
+            formControlName="username"
+          />
+          <label for="floatingInput">Username</label>
+        </div>
+        <div class="form-floating">
+          <input
+            type="password"
+            class="form-control mt-4"
+            id="floatingPassword"
+            placeholder="Password"
+            formControlName="password"
+          />
+  
+          <label for="floatingPassword">Password</label>
+        </div>
+  
+        <!-- <div class="checkbox mb-3">
+        <label> <input type="checkbox" value="remember-me" /> Remember me </label>
+      </div> -->
+  
+        <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">
+          Sign in
+        </button>
+      </form>
+    </div>
+  </div>
+  
