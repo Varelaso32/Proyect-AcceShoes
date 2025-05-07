@@ -1,0 +1,100 @@
+<div class="carousel-container">
+    <div class="carousel rounded-box w-64">
+
+        <!-- Primer Slide -->
+        <div class="carousel-item relative w-full" [class.active]="currentSlideIndex === 0">
+            <div class="card w-full bg-base-200 shadow-xl">
+                <figure><img [src]="slides[0].imageUrl" class="w-full" alt="Imagen 1" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">{{ slides[0].title }}</h2>
+                    <p>{{ slides[0].description }}</p>
+                    <button class="btn btn-primary">Ver más</button>
+                </div>
+                <!-- Botones de navegación dentro de la card -->
+                <div class="carousel-controls absolute inset-0 flex items-center justify-between px-4">
+                    <button (click)="prevSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❮</button>
+                    <button (click)="nextSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❯</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segundo Slide -->
+        <div class="carousel-item relative w-full" [class.active]="currentSlideIndex === 1">
+            <div class="card w-full bg-base-200 shadow-xl">
+                <figure><img [src]="slides[1].imageUrl" class="w-full" alt="Imagen 2" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">{{ slides[1].title }}</h2>
+                    <p>{{ slides[1].description }}</p>
+                    <button class="btn btn-primary">Ver más</button>
+                </div>
+                <!-- Botones de navegación dentro de la card -->
+                <div class="carousel-controls absolute inset-0 flex items-center justify-between px-4">
+                    <button (click)="prevSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❮</button>
+                    <button (click)="nextSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❯</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tercer Slide -->
+        <div class="carousel-item relative w-full" [class.active]="currentSlideIndex === 2">
+            <div class="card w-full bg-base-200 shadow-xl">
+                <figure><img [src]="slides[2].imageUrl" class="w-full" alt="Imagen 3" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">{{ slides[2].title }}</h2>
+                    <p>{{ slides[2].description }}</p>
+                    <button class="btn btn-primary">Ver más</button>
+                </div>
+                <!-- Botones de navegación dentro de la card -->
+                <div class="carousel-controls absolute inset-0 flex items-center justify-between px-4">
+                    <button (click)="prevSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❮</button>
+                    <button (click)="nextSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❯</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cuarto Slide -->
+        <div class="carousel-item relative w-full" [class.active]="currentSlideIndex === 3">
+            <div class="card w-full bg-base-200 shadow-xl">
+                <figure><img [src]="slides[3].imageUrl" class="w-full" alt="Imagen 4" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">{{ slides[3].title }}</h2>
+                    <p>{{ slides[3].description }}</p>
+                    <button class="btn btn-primary">Ver más</button>
+                </div>
+                <!-- Botones de navegación dentro de la card -->
+                <div class="carousel-controls absolute inset-0 flex items-center justify-between px-4">
+                    <button (click)="prevSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❮</button>
+                    <button (click)="nextSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❯</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quinto Slide -->
+        <div class="carousel-item relative w-full" [class.active]="currentSlideIndex === 4">
+            <div class="card w-full bg-base-200 shadow-xl">
+                <figure><img [src]="slides[4].imageUrl" class="w-full" alt="Imagen 5" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">{{ slides[4].title }}</h2>
+                    <p>{{ slides[4].description }}</p>
+                    <button class="btn btn-primary">Ver más</button>
+                </div>
+                <!-- Botones de navegación dentro de la card -->
+                <div class="carousel-controls absolute inset-0 flex items-center justify-between px-4">
+                    <button (click)="prevSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❮</button>
+                    <button (click)="nextSlide()"
+                        class="btn btn-circle text-white bg-black hover:bg-gray-800">❯</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

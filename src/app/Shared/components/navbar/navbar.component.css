@@ -1,0 +1,14 @@
+/* Transiciones suaves para el botón y el campo de búsqueda */
+.search-btn {
+  transition: margin-left 0.3s ease-in-out;
+}
+
+input {
+  transition: width 0.3s ease-in-out;
+}
+
+/* Aseguramos que el botón de búsqueda y el input estén en el mismo nivel */
+.relative {
+  display: flex;
+  align-items: center;
+}
