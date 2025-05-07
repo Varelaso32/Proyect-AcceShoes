@@ -1,0 +1,54 @@
+<div class="h-screen bg-gray-800 flex items-center justify-center overflow-hidden">
+    <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+      <div class="text-center mb-8">
+        <img
+          class="mb-6 mx-auto"
+          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
+          alt="Logo"
+          width="150"
+          height="150"
+        />
+        <h1 class="text-3xl font-semibold text-cyan-600">Login</h1>
+      </div>
+  
+      <form (ngSubmit)="onSubmit()" class="space-y-6">
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            [(ngModel)]="user.username"
+            required
+            class="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Enter your username"
+          />
+        </div>
+  
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="user.password"
+            required
+            class="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Enter your password"
+          />
+        </div>
+  
+        <button
+          type="submit"
+          class="w-full py-3 mt-6 bg-cyan-600 text-white rounded-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        >
+          Sign in
+        </button>
+      </form>
+  
+      <div class="text-center mt-4">
+        <a href="#" class="text-sm text-cyan-600 hover:text-cyan-700">Forgot your password?</a>
+      </div>
+    </div>
+  </div>
+  
