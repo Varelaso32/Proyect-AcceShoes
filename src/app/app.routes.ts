@@ -1,14 +1,12 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from '../app/Pages/home/home.component';
 import { TxtInputComponent } from '../app/Shared/components/txt-input/txt-input.component';
-import { BtnButtonComponent } from '../app/Shared/components/btn-button/btn-button.component';
 import { ChatMessageComponent } from '../app/Shared/components/chat-message/chat-message.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirección por defecto a Home
     { path: 'home', component: HomeComponent },
     { path: 'input', component: TxtInputComponent },
-    { path: 'button', component: BtnButtonComponent },
     { path: 'chat', component: ChatMessageComponent },
     { path: '**', redirectTo: 'home' }, // Ruta comodín para rutas no válidas
 ];
