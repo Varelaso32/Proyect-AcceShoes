@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
+import { CarruselComponent } from '../../Shared/components/carrusel/carrusel.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, CommonModule],
+  imports: [CommonModule, CarruselComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
