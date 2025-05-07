@@ -1,0 +1,18 @@
+<!-- src/app/chat/chat.component.html -->
+<div class="chat-container">
+    <div class="chat" *ngFor="let message of messages">
+        <div class="chat-image avatar">
+            <div class="w-10 rounded-full">
+                <img [src]="message.avatar" alt="User Avatar" />
+            </div>
+        </div>
+        <div class="chat-header">
+            {{ message.sender }}
+            <time class="text-xs opacity-50">{{ message.time }}</time>
+        </div>
+        <div class="chat-bubble">{{ message.text }}</div>
+        <div class="chat-footer opacity-50">Delivered</div>
+    </div>
+</div>
+
+<input [(ngModel)]="newMessage" (keydown.enter)="sendMessage()" placeholder="Escribe un mensaje" />
