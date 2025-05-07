@@ -15,4 +15,12 @@ export const routes: Routes = [
         './Pages/config/politica-privacidad/politica-privacidad.component'
       ).then((m) => m.PoliticaPrivacidadComponent),
   },
+  {
+    path: 'terminos-condiciones',
+    title: 'Términos y Condiciones',
+    loadComponent: () =>
+      import(
+        './Pages/config/terminos-condiciones/terminos-condiciones.component'
+      ).then((m) => m.TerminosCondicionesComponent),
+  },
 ];
