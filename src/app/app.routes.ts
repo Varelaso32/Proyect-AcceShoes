@@ -23,4 +23,5 @@ export const routes: Routes = [
         './Pages/config/terminos-condiciones/terminos-condiciones.component'
       ).then((m) => m.TerminosCondicionesComponent),
   },
+  
 ];
