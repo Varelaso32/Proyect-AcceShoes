@@ -1,14 +1,27 @@
 import { Component } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { ViewportScroller } from '@angular/common';
+import { filter } from 'rxjs/operators';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from '../app/Shared/components/navbar/navbar.component';
-import { FooterComponent } from './Shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, FooterComponent],
+  standalone: true,
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'AcceShoes';
+
+  constructor(
+    private router: Router,
+    private viewportScroller: ViewportScroller
+  ) {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      });
+  }
 }
