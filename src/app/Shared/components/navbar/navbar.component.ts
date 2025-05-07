@@ -23,15 +23,15 @@ export class NavbarComponent {
     // Si el campo de búsqueda está oculto, lo mostramos
     if (searchElement.classList.contains('hidden')) {
       this.renderer.removeClass(searchElement, 'hidden');
-      this.renderer.addClass(searchButton, 'ml-12'); // Mover el botón y el input juntos
-      this.renderer.addClass(searchElement, 'w-64'); // Aumentar el ancho del input
-      this.renderer.addClass(searchButton, 'mr-2'); // Agregar un margen al botón
+      this.renderer.addClass(searchButton, 'ml-12'); 
+      this.renderer.addClass(searchElement, 'w-64');
+      this.renderer.addClass(searchButton, 'mr-2');
     } else {
       // Si ya está visible, lo ocultamos
       this.renderer.addClass(searchElement, 'hidden');
-      this.renderer.removeClass(searchButton, 'ml-12'); // Mover el botón de vuelta
-      this.renderer.removeClass(searchElement, 'w-64'); // Reducir el ancho del input
-      this.renderer.removeClass(searchButton, 'mr-2'); // Eliminar el margen extra
+      this.renderer.removeClass(searchButton, 'ml-12'); 
+      this.renderer.removeClass(searchElement, 'w-64'); 
+      this.renderer.removeClass(searchButton, 'mr-2');
     }
   }
 }
