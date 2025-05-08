@@ -1,14 +1,20 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { BaseHttpService } from '../services/base-http.service';
 import { Observable, of, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 const STORE_KEY = 'login';
-const TOKEN_KEY = 'access_token'; // Nuevo nombre para el token
+const TOKEN_KEY = 'access_token'; // Nombre para el token
 
 const loadFromLocalStorage = () => {
-  const loginFromLocalStorage = localStorage.getItem(STORE_KEY) ?? false;
-  const login = JSON.parse(loginFromLocalStorage.toString());
-  return login;
+  try {
+    const loginFromLocalStorage = localStorage.getItem(STORE_KEY);
+    if (loginFromLocalStorage === null) return false;
+    return JSON.parse(loginFromLocalStorage.toString());
+  } catch (error) {
+    console.error('Error loading login state from localStorage:', error);
+    return false;
+  }
 };
 
 @Injectable({
@@ -18,10 +24,29 @@ export class AuthService extends BaseHttpService {
   // Estado de login usando señales
   login = signal<boolean>(loadFromLocalStorage());
 
+  constructor(private router: Router) {
+    super();
+    
+    // Verificar token al inicio
+    this.checkTokenValidity();
+  }
+
+  // Verificar si el token es válido
+  private checkTokenValidity() {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) {
+      this.login.set(false);
+    }
+  }
+
   // Guardar el estado de login en localStorage
   saveLoginToLocalStorage = effect(() => {
-    const login = JSON.stringify(this.login());
-    localStorage.setItem(STORE_KEY, login);
+    try {
+      const login = JSON.stringify(this.login());
+      localStorage.setItem(STORE_KEY, login);
+    } catch (error) {
+      console.error('Error saving login state to localStorage:', error);
+    }
   });
 
   // Obtener el token de autenticación
@@ -42,11 +67,9 @@ export class AuthService extends BaseHttpService {
   }
 
   register(data: any) {
-    return this.http.post(`${this.apiUrl}/users/`, data).pipe(
+    return this.http.post(`${this.apiUrl}/users/register`, data).pipe(
       tap((response: any) => {
-        // Guardar el token en localStorage si el backend lo devuelve
-        localStorage.setItem('access_token', response.access_token);
-        this.login.set(true); // Cambiar el estado a logueado
+        // Aquí puedes guardar el token o hacer cualquier otra acción después de registrar
         console.log('Registro exitoso ✅', response);
       })
     );
@@ -65,8 +88,28 @@ export class AuthService extends BaseHttpService {
 
   // Método para cerrar sesión
   logout() {
-    this.login.set(false);
-    localStorage.removeItem(TOKEN_KEY); // Eliminar el token del localStorage
-    window.location.reload();
+    try {
+      console.log('Cerrando sesión desde AuthService');
+      // Limpiar localStorage
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(STORE_KEY);
+      
+      // Actualizar estado
+      this.login.set(false);
+      
+      // Navegar a la página de login
+      this.router.navigate(['/login']).then(() => {
+        console.log('Redirección a login completada');
+        
+        // Si la redirección falla por alguna razón, forzar recarga
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 100);
+      });
+    } catch (error) {
+      console.error('Error en proceso de logout:', error);
+      // Intento de recuperación
+      window.location.href = '/login';
+    }
   }
 }

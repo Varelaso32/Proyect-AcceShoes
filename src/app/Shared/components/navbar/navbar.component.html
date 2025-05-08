@@ -9,7 +9,7 @@
                 </svg>
             </div>
             <ul class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                <li><a>Inicio</a></li>
+                <li><a routerLink="/">Inicio</a></li>
                 <li><a>Productos</a></li>
                 <li><a>Ofertas</a></li>
                 <li><a>Contacto</a></li>
@@ -19,7 +19,7 @@
 
     <!-- Logo -->
     <div class="navbar-center">
-        <a class="btn btn-ghost text-2xl font-bold text-cyan-600" routerLink="/home">AcceShoes</a>
+        <a class="btn btn-ghost text-2xl font-bold text-cyan-600" routerLink="/">AcceShoes</a>
     </div>
 
     <!-- Acciones derecha -->
@@ -73,7 +73,7 @@
             <ul class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li><a>Perfil</a></li>
                 <li><a>Configuración</a></li>
-                <li><a>Cerrar sesión</a></li>
+                <li><button (click)="logout()" class="btn btn-ghost btn-sm justify-start w-full text-left">Cerrar sesión</button></li>
             </ul>
         </div>
     </div>
