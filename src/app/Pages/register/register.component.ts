@@ -28,11 +28,30 @@ export class RegisterComponent {
       next: () => {
         this.successMessage = '¡Registro exitoso!';
         this.errorMessage = '';
-        setTimeout(() => this.router.navigate(['/login']), 2000); 
+        setTimeout(() => {
+          this.successMessage = '';
+          this.router.navigate(['/login']);
+        }, 800);
       },
       error: (error) => {
-        this.errorMessage = error?.error?.detail || 'Error al registrarse';
+        if (error.status === 409) {
+          this.errorMessage = error.error.detail;
+        } else if (error.status === 422) {
+          const errores = error.error.detail;
+          if (Array.isArray(errores)) {
+            // Capitalizar cada mensaje de error
+            this.errorMessage = errores
+              .map((e: any) => e.msg.charAt(0).toUpperCase() + e.msg.slice(1))
+              .join(', ');
+          } else {
+            this.errorMessage = 'Datos inválidos.';
+          }
+        } else {
+          this.errorMessage = 'Error inesperado al registrarse.';
+        }
+
         this.successMessage = '';
+        setTimeout(() => (this.errorMessage = ''), 4000);
       },
     });
   }

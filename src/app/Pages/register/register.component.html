@@ -1,37 +1,53 @@
-<div class="min-h-screen bg-base-200 flex items-center justify-center">
-    <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-      <h2 class="text-2xl font-bold text-center text-cyan-600 mb-6">Registro</h2>
-  
-      <div *ngIf="successMessage" class="alert alert-success mb-4">
-        <span>{{ successMessage }}</span>
+<!-- ALERTAS FLotantes (esquina superior derecha) -->
+<div class="fixed top-4 right-4 z-50 space-y-4">
+  <div *ngIf="successMessage" role="alert" class="alert alert-success shadow-lg w-[300px]">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span>{{ successMessage }}</span>
+  </div>
+
+  <div *ngIf="errorMessage" role="alert" class="alert alert-error shadow-lg w-[300px]">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    <span>{{ errorMessage }}</span>
+  </div>
+</div>
+
+
+<div class="min-h-screen bg-base-200 flex flex-col items-center justify-center p-4">
+
+  <!-- CONTENEDOR DE FORMULARIO -->
+  <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-center text-cyan-600 mb-6">Registro</h2>
+
+    <form (ngSubmit)="onRegister()" class="space-y-6">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
+        <input type="text" id="name" name="name" [(ngModel)]="user.name" required
+          class="mt-2 p-3 w-full border border-gray-300 rounded-md" placeholder="Ingresa tu nombre" />
       </div>
-      <div *ngIf="errorMessage" class="alert alert-error mb-4">
-        <span>{{ errorMessage }}</span>
+
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Correo</label>
+        <input type="email" id="email" name="email" [(ngModel)]="user.email" required
+          class="mt-2 p-3 w-full border border-gray-300 rounded-md" placeholder="Ingresa tu correo" />
       </div>
-  
-      <form (ngSubmit)="onRegister()" class="space-y-6">
-        <div>
-          <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
-          <input type="text" id="name" name="name" [(ngModel)]="user.name" required class="mt-2 p-3 w-full border border-gray-300 rounded-md" placeholder="Ingresa tu nombre" />
-        </div>
-  
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">Correo</label>
-          <input type="email" id="email" name="email" [(ngModel)]="user.email" required class="mt-2 p-3 w-full border border-gray-300 rounded-md" placeholder="Ingresa tu correo" />
-        </div>
-  
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-          <input type="password" id="password" name="password" [(ngModel)]="user.password" required class="mt-2 p-3 w-full border border-gray-300 rounded-md" placeholder="Ingresa tu contraseña" />
-        </div>
-  
-        <button type="submit" class="w-full py-3 bg-cyan-600 text-white rounded-md hover:bg-cyan-700">Registrarse</button>
-      </form>
-  
-      <div class="text-center mt-4">
-        <span class="text-gray-700">¿Ya tienes una cuenta?</span>
-        <a routerLink="/login" class="text-cyan-600 hover:underline ml-1">Inicia sesión</a>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input type="password" id="password" name="password" [(ngModel)]="user.password" required
+          class="mt-2 p-3 w-full border border-gray-300 rounded-md" placeholder="Ingresa tu contraseña" />
       </div>
+
+      <button type="submit" class="w-full py-3 bg-cyan-600 text-white rounded-md hover:bg-cyan-700">Registrarse</button>
+    </form>
+
+    <div class="text-center mt-4">
+      <span class="text-gray-700">¿Ya tienes una cuenta?</span>
+      <a routerLink="/login" class="text-cyan-600 hover:underline ml-1">Inicia sesión</a>
     </div>
   </div>
-  
+</div>
