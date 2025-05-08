@@ -3,7 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../Shared/services/auth.service';
-import { User } from '../../models/user.model';
+import { User } from '../../models/user.model'; // Asegúrate de que el modelo User esté bien definido
 
 @Component({
   selector: 'app-register',
@@ -15,7 +15,7 @@ export class RegisterComponent {
   user: User = {
     name: '',
     email: '',
-    password: ''
+    password: '',
   };
 
   successMessage = '';
@@ -28,12 +28,12 @@ export class RegisterComponent {
       next: () => {
         this.successMessage = '¡Registro exitoso!';
         this.errorMessage = '';
-        setTimeout(() => this.router.navigate(['/login']), 2000);
+        setTimeout(() => this.router.navigate(['/login']), 2000); 
       },
       error: (error) => {
         this.errorMessage = error?.error?.detail || 'Error al registrarse';
         this.successMessage = '';
-      }
+      },
     });
   }
 }

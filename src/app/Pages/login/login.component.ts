@@ -8,12 +8,12 @@ import { AuthService } from '../../Shared/services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
 })
 export class LoginComponent {
   user = {
     email: '',
-    password: ''
+    password: '',
   };
 
   errorMessage: string = '';
@@ -21,21 +21,22 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
-    this.authService.login(this.user).subscribe(
-      (response) => {
+    this.authService.loginAuth(this.user).subscribe({
+      next: (response: any) => {
         console.log('Login exitoso ✅', response);
         alert('Login exitoso ✅');
 
-        if (response.access_token) {
-          localStorage.setItem('token', response.access_token);
-        }
-
+        // El token se guarda automáticamente en el servicio
         this.router.navigate(['/home']);
       },
-      (error) => {
+      error: (error) => {
         console.error('Login fallido ❌', error);
-        this.errorMessage = 'Usuario o contraseña incorrectos';
-      }
-    );
+        if (error.status === 401 || error.status === 422) {
+          this.errorMessage = 'Usuario o contraseña incorrectos';
+        } else {
+          this.errorMessage = 'Error del servidor. Intenta más tarde.';
+        }
+      },
+    });
   }
 }
