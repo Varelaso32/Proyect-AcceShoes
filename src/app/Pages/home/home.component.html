@@ -1,28 +1,44 @@
 <app-navbar></app-navbar>
 
-<div class="mt-2">
-    <section class="bg-base-200 flex flex-col md:flex-row items-center justify-center px-10 py-34">
-        <div class="md:w-1/2 text-center md:text-left space-y-5">
-            <h1 class="text-5xl font-bold">Explora lo mejor de AcceShoes</h1>
-            <p class="text-lg text-gray-600">Diseños innovadores, comodidad sin límites.</p>
-            <button class="btn bg-cyan-600 text-white hover:bg-cyan-700">Ver colección</button>
-        </div>
-        <div class="md:w-1/2 mt-10 md:mt-0 flex justify-center">
-            <img src="assets/modelo.png" alt="Banner AcceShoes" class="w-[400px] h-auto rounded-xl shadow-lg" />
-        </div>
-    </section>
-</div>
+<!-- Hero con imagen dinámica -->
+<section
+    class="relative h-[100vh] bg-cover bg-center flex items-center justify-center text-white transition-all duration-1000"
+    [ngStyle]="{ 'background-image': 'url(' + currentImage + ')' }">
 
-<!-- Sección inferior para seguir navegando -->
-<section class="py-20 bg-white">
-    <div class="text-center">
-        <h2 class="text-3xl font-bold">Nuestros productos</h2>
-        <p class="mt-2 text-gray-600">Descubre nuestra colección destacada</p>
-        <!-- Aquí puedes colocar un componente o cards -->
+    <!-- Círculo indicador -->
+    <div class="absolute top-20 right-6 w-12 h-12">
+        <svg class="w-full h-full rotate-[-90deg]">
+            <circle cx="24" cy="24" r="20" stroke="#ffffff44" stroke-width="4" fill="none"></circle>
+            <circle cx="24" cy="24" r="20" stroke="white" stroke-width="4" fill="none"
+                [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="progressOffset" stroke-linecap="round"
+                style="transition: stroke-dashoffset 0.1s linear;"></circle>
+        </svg>
+    </div>
+
+    <!-- Contenido centrado -->
+    <div class="relative z-10 text-center px-6 max-w-2xl">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4 leading-tight drop-shadow-md">
+            Explora lo mejor de AcceShoes
+        </h1>
+        <p class="text-xl md:text-2xl mb-6 text-gray-200 drop-shadow">
+            Te ofrecemos todo tipo de prendas para que vistas a tu estilo.
+        </p>
+        <button
+            class="btn relative overflow-hidden bg-cyan-600 hover:bg-cyan-700 text-white px-10 py-4 text-lg font-semibold rounded-full shadow-xl transition-all duration-300 group">
+            <span class="relative z-10">Ver colección</span>
+            <span
+                class="absolute inset-0 bg-white opacity-10 group-hover:opacity-20 transition-opacity duration-300 rounded-full"></span>
+        </button>
     </div>
 </section>
 
+<!-- Sección inferior -->
+<section class="py-20 bg-white">
+    <div class="text-center">
+        <h2 class="text-3xl font-bold text-gray-800">Nuestros productos</h2>
+        <p class="mt-2 text-gray-600">Descubre nuestra colección destacada</p>
+    </div>
+</section>
 
 <app-carrusel></app-carrusel>
-
 <app-footer></app-footer>

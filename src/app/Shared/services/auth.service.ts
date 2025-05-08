@@ -42,9 +42,11 @@ export class AuthService extends BaseHttpService {
   }
 
   register(data: any) {
-    return this.http.post(`${this.apiUrl}/users/register`, data).pipe(
+    return this.http.post(`${this.apiUrl}/users/`, data).pipe(
       tap((response: any) => {
-        // Aquí puedes guardar el token o hacer cualquier otra acción después de registrar
+        // Guardar el token en localStorage si el backend lo devuelve
+        localStorage.setItem('access_token', response.access_token);
+        this.login.set(true); // Cambiar el estado a logueado
         console.log('Registro exitoso ✅', response);
       })
     );
