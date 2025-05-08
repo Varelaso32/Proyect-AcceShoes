@@ -15,6 +15,8 @@ export class ForgotPasswordComponent {
   newPassword: string = '';
   successMessage: string = '';
   errorMessage: string = '';
+  showNewPassword: boolean = false;
+
 
   constructor(private authService: AuthService, private router: Router) {}
 
