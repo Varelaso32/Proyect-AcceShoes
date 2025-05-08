@@ -26,9 +26,10 @@ export class ForgotPasswordComponent {
         setTimeout(() => this.router.navigate(['/login']), 2500);
       },
       error: (err) => {
-        this.errorMessage = err?.error?.detail || 'Error al actualizar contraseña';
+        this.errorMessage =
+          err?.error?.detail || 'Error al actualizar contraseña';
         this.successMessage = '';
-      }
+      },
     });
   }
 }

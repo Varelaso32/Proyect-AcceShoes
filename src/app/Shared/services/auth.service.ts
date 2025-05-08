@@ -1,35 +1,70 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { User } from '../../models/user.model'; 
+import { effect, Injectable, signal } from '@angular/core';
+import { BaseHttpService } from '../services/base-http.service';
+import { Observable, of, tap } from 'rxjs';
+
+const STORE_KEY = 'login';
+const TOKEN_KEY = 'access_token'; // Nuevo nombre para el token
+
+const loadFromLocalStorage = () => {
+  const loginFromLocalStorage = localStorage.getItem(STORE_KEY) ?? false;
+  const login = JSON.parse(loginFromLocalStorage.toString());
+  return login;
+};
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class AuthService {
+export class AuthService extends BaseHttpService {
+  // Estado de login usando señales
+  login = signal<boolean>(loadFromLocalStorage());
 
-  private apiUrl = 'https://fastacceshoes.onrender.com'; 
+  // Guardar el estado de login en localStorage
+  saveLoginToLocalStorage = effect(() => {
+    const login = JSON.stringify(this.login());
+    localStorage.setItem(STORE_KEY, login);
+  });
 
-  constructor(private http: HttpClient) {}
-
-  // Método para hacer login
-  
-  login(user: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, user);
+  // Obtener el token de autenticación
+  getAuthToken(): Observable<boolean> {
+    const token = localStorage.getItem(TOKEN_KEY);
+    return of(!!token); // Si el token existe, retorna true
   }
 
-  register(user: User): Observable<any> {
-    return this.http.post(`${this.apiUrl}`, user);
+  // Método para hacer login y guardar el token
+  loginAuth(data: any) {
+    return this.http.post(`${this.apiUrl}/users/login`, data).pipe(
+      tap((response: any) => {
+        // Guardar el token en el localStorage
+        localStorage.setItem(TOKEN_KEY, response.access_token);
+        this.login.set(true); // Establecer el estado de login a true
+      })
+    );
   }
 
-
-  resetPassword(email: string, newPassword: string): Observable<any> {
-    const body = {
-      username: email,
-      new_password: newPassword
-    };
-    return this.http.patch(`${this.apiUrl}/users/me/password`, body);
+  register(data: any) {
+    return this.http.post(`${this.apiUrl}/users/register`, data).pipe(
+      tap((response: any) => {
+        // Aquí puedes guardar el token o hacer cualquier otra acción después de registrar
+        console.log('Registro exitoso ✅', response);
+      })
+    );
   }
-  
-  
+
+  resetPassword(email: string, newPassword: string) {
+    return this.http
+      .post(`${this.apiUrl}/users/reset-password`, { email, newPassword })
+      .pipe(
+        tap((response: any) => {
+          // Aquí puedes manejar la respuesta después de la actualización de la contraseña
+          console.log('Contraseña actualizada ✅', response);
+        })
+      );
+  }
+
+  // Método para cerrar sesión
+  logout() {
+    this.login.set(false);
+    localStorage.removeItem(TOKEN_KEY); // Eliminar el token del localStorage
+    window.location.reload();
+  }
 }

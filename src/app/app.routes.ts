@@ -1,27 +1,51 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    title: 'Home',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
+  {
+    path: 'login',
+    title: 'Iniciar sesión',
     loadComponent: () =>
-      import('../app/Pages/home/home.component').then((m) => m.default),
+      import('./Pages/login/login.component').then(m => m.LoginComponent),
+  },
+  {
+    path: 'register',
+    title: 'Registro',
+    loadComponent: () =>
+      import('./Pages/register/register.component').then(m => m.RegisterComponent),
+  },
+  {
+    path: 'forgot-password',
+    title: 'Recuperar contraseña',
+    loadComponent: () =>
+      import('./Pages/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent),
+  },
+  {
+    path: 'home',
+    title: 'Inicio',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./Pages/home/home.component').then(m => m.default),
   },
   {
     path: 'politica-privacidad',
     title: 'Política de Privacidad',
     loadComponent: () =>
-      import(
-        './Pages/config/politica-privacidad/politica-privacidad.component'
-      ).then((m) => m.PoliticaPrivacidadComponent),
+      import('./Pages/config/politica-privacidad/politica-privacidad.component').then(m => m.PoliticaPrivacidadComponent),
   },
   {
     path: 'terminos-condiciones',
     title: 'Términos y Condiciones',
     loadComponent: () =>
-      import(
-        './Pages/config/terminos-condiciones/terminos-condiciones.component'
-      ).then((m) => m.TerminosCondicionesComponent),
+      import('./Pages/config/terminos-condiciones/terminos-condiciones.component').then(m => m.TerminosCondicionesComponent),
   },
-  
+  {
+    path: '**',
+    redirectTo: 'login',
+  },
 ];
