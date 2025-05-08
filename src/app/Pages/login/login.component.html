@@ -7,7 +7,7 @@
     <span>{{ errorMessage }}</span>
   </div>
 
-  <div *ngIf="isUserBlocked" role="alert" class="alert alert-error shadow-md flex items-center gap-2">
+  <div *ngIf="isUserBlocked" class="alert alert-error shadow-md flex items-center gap-2">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
         d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -16,6 +16,10 @@
   </div>
 </div>
 
+<!-- SPINNER DE CARGA -->
+<div *ngIf="isLoading" class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-white bg-opacity-75 z-50">
+  <span class="loading loading-spinner loading-xl"></span>
+</div>
 
 <!-- FORMULARIO DE LOGIN -->
 <div class="min-h-screen bg-base-200 flex items-center justify-center">
@@ -57,8 +61,10 @@
         </div>
       </div>
 
-      <button type="submit" class="w-full py-3 bg-cyan-600 text-white rounded-md hover:bg-cyan-700">
-        Iniciar sesión
+      <button type="submit" class="w-full py-3 bg-cyan-600 text-white rounded-md hover:bg-cyan-700"
+        [disabled]="isLoading">
+        <span *ngIf="isLoading">Cargando...</span>
+        <span *ngIf="!isLoading">Iniciar sesión</span>
       </button>
 
       <div class="text-center mt-4">

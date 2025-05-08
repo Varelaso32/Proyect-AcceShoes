@@ -21,6 +21,7 @@ export class LoginComponent {
 
   failedAttempts: number = 0;
   isUserBlocked: boolean = false;
+  isLoading: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -31,6 +32,11 @@ export class LoginComponent {
     setTimeout(() => {
       this.errorMessage = null;
     }, 4000);
+  }
+
+  showSuccess(message: string) {
+    // Se elimina la llamada a setTimeout() para la alerta de éxito aquí
+    // La redirección se hará antes
   }
 
   getUserKey(prefix: string): string {
@@ -64,13 +70,16 @@ export class LoginComponent {
       return;
     }
 
+    this.isLoading = true;
+
     this.authService.loginAuth(this.user).subscribe({
       next: (response) => {
-        // Guardar token si es necesario:
         localStorage.setItem('access_token', response.access_token);
-
         this.unblockUser();
-        this.router.navigate(['/home']);
+
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 0);
       },
       error: (error) => {
         this.failedAttempts++;
@@ -96,6 +105,9 @@ export class LoginComponent {
         } else {
           this.showError('Error del servidor. Intenta más tarde.');
         }
+      },
+      complete: () => {
+        this.isLoading = false; 
       },
     });
   }
