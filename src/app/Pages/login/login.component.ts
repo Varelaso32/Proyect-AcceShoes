@@ -9,6 +9,7 @@ import { AuthService } from '../../Shared/services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
+  
 })
 export class LoginComponent {
   user = {
@@ -17,6 +18,7 @@ export class LoginComponent {
   };
 
   errorMessage: string = '';
+  showPassword: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
