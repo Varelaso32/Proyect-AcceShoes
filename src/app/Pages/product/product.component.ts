@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService, Product } from '../../Shared/services/product.service';
 import { CommonModule, Location } from '@angular/common';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { CartService } from '../../Shared/services/cart.service';
-
 
 @Component({
   selector: 'app-product-detail',
@@ -15,6 +14,8 @@ import { CartService } from '../../Shared/services/cart.service';
 })
 export class ProductDetailComponent implements OnInit {
   product: Product | undefined;
+  @ViewChild('modalRef') modalRef!: ElementRef<HTMLDialogElement>;
+  addedProductName: string = ''; 
 
   constructor(
     private route: ActivatedRoute,
@@ -38,10 +39,16 @@ export class ProductDetailComponent implements OnInit {
       console.error('ID de producto no válido');
     }
   }
+
   addToCart(): void {
     if (this.product) {
       this.cartService.addToCart(this.product);
-      alert('Producto agregado al carrito');
+      this.addedProductName = this.product.name; 
+
+      // Mostrar el modal después de agregar el producto
+      if (this.modalRef?.nativeElement) {
+        this.modalRef.nativeElement.showModal();
+      }
     }
   }
 

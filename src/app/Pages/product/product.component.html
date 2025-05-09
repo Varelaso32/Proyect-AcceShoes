@@ -22,7 +22,6 @@
           <span class="text-2xl font-bold text-cyan-600">${{ product?.price?.toFixed(2) }}</span>
         </div>
         <div class="mt-6 flex items-center gap-4">
-          <span class="text-2xl font-bold text-cyan-600">${{ product?.price?.toFixed(2) }}</span>
           <button (click)="addToCart()" class="btn btn-primary">
             🛒 Agregar al carrito
           </button>
@@ -37,5 +36,18 @@
     </div>
   </ng-template>
 </div>
+
+<!-- Modal DaisyUI -->
+<dialog #modalRef id="addToCartModal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Producto agregado al carrito</h3>
+    <p class="py-4">Has agregado <strong>{{ addedProductName }}</strong> al carrito exitosamente.</p>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn">Cerrar</button>
+      </form>
+    </div>
+  </div>
+</dialog>
 
 <app-footer></app-footer>
