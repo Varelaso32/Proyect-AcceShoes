@@ -10,9 +10,17 @@
             </div>
             <ul class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li><a routerLink="/">Inicio</a></li>
-                <li><a>Productos</a></li>
-                <li><a>Ofertas</a></li>
-                <li><a>Contacto</a></li>
+                <li>
+                    <a>Categorías</a>
+                    <ul class="p-2">
+                        <li><a [routerLink]="['/category', 'zapatos']">Zapatos</a></li>
+                        <li><a [routerLink]="['/category', 'gorras']">Gorras</a></li>
+                        <li><a [routerLink]="['/category', 'sacos']">Sacos</a></li>
+                        <li><a [routerLink]="['/category', 'collares']">Collares</a></li>
+                    </ul>
+                </li>
+                <li><a routerLink="/ofertas">Ofertas</a></li>
+                <li><a routerLink="/contacto">Contacto</a></li>
             </ul>
         </div>
     </div>
@@ -26,17 +34,52 @@
     <div class="navbar-end space-x-2">
         <!-- Buscar -->
         <div class="relative flex items-center transition-all duration-300" #searchContainer>
-            <button class="btn btn-ghost btn-circle search-btn" (click)="toggleSearch()">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-            </button>
+            <form (submit)="submitSearch($event)" class="flex items-center">
+                <button type="button" class="btn btn-ghost btn-circle search-btn" (click)="toggleSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
 
-            <!-- Campo de búsqueda -->
-            <input #searchBox type="text" placeholder="Buscar productos..."
-                class="input input-bordered w-48 transition-all duration-300 transform hidden focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+                <!-- Campo de búsqueda -->
+                <div class="relative">
+                    <input #searchBox 
+                        type="text" 
+                        [(ngModel)]="searchQuery"
+                        name="searchQuery"
+                        placeholder="Buscar productos..."
+                        (input)="onSearchInput($event)"
+                        (blur)="closeSuggestions()"
+                        class="input input-bordered w-48 transition-all duration-300 transform hidden focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+
+                    <!-- Sugerencias de búsqueda -->
+                    <div *ngIf="showSearchSuggestions && searchSuggestions.length > 0"
+                        class="absolute top-full left-0 right-0 bg-white shadow-lg rounded-md overflow-hidden z-50 mt-1 border border-gray-200">
+                        <ul>
+                            <li *ngFor="let suggestion of searchSuggestions"
+                                class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                                (click)="selectSuggestion(suggestion.name)">
+                                <div class="flex-shrink-0 w-10 h-10">
+                                    <img [src]="suggestion.imageUrl" alt="{{ suggestion.name }}" 
+                                         class="h-10 w-10 object-cover rounded-md"
+                                         onerror="this.src='/api/placeholder/40/40'; this.onerror=null;" />
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-800">{{ suggestion.name }}</p>
+                                    <p class="text-xs text-gray-500">{{ suggestion.category }}</p>
+                                </div>
+                            </li>
+                            <li class="px-4 py-2 bg-gray-50 text-center">
+                                <button (click)="submitSearch()" class="text-sm text-cyan-600 font-medium">
+                                    Ver todos los resultados
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
         </div>
 
         <!-- Carrito de compras -->
@@ -73,7 +116,7 @@
             <ul class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li><a>Perfil</a></li>
                 <li><a>Configuración</a></li>
-                <li><button (click)="logout()" class="btn btn-ghost btn-sm justify-start w-full text-left">Cerrar sesión</button></li>
+                <li><a>Cerrar sesión</a></li>
             </ul>
         </div>
     </div>

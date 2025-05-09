@@ -47,7 +47,23 @@ export const routes: Routes = [
       import('./Pages/config/terminos-condiciones/terminos-condiciones.component').then(m => m.TerminosCondicionesComponent),
   },
   {
+    path: 'search',
+    title: 'Resultados de Búsqueda',
+    loadComponent: () =>
+      import('./Shared/components/search-results/search-results.component').then(
+        (m) => m.SearchResultsComponent
+      ),
+  },
+{
+  path: 'product/:id',
+  title: 'Detalle del Producto',
+  loadComponent: () =>
+    import('./Pages/product/product.component').then(m => m.ProductDetailComponent),
+},
+
+  {
     path: '**',
     redirectTo: 'login',
   },
+  
 ];
