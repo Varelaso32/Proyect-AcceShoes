@@ -104,17 +104,18 @@
         </div>
 
         <!-- Usuario -->
+
         <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                <div class="w-10 rounded-full ring ring-cyan-500 ring-offset-base-100 ring-offset-2">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                        alt="Avatar" />
+            <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                <div class="w-10 rounded-full">
+                    <img src="https://api.dicebear.com/7.x/miniavs/svg?seed=user" />
                 </div>
-            </div>
+            </label>
             <ul class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li><a>Perfil</a></li>
                 <li><a>Configuración</a></li>
-                <li><a>Cerrar sesión</a></li>
+                <li><button (click)="logout()" class="btn btn-ghost btn-sm justify-start w-full text-left">Cerrar
+                        sesión</button></li>
             </ul>
         </div>
     </div>
