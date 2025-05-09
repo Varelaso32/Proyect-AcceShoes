@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Product } from './product.service';
+
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  imageUrl: string;
+  description: string;
+  category: string;
+}
 
 export interface CartItem {
   product: Product;
@@ -8,49 +16,47 @@ export interface CartItem {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class CartService {
-  private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
+  private cartItemsSubject = new BehaviorSubject<CartItem[]>(this.getCart());
   cartItems$ = this.cartItemsSubject.asObservable();
 
-  constructor() {
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      this.cartItemsSubject.next(JSON.parse(storedCart));
-    }
+  constructor() {}
+
+  private getCart(): CartItem[] {
+    const cart = localStorage.getItem('cart');
+    return cart ? JSON.parse(cart) : [];
   }
 
-  private updateLocalStorage(cartItems: CartItem[]) {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
+  private updateCart(cart: CartItem[]) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    this.cartItemsSubject.next(cart); // 🔥 Notifica cambios a los componentes
   }
 
-  addToCart(product: Product, quantity: number = 1) {
-    const items = this.cartItemsSubject.getValue();
-    const index = items.findIndex(item => item.product.id === product.id);
+  addToCart(product: Product, quantity: number = 1): void {
+    const currentCart = this.getCart();
+    const existingItem = currentCart.find(item => item.product.id === product.id);
 
-    if (index > -1) {
-      items[index].quantity += quantity;
+    if (existingItem) {
+      existingItem.quantity += quantity;
     } else {
-      items.push({ product, quantity });
+      currentCart.push({ product, quantity });
     }
 
-    this.cartItemsSubject.next(items);
-    this.updateLocalStorage(items);
+    this.updateCart(currentCart);
   }
 
-  removeFromCart(productId: number) {
-    const items = this.cartItemsSubject.getValue().filter(item => item.product.id !== productId);
-    this.cartItemsSubject.next(items);
-    this.updateLocalStorage(items);
+  removeFromCart(productId: number): void {
+    const currentCart = this.getCart().filter(item => item.product.id !== productId);
+    this.updateCart(currentCart);
   }
 
-  clearCart() {
-    this.cartItemsSubject.next([]);
-    localStorage.removeItem('cart');
+  clearCart(): void {
+    this.updateCart([]);
   }
 
   getTotalPrice(): number {
-    return this.cartItemsSubject.getValue().reduce((total, item) => total + item.product.price * item.quantity, 0);
+    return this.getCart().reduce((total, item) => total + item.product.price * item.quantity, 0);
   }
 }

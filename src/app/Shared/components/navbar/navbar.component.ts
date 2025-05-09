@@ -23,7 +23,7 @@ export class NavbarComponent {
 
   private authService = inject(AuthService);
   private router = inject(Router);
-  private cartService = inject(CartService);
+  public cartService = inject(CartService);
 
   constructor(private renderer: Renderer2, private productService: ProductService) {
 
