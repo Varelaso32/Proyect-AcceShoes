@@ -1,1 +1,36 @@
-<p>product-detail works!</p>
+<app-navbar></app-navbar>
+
+<div class="container mx-auto px-4 pt-32 min-h-screen">
+  <div class="mb-6">
+    <button (click)="goBack()" class="btn btn-outline btn-accent">
+      ⬅ Volver atrás
+    </button>
+  </div>
+
+  <div *ngIf="product; else loading" class="max-w-4xl mx-auto card bg-base-100 shadow-xl p-6">
+    <div class="flex flex-col lg:flex-row gap-6">
+      <img [src]="product?.imageUrl" [alt]="product?.name"
+           class="w-full lg:w-1/2 h-64 object-cover rounded-xl"
+           onerror="this.src='/api/placeholder/400/400'; this.onerror=null;" />
+
+      <div class="flex flex-col justify-between">
+        <div>
+          <h2 class="text-3xl font-bold text-cyan-700">{{ product?.name }}</h2>
+          <p class="text-gray-600 mt-2">{{ product?.description }}</p>
+          <span class="badge badge-outline mt-4">{{ product?.category }}</span>
+        </div>
+        <div class="mt-6">
+          <span class="text-2xl font-bold text-cyan-600">${{ product?.price?.toFixed(2) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="text-center py-20">
+      <span class="loading loading-spinner text-cyan-600 w-16 h-16"></span>
+    </div>
+  </ng-template>
+</div>
+
+<app-footer></app-footer>
