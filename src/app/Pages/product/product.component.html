@@ -9,9 +9,8 @@
 
   <div *ngIf="product; else loading" class="max-w-4xl mx-auto card bg-base-100 shadow-xl p-6">
     <div class="flex flex-col lg:flex-row gap-6">
-      <img [src]="product?.imageUrl" [alt]="product?.name"
-           class="w-full lg:w-1/2 h-64 object-cover rounded-xl"
-           onerror="this.src='/api/placeholder/400/400'; this.onerror=null;" />
+      <img [src]="product?.imageUrl" [alt]="product?.name" class="w-full lg:w-1/2 h-64 object-cover rounded-xl"
+        onerror="this.src='/api/placeholder/400/400'; this.onerror=null;" />
 
       <div class="flex flex-col justify-between">
         <div>
@@ -21,6 +20,12 @@
         </div>
         <div class="mt-6">
           <span class="text-2xl font-bold text-cyan-600">${{ product?.price?.toFixed(2) }}</span>
+        </div>
+        <div class="mt-6 flex items-center gap-4">
+          <span class="text-2xl font-bold text-cyan-600">${{ product?.price?.toFixed(2) }}</span>
+          <button (click)="addToCart()" class="btn btn-primary">
+            🛒 Agregar al carrito
+          </button>
         </div>
       </div>
     </div>

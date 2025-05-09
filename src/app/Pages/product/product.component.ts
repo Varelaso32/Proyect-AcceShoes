@@ -4,6 +4,7 @@ import { ProductService, Product } from '../../Shared/services/product.service';
 import { CommonModule, Location } from '@angular/common';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
+import { CartService } from '../../Shared/services/cart.service';
 
 
 @Component({
@@ -18,8 +19,9 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private location: Location  
-  ) {}
+    private location: Location,
+    private cartService: CartService,
+  ) { }
 
   ngOnInit(): void {
     const productId = Number(this.route.snapshot.paramMap.get('id'));
@@ -36,9 +38,15 @@ export class ProductDetailComponent implements OnInit {
       console.error('ID de producto no válido');
     }
   }
+  addToCart(): void {
+    if (this.product) {
+      this.cartService.addToCart(this.product);
+      alert('Producto agregado al carrito');
+    }
+  }
 
   // Método para volver atrás
   goBack(): void {
-    this.location.back();  
+    this.location.back();
   }
 }

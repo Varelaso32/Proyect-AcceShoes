@@ -6,6 +6,7 @@ import { Observable, switchMap } from 'rxjs';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { Location } from '@angular/common';
+import { CartService } from '../../Shared/services/cart.service';
 
 
 
@@ -13,6 +14,7 @@ import { Location } from '@angular/common';
   selector: 'app-category',
   standalone: true,
   imports: [CommonModule, NavbarComponent, FooterComponent, RouterLink],
+  providers: [CartService],
   templateUrl: './category.component.html',
 })
 export class CategoryComponent {
@@ -21,8 +23,10 @@ export class CategoryComponent {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private location: Location
+    private location: Location,
+    private cartService: CartService,
   ) {
+
 
     this.products$ = this.route.paramMap.pipe(
       switchMap(params => {
@@ -30,6 +34,9 @@ export class CategoryComponent {
         return this.productService.getProductsByCategory(category);
       })
     );
+  }
+  addToCart(product: Product) {
+    this.cartService.addToCart(product, 1);
   }
   goBack(): void {
     this.location.back();
