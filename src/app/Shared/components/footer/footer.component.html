@@ -1,4 +1,4 @@
-<footer class="footer sm:footer-horizontal bg-base-200 text-base-content p-10 border-t-4 border-black">
+<footer class="footer sm:footer-horizontal bg-base-200 text-base-content p-10 border-t-2 border-black">
     <aside>
         <img src="assets/logo-acceshoes.png" alt="Logo" width="200" height="200" />
         <p class="mt-4">
@@ -18,13 +18,14 @@
     <nav>
         <h6 class="footer-title text-cyan-600">Compañía</h6>
         <a class="link link-hover" routerLink="/sobre-nosotros">Sobre nosotros</a>
-        <a class="link link-hover">Contactanos</a>
+        <!-- esta en la misma pantalla de sobre nosotros solo que abajo -->
+        <a class="link link-hover" routerLink="/sobre-nosotros" fragment="contacto">Contactanos</a> 
         <a class="link link-hover">Ubicación</a>
     </nav>
     <nav>
         <h6 class="footer-title text-cyan-600">Legal</h6>
         <a class="link link-hover" routerLink="/terminos-condiciones">Términos y condiciones</a>
-        <a class="link link-hover" routerLink="/politica-privacidad">Política y Privacidad</a>
+        <a class="link link-hover" routerLink="/politica-privacidad" >Política y Privacidad</a>
     </nav>
     <nav>
         <h6 class="footer-title text-cyan-600">Social</h6>
