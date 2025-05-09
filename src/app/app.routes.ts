@@ -47,6 +47,13 @@ export const routes: Routes = [
       import('./Pages/config/terminos-condiciones/terminos-condiciones.component').then(m => m.TerminosCondicionesComponent),
   },
   {
+    path: 'sobre-nosotros',
+    title: 'Sobre Nosotros',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./Pages/config/sobre-nosotros/sobre-nosotros.component').then(m => m.SobreNosotrosComponent),
+  },
+  {
     path: '**',
     redirectTo: 'login',
   },
