@@ -1,33 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ProductService, Product } from '../../Shared/services/product.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
+
 
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product.component.html',
-  imports: [CommonModule,NavbarComponent, FooterComponent,RouterLink],
+  imports: [CommonModule, FooterComponent, NavbarComponent],
   styleUrls: ['./product.component.css']
 })
 export class ProductDetailComponent implements OnInit {
-  product: Product | undefined;  // La variable donde almacenamos el producto
+  product: Product | undefined;
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private location: Location  
   ) {}
 
   ngOnInit(): void {
-    // Obtén el ID del producto desde la URL
     const productId = Number(this.route.snapshot.paramMap.get('id'));
-    
-    // Si el ID es válido, obtiene el producto
+
     if (productId) {
       this.productService.getProductById(productId).subscribe((product) => {
         if (product) {
-          this.product = product;  
+          this.product = product;
         } else {
           console.error('Producto no encontrado');
         }
@@ -35,5 +35,10 @@ export class ProductDetailComponent implements OnInit {
     } else {
       console.error('ID de producto no válido');
     }
+  }
+
+  // Método para volver atrás
+  goBack(): void {
+    this.location.back();  
   }
 }
