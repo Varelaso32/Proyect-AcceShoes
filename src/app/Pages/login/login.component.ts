@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../Shared/services/auth.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -31,12 +32,7 @@ export class LoginComponent {
     this.errorMessage = message;
     setTimeout(() => {
       this.errorMessage = null;
-    }, 4000);
-  }
-
-  showSuccess(message: string) {
-    // Se elimina la llamada a setTimeout() para la alerta de éxito aquí
-    // La redirección se hará antes
+    }, 2000);
   }
 
   getUserKey(prefix: string): string {
@@ -70,45 +66,58 @@ export class LoginComponent {
       return;
     }
 
+    // Validar si faltan campos
+    if (!this.user.email || !this.user.password) {
+      this.showError('Por favor, completa todos los campos.');
+      return;
+    }
+
     this.isLoading = true;
 
-    this.authService.loginAuth(this.user).subscribe({
-      next: (response) => {
-        localStorage.setItem('access_token', response.access_token);
-        this.unblockUser();
+    this.authService
+      .loginAuth(this.user)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          localStorage.setItem('access_token', response.access_token);
+          this.unblockUser();
 
-        setTimeout(() => {
-          this.router.navigate(['/home']);
-        }, 0);
-      },
-      error: (error) => {
-        this.failedAttempts++;
-        localStorage.setItem(
-          this.getUserKey('failedAttempts'),
-          this.failedAttempts.toString()
-        );
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+          }, 0);
+        },
+        error: (error) => {
+          this.failedAttempts++;
+          localStorage.setItem(
+            this.getUserKey('failedAttempts'),
+            this.failedAttempts.toString()
+          );
 
-        if (this.failedAttempts >= 3) {
-          this.isUserBlocked = true;
-          localStorage.setItem(this.getUserKey('isUserBlocked'), 'true');
-          this.showError('Demasiados intentos fallidos. Usuario bloqueado.');
-          return;
-        }
+          if (this.failedAttempts >= 3) {
+            this.isUserBlocked = true;
+            localStorage.setItem(this.getUserKey('isUserBlocked'), 'true');
+            this.showError('Demasiados intentos fallidos. Usuario bloqueado.');
+            return;
+          }
 
-        if (error.status === 401) {
-          this.showError(error.error?.detail);
-        } else if (error.status === 422 && Array.isArray(error.error?.detail)) {
-          const validationErrors = error.error.detail
-            .map((e: any) => e.msg.charAt(0).toUpperCase() + e.msg.slice(1))
-            .join(', ');
-          this.showError(validationErrors);
-        } else {
-          this.showError('Error del servidor. Intenta más tarde.');
-        }
-      },
-      complete: () => {
-        this.isLoading = false; 
-      },
-    });
+          if (error.status === 401) {
+            this.showError(error.error?.detail);
+          } else if (
+            error.status === 422 &&
+            Array.isArray(error.error?.detail)
+          ) {
+            const validationErrors = error.error.detail
+              .map((e: any) => e.msg.charAt(0).toUpperCase() + e.msg.slice(1))
+              .join(', ');
+            this.showError(validationErrors);
+          } else {
+            this.showError('Error del servidor. Intenta más tarde.');
+          }
+        },
+      });
   }
 }
