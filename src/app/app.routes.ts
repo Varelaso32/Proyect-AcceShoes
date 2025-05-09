@@ -81,6 +81,15 @@ export const routes: Routes = [
   },
 
   {
+  path: 'category/:category',
+  title: 'Categoría',
+  loadComponent: () =>
+    import('./Pages/category/category.component').then(
+      (m) => m.CategoryComponent
+    ),
+},
+
+  {
     path: '**',
     redirectTo: 'login',
   },

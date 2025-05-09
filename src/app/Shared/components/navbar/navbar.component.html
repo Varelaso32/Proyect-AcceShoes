@@ -10,15 +10,18 @@
             </div>
             <ul class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li><a routerLink="/">Inicio</a></li>
-                <li>
-                    <a>Categorías</a>
-                    <ul class="p-2">
-                        <li><a [routerLink]="['/category', 'zapatos']">Zapatos</a></li>
-                        <li><a [routerLink]="['/category', 'gorras']">Gorras</a></li>
-                        <li><a [routerLink]="['/category', 'sacos']">Sacos</a></li>
-                        <li><a [routerLink]="['/category', 'collares']">Collares</a></li>
-                    </ul>
+                <li tabindex="0">
+                    <details>
+                        <summary>Categorías</summary>
+                        <ul class="p-2">
+                            <li><a [routerLink]="['/category', 'zapatos']">Zapatos</a></li>
+                            <li><a [routerLink]="['/category', 'gorras']">Gorras</a></li>
+                            <li><a [routerLink]="['/category', 'sacos']">Sacos</a></li>
+                            <li><a [routerLink]="['/category', 'collares']">Collares</a></li>
+                        </ul>
+                    </details>
                 </li>
+
                 <li><a routerLink="/ofertas">Ofertas</a></li>
                 <li><a routerLink="/contacto">Contacto</a></li>
             </ul>
@@ -45,13 +48,8 @@
 
                 <!-- Campo de búsqueda -->
                 <div class="relative">
-                    <input #searchBox 
-                        type="text" 
-                        [(ngModel)]="searchQuery"
-                        name="searchQuery"
-                        placeholder="Buscar productos..."
-                        (input)="onSearchInput($event)"
-                        (blur)="closeSuggestions()"
+                    <input #searchBox type="text" [(ngModel)]="searchQuery" name="searchQuery"
+                        placeholder="Buscar productos..." (input)="onSearchInput($event)" (blur)="closeSuggestions()"
                         class="input input-bordered w-48 transition-all duration-300 transform hidden focus:outline-none focus:ring-2 focus:ring-cyan-500" />
 
                     <!-- Sugerencias de búsqueda -->
@@ -62,9 +60,9 @@
                                 class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
                                 (click)="selectSuggestion(suggestion.name)">
                                 <div class="flex-shrink-0 w-10 h-10">
-                                    <img [src]="suggestion.imageUrl" alt="{{ suggestion.name }}" 
-                                         class="h-10 w-10 object-cover rounded-md"
-                                         onerror="this.src='/api/placeholder/40/40'; this.onerror=null;" />
+                                    <img [src]="suggestion.imageUrl" alt="{{ suggestion.name }}"
+                                        class="h-10 w-10 object-cover rounded-md"
+                                        onerror="this.src='/api/placeholder/40/40'; this.onerror=null;" />
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm font-medium text-gray-800">{{ suggestion.name }}</p>
