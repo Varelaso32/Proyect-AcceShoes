@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CartService, CartItem } from '../../services/cart.service';
+import { Location } from '@angular/common';  // Importa el servicio Location
 
 @Component({
   standalone: true,
@@ -12,7 +13,7 @@ import { CartService, CartItem } from '../../services/cart.service';
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private location: Location) {}  // Inyecta el servicio Location
 
   ngOnInit(): void {
     this.cartService.cartItems$.subscribe(items => {
@@ -30,5 +31,10 @@ export class CartComponent implements OnInit {
 
   clearCart(): void {
     this.cartService.clearCart();
+  }
+
+  // Método para devolver al usuario a la página anterior
+  goBack(): void {
+    this.location.back();
   }
 }
