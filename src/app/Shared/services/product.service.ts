@@ -20,7 +20,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 1,
       name: 'Zapatos Deportivos',
-      category: 'zapatos',
+      category: 'Zapatos',
       price: 89.99,
       description: 'Zapatos deportivos cómodos para correr',
       imageUrl: 'assets/zapatos.jpg',
@@ -28,7 +28,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 2,
       name: 'Zapatos Formales',
-      category: 'zapatos',
+      category: 'Zapatos',
       price: 120.00,
       description: 'Zapatos formales elegantes para ocasiones especiales',
       imageUrl: 'assets/products/zapatos-formales.jpg',
@@ -36,7 +36,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 3,
       name: 'Zapatos Casuales',
-      category: 'zapatos',
+      category: 'Zapatos',
       price: 75.50,
       description: 'Zapatos casuales para uso diario',
       imageUrl: 'assets/products/zapatos-casuales.jpg',
@@ -44,7 +44,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 4,
       name: 'Gorra Deportiva',
-      category: 'gorras',
+      category: 'Gorras',
       price: 25.99,
       description: 'Gorra deportiva con protección UV',
       imageUrl: 'assets/products/gorra-deportiva.jpg',
@@ -52,7 +52,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 5,
       name: 'Gorra de Moda',
-      category: 'gorras',
+      category: 'Gorras',
       price: 34.50,
       description: 'Gorra moderna con diseño a la moda',
       imageUrl: 'assets/products/gorra-moda.jpg',
@@ -60,7 +60,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 6,
       name: 'Saco de Invierno',
-      category: 'sacos',
+      category: 'Sacos',
       price: 159.99,
       description: 'Saco cálido para temporada de frío',
       imageUrl: 'assets/products/saco-invierno.jpg',
@@ -68,7 +68,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 7,
       name: 'Saco Formal',
-      category: 'sacos',
+      category: 'Sacos',
       price: 189.95,
       description: 'Saco formal elegante para eventos',
       imageUrl: 'assets/products/saco-formal.jpg',
@@ -76,7 +76,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 8,
       name: 'Collar de Plata',
-      category: 'collares',
+      category: 'Collares',
       price: 65.00,
       description: 'Collar de plata con diseño elegante',
       imageUrl: 'assets/products/collar-plata.jpg',
@@ -84,7 +84,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 9,
       name: 'Collar de Perlas',
-      category: 'collares',
+      category: 'Collares',
       price: 89.99,
       description: 'Collar de perlas cultivadas',
       imageUrl: 'assets/products/collar-perlas.jpg',
@@ -92,7 +92,7 @@ export class ProductService extends BaseHttpService {
     {
       id: 10,
       name: 'Collar de Oro',
-      category: 'collares',
+      category: 'Collares',
       price: 250.00,
       description: 'Collar de oro de 18 quilates',
       imageUrl: 'assets/products/collar-oro.jpg',

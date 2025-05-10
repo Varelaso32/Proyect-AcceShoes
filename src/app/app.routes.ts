@@ -81,19 +81,24 @@ export const routes: Routes = [
   },
 
   {
-  path: 'category/:category',
-  title: 'Categoría',
-  loadComponent: () =>
-    import('./Pages/category/category.component').then(
-      (m) => m.CategoryComponent
-    ),
-},
-{
-  path: 'cart',
-  title: 'Carrito de Compras',
-  loadComponent: () =>
-    import('./Shared/components/cart/cart.component').then((m) => m.CartComponent),
-},
+    path: 'category/:category',
+    title: 'Categoría',
+    loadComponent: () =>
+      import('./Pages/category/category.component').then(
+        (m) => m.CategoryComponent
+      ),
+  },
+  {
+    path: 'all-products',
+    loadComponent: () => import('./Pages/all-categories/all-categories.component').then(m => m.AllCategoriesComponent),
+  },
+
+  {
+    path: 'cart',
+    title: 'Carrito de Compras',
+    loadComponent: () =>
+      import('./Shared/components/cart/cart.component').then((m) => m.CartComponent),
+  },
 
   {
     path: '**',
