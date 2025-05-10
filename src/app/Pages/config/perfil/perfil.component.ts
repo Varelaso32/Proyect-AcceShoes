@@ -127,6 +127,7 @@ export class PerfilComponent implements OnInit {
   }
 
   private mostrarExito(mensaje: string) {
+    this.errorMessage = null;
     this.successMessage = mensaje;
     setTimeout(() => (this.successMessage = null), 5000);
   }

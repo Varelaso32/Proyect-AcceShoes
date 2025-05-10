@@ -36,6 +36,15 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Pages/home/home.component').then((m) => m.default),
   },
+    {
+    path: 'configuracion',
+    title: 'Configuración',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './Pages/config/configuracion/configuracion.component'
+      ).then((m) => m.ConfiguracionComponent),
+  },
   {
     path: 'politica-privacidad',
     title: 'Política de Privacidad',

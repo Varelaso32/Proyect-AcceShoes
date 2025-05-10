@@ -1,0 +1,154 @@
+<app-navbar></app-navbar>
+
+<section class="mt-[70px] py-10 bg-base-200 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Título -->
+        <h2 class="text-4xl font-bold text-cyan-600 mb-8">Configuraciones</h2>
+
+        <!-- Grid de Opciones -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Opción: Idioma -->
+            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('idiomaModal')">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-language text-xl"></i>
+                        <span class="font-semibold">Idioma</span>
+                    </div>
+                    <span>⮞</span>
+                </div>
+            </div>
+
+            <!-- Opción: Tema -->
+            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('temaModal')">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-palette text-xl"></i>
+                        <span class="font-semibold">Tema</span>
+                    </div>
+                    <span>⮞</span>
+                </div>
+            </div>
+
+            <!-- Opción: Ubicación -->
+            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer"
+                (click)="abrirModal('ubicacionModal')">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-map-marker-alt text-xl"></i>
+                        <span class="font-semibold">Ubicación</span>
+                    </div>
+                    <span>⮞</span>
+                </div>
+            </div>
+
+            <!-- Opción: Cerrar Sesión -->
+            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('logoutModal')">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-sign-out-alt text-xl text-red-500"></i>
+                        <span class="font-semibold text-red-500">Cerrar Sesión</span>
+                    </div>
+                    <span>⮞</span>
+                </div>
+            </div>
+
+            <!-- Opción: Desactivar Cuenta -->
+            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer"
+                (click)="abrirModal('desactivarModal')">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-user-slash text-xl text-orange-500"></i>
+                        <span class="font-semibold text-orange-500">Desactivar Cuenta</span>
+                    </div>
+                    <span>⮞</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-footer></app-footer>
+
+<!-- MODAL: Idioma -->
+<dialog id="idiomaModal" class="modal" [class.modal-open]="modalAbierto === 'idiomaModal'">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Cambiar Idioma</h3>
+        <select class="select select-bordered w-full" [(ngModel)]="idiomaSeleccionado">
+            <option value="es">Español</option>
+            <option value="en">Inglés</option>
+            <option value="fr">Francés</option>
+            <option value="de">Alemán</option>
+        </select>
+        <div class="modal-action flex justify-end gap-2 mt-4">
+            <button class="btn btn-ghost" (click)="cerrarModal()">Cancelar</button>
+            <button class="btn btn-primary" (click)="cambiarIdioma()">Aplicar</button>
+        </div>
+    </div>
+</dialog>
+
+<!-- MODAL: Tema -->
+<dialog id="temaModal" class="modal" [class.modal-open]="modalAbierto === 'temaModal'">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Cambiar Tema</h3>
+        <div class="flex flex-col gap-4">
+            <label class="flex items-center gap-4 cursor-pointer">
+                <input type="radio" name="tema" class="radio radio-primary" [checked]="temaSeleccionado === 'light'"
+                    (change)="temaSeleccionado = 'light'">
+                <span>Tema Claro</span>
+            </label>
+            <label class="flex items-center gap-4 cursor-pointer">
+                <input type="radio" name="tema" class="radio radio-primary" [checked]="temaSeleccionado === 'dark'"
+                    (change)="temaSeleccionado = 'dark'">
+                <span>Tema Oscuro</span>
+            </label>
+            <label class="flex items-center gap-4 cursor-pointer">
+                <input type="radio" name="tema" class="radio radio-primary" [checked]="temaSeleccionado === 'system'"
+                    (change)="temaSeleccionado = 'system'">
+                <span>Sistema (Automático)</span>
+            </label>
+        </div>
+        <div class="modal-action flex justify-end gap-2 mt-4">
+            <button class="btn btn-ghost" (click)="cerrarModal()">Cancelar</button>
+            <button class="btn btn-primary" (click)="cambiarTema()">Aplicar</button>
+        </div>
+    </div>
+</dialog>
+
+<!-- MODAL: Ubicación -->
+<dialog id="ubicacionModal" class="modal" [class.modal-open]="modalAbierto === 'ubicacionModal'">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Cambiar Ubicación</h3>
+        <p class="text-sm text-gray-600 mb-4">Ingresa tu ubicación para personalizar tu experiencia.</p>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">País</span>
+            </label>
+            <select class="select select-bordered w-full" [(ngModel)]="ubicacion.pais">
+                <option value="">Selecciona un país</option>
+                <option *ngFor="let pais of paises" [value]="pais">{{pais}}</option>
+            </select>
+        </div>
+        <div class="form-control mt-4">
+            <label class="label">
+                <span class="label-text">Ciudad</span>
+            </label>
+            <input type="text" class="input input-bordered w-full" placeholder="Ciudad" [(ngModel)]="ubicacion.ciudad">
+        </div>
+        <div class="modal-action flex justify-end gap-2 mt-4">
+            <button class="btn btn-ghost" (click)="cerrarModal()">Cancelar</button>
+            <button class="btn btn-primary" (click)="guardarUbicacion()">Guardar</button>
+        </div>
+    </div>
+</dialog>
+
+<!-- MODAL: Cerrar Sesión -->
+<dialog id="logoutModal" class="modal" [class.modal-open]="modalAbierto === 'logoutModal'">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Cerrar Sesión</h3>
+        <p class="mb-4">¿Estás seguro que deseas cerrar tu sesión?</p>
+        <div class="modal-action flex justify-end gap-2">
+            <button class="btn btn-ghost" (click)="cerrarModal()">Cancelar</button>
+            <button class="btn btn-error text-white" (click)="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+    </div>
+</dialog>
