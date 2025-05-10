@@ -1,0 +1,28 @@
+<div class="container mx-auto px-4 pt-32 min-h-screen">
+  <h2 class="text-3xl font-bold text-cyan-700 mb-6">Tu Carrito</h2>
+
+  <div *ngIf="cartItems.length > 0; else emptyCart">
+    <div *ngFor="let item of cartItems" class="flex items-center justify-between mb-4">
+      <div>
+        <h3 class="text-xl font-semibold">{{ item.product.name }}</h3>
+        <p>Cantidad: {{ item.quantity }}</p>
+        <p>Precio: ${{ item.product.price.toFixed(2) }}</p>
+      </div>
+      <button (click)="removeItem(item.product.id)" class="btn btn-sm btn-error">Eliminar</button>
+    </div>
+
+    <div class="mt-6">
+      <p class="text-xl font-bold">Total: ${{ getTotal().toFixed(2) }}</p>
+      <button (click)="clearCart()" class="btn btn-outline btn-warning mt-2">Vaciar Carrito</button>
+    </div>
+  </div>
+
+  <ng-template #emptyCart>
+    <p class="text-gray-600">Tu carrito está vacío.</p>
+  </ng-template>
+
+  <!-- Botón para devolver -->
+  <button (click)="goBack()" class="btn btn-outline btn-accent mt-4">
+    ⬅ Volver atrás
+  </button>
+</div>

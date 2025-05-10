@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ProductService } from '../../services/product.service';
-
+import { CartService } from '../../services/cart.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -19,11 +19,19 @@ export class NavbarComponent {
   searchQuery: string = '';
   showSearchSuggestions: boolean = false;
   searchSuggestions: any[] = [];
+  cartItemCount: number = 0;
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  public cartService = inject(CartService);
 
-  constructor(private renderer: Renderer2, private productService: ProductService) {}
+  constructor(private renderer: Renderer2, private productService: ProductService) {
+
+    this.cartService.cartItems$.subscribe(items => {
+      this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
+    });
+
+  }
 
   toggleSearch() {
     const searchElement = this.searchBox.nativeElement;

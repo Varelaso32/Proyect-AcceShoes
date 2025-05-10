@@ -99,13 +99,19 @@ export const routes: Routes = [
   },
 
   {
-    path: 'category/:category',
-    title: 'Categoría',
-    loadComponent: () =>
-      import('./Pages/category/category.component').then(
-        (m) => m.CategoryComponent
-      ),
-  },
+  path: 'category/:category',
+  title: 'Categoría',
+  loadComponent: () =>
+    import('./Pages/category/category.component').then(
+      (m) => m.CategoryComponent
+    ),
+},
+{
+  path: 'cart',
+  title: 'Carrito de Compras',
+  loadComponent: () =>
+    import('./Shared/components/cart/cart.component').then((m) => m.CartComponent),
+},
 
   {
     path: '**',
