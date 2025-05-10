@@ -84,8 +84,7 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           localStorage.setItem('access_token', response.access_token);
-          this.unblockUser();
-
+          this.unblockUser();            
           setTimeout(() => {
             this.router.navigate(['/home']);
           }, 0);

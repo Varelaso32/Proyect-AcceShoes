@@ -4,6 +4,8 @@ import { FooterComponent } from '../../../Shared/components/footer/footer.compon
 import { NavbarComponent } from '../../../Shared/components/navbar/navbar.component';
 import { ActivatedRoute } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
+import { ThemeService } from '../../../Shared/services/theme.service';
+
 @Component({
   selector: 'app-sobre-nosotros',
   standalone: true,
@@ -18,7 +20,8 @@ export class SobreNosotrosComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private scroller: ViewportScroller
+    private scroller: ViewportScroller,
+    public themeService: ThemeService
   ) {}
 
   toggleFundadores(): void {

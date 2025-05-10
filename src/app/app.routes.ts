@@ -36,6 +36,15 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Pages/home/home.component').then((m) => m.default),
   },
+    {
+    path: 'configuracion',
+    title: 'Configuración',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './Pages/config/configuracion/configuracion.component'
+      ).then((m) => m.ConfiguracionComponent),
+  },
   {
     path: 'politica-privacidad',
     title: 'Política de Privacidad',
@@ -53,6 +62,24 @@ export const routes: Routes = [
       import(
         './Pages/config/terminos-condiciones/terminos-condiciones.component'
       ).then((m) => m.TerminosCondicionesComponent),
+  },
+  {
+    path: 'perfil',
+    title: 'Perfil',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./Pages/config/perfil/perfil.component').then(
+        (m) => m.PerfilComponent
+      ),
+  },
+  {
+    path: 'usuarios/:id',
+    title: 'Perfil de Usuario',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./Pages/config/perfil/perfil.component').then(
+        (m) => m.PerfilComponent
+      ),
   },
   {
     path: 'search',
