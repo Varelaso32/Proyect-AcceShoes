@@ -1,0 +1,81 @@
+<!-- ALERTAS FLOTANTES -->
+<div class="fixed top-4 right-4 z-[9999] space-y-4 w-[300px]">
+  <div *ngIf="errorMessage" class="alert alert-error shadow-md flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <div *ngIf="isUserBlocked" class="alert alert-error shadow-md flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span>Usuario bloqueado por múltiples intentos fallidos</span>
+  </div>
+</div>
+
+<!-- SPINNER DE CARGA -->
+<div *ngIf="isLoading" class="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-white bg-opacity-75 z-50">
+  <span class="loading loading-spinner loading-xl"></span>
+</div>
+
+<!-- FORMULARIO DE LOGIN -->
+<div class="min-h-screen bg-base-200 flex items-center justify-center">
+  <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+    <img src="assets/logo-acceshoes.png" alt="Logo" class="mx-auto mb-1 mt-1 w-40 h-25 object-contain" />
+    <h2 class="text-2xl font-bold text-center text-cyan-600 mb-6">Iniciar sesión</h2>
+
+    <form (ngSubmit)="onSubmit()" class="space-y-6">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Correo</label>
+        <input type="email" id="email" name="email" [(ngModel)]="user.email" required
+          class="mt-2 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          placeholder="Ingresa tu correo" />
+      </div>
+
+      <div class="mb-4 relative">
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+
+        <div class="relative">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="user.password"
+            required
+            class="p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 pr-12"
+            placeholder="Ingresa tu contraseña" />
+
+          <!-- Botón del ojo -->
+          <button type="button" (click)="showPassword = !showPassword"
+            class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none">
+            <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a16.62 16.62 0 014.463-5.7M9.88 9.88a3 3 0 104.24 4.24M15 12a3 3 0 00-3-3m0 0a3 3 0 013 3m0 0a3 3 0 01-3 3m8.712 1.712A10.016 10.016 0 0022 12s-3-7-10-7a9.953 9.953 0 00-3.25.538M3 3l18 18" />
+            </svg>
+
+            <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm-3-7c-7 0-10 7-10 7s3 7 10 7 10-7 10-7-3-7-10-7z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full py-3 bg-cyan-600 text-white rounded-md hover:bg-cyan-700"
+        [disabled]="isLoading">
+        <span *ngIf="isLoading">Cargando...</span>
+        <span *ngIf="!isLoading">Iniciar sesión</span>
+      </button>
+
+      <div class="text-center mt-4">
+        <a routerLink="/forgot-password" class="text-cyan-600 hover:underline">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <div class="text-center mt-4">
+        <span class="text-gray-700">¿No tienes una cuenta?</span>
+        <a routerLink="/register" class="text-cyan-600 hover:underline ml-1">Regístrate</a>
+      </div>
+    </form>
+  </div>
+</div>
