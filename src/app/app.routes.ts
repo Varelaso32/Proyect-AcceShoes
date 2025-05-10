@@ -55,6 +55,24 @@ export const routes: Routes = [
       ).then((m) => m.TerminosCondicionesComponent),
   },
   {
+    path: 'perfil',
+    title: 'Perfil',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./Pages/config/perfil/perfil.component').then(
+        (m) => m.PerfilComponent
+      ),
+  },
+  {
+    path: 'usuarios/:id',
+    title: 'Perfil de Usuario',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./Pages/config/perfil/perfil.component').then(
+        (m) => m.PerfilComponent
+      ),
+  },
+  {
     path: 'search',
     title: 'Resultados de Búsqueda',
     loadComponent: () =>
@@ -81,13 +99,13 @@ export const routes: Routes = [
   },
 
   {
-  path: 'category/:category',
-  title: 'Categoría',
-  loadComponent: () =>
-    import('./Pages/category/category.component').then(
-      (m) => m.CategoryComponent
-    ),
-},
+    path: 'category/:category',
+    title: 'Categoría',
+    loadComponent: () =>
+      import('./Pages/category/category.component').then(
+        (m) => m.CategoryComponent
+      ),
+  },
 
   {
     path: '**',
