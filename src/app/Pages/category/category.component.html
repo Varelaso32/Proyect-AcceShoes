@@ -24,6 +24,8 @@
         </div>
         <div class="flex justify-between items-center mt-4">
           <span class="text-xl font-bold text-cyan-600">${{ product.price.toFixed(2) }}</span>
+          <button (click)="addToCart(product)" class="btn btn-sm bg-green-500 text-white">Agregar al carrito</button>
+
           <div class="card-actions">
             <button class="btn btn-sm bg-cyan-600 text-white hover:bg-cyan-700" [routerLink]="['/product', product.id]">
               Ver detalles
@@ -34,4 +36,18 @@
     </div>
   </div>
 </div>
+
+<!-- Modal DaisyUI -->
+<dialog #modalRef id="addToCartModal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Producto agregado al carrito</h3>
+    <p class="py-4">Has agregado <strong>{{ addedProductName }}</strong> al carrito exitosamente.</p>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn">Cerrar</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
 <app-footer></app-footer>

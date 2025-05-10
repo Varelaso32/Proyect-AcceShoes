@@ -88,6 +88,12 @@ export const routes: Routes = [
       (m) => m.CategoryComponent
     ),
 },
+{
+  path: 'cart',
+  title: 'Carrito de Compras',
+  loadComponent: () =>
+    import('./Shared/components/cart/cart.component').then((m) => m.CartComponent),
+},
 
   {
     path: '**',
