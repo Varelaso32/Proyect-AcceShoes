@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CartService, CartItem } from '../../services/cart.service';
-import { Location } from '@angular/common';  // Importa el servicio Location
+import { Location } from '@angular/common';
+import { NavbarComponent } from "../navbar/navbar.component";
+import { FooterComponent } from "../footer/footer.component";  
+
 
 @Component({
   standalone: true,
   selector: 'app-cart',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent],
   templateUrl: './cart.component.html',
 })
 export class CartComponent implements OnInit {
@@ -37,4 +40,15 @@ export class CartComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
+  increaseQuantity(item: CartItem): void {
+    item.quantity++;
+    this.cartService.updateCart(this.cartItems);
+  }
+
+  decreaseQuantity(item: CartItem): void {
+    if (item.quantity > 1) {
+      item.quantity--;
+      this.cartService.updateCart(this.cartItems);
+    }
+}
 }

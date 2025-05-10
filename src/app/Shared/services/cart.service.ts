@@ -22,16 +22,16 @@ export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>(this.getCart());
   cartItems$ = this.cartItemsSubject.asObservable();
 
-  constructor() {}
+  constructor() { }
 
   private getCart(): CartItem[] {
     const cart = localStorage.getItem('cart');
     return cart ? JSON.parse(cart) : [];
   }
 
-  private updateCart(cart: CartItem[]) {
-    localStorage.setItem('cart', JSON.stringify(cart));
-    this.cartItemsSubject.next(cart); // 🔥 Notifica cambios a los componentes
+  updateCart(items: CartItem[]): void {
+    this.cartItemsSubject.next(items);
+    localStorage.setItem('cart', JSON.stringify(items));
   }
 
   addToCart(product: Product, quantity: number = 1): void {
@@ -59,4 +59,5 @@ export class CartService {
   getTotalPrice(): number {
     return this.getCart().reduce((total, item) => total + item.product.price * item.quantity, 0);
   }
+
 }
