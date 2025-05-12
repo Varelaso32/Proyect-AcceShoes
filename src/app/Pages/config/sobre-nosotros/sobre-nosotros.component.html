@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 
-<section class="about-us py-9 bg-base-200 mt-[60px]">
+<section class="about-us py-9 bg-gray-200 mt-[60px]">
     <div class="container mx-auto px-12">
         <div class="card bg-white shadow-lg rounded-lg p-16 mb-12 flex flex-col">
 
@@ -84,10 +84,12 @@
                     </button>
                 </div>
 
-                <!-- Grid de opciones de contacto - ahora debajo del botón -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Grid de opciones de contacto -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- WhatsApp -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-6">
+                    <div class="bg-white border border-gray-200 rounded-lg p-6"
+                        [class.bg-gray-600]="themeService.isDarkMode()"
+                        [class.border-gray-500]="themeService.isDarkMode()">
                         <div class="flex items-center mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 class="w-6 h-6 text-green-500 mr-2">
@@ -95,51 +97,89 @@
                                     d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm3.659 13.503a.75.75 0 01-.94.337c-1.287-.428-2.75-1.33-3.884-2.583-1.134-1.253-1.94-2.696-2.31-3.898a.75.75 0 011.264-.94c.43.31.892.617 1.386.918a.75.75 0 01.337.94c-.005.243-.03.483-.077.716a.75.75 0 01-.686.643c-.17.04-.34.078-.513.113-.518.105-1.057.18-1.613.213a.75.75 0 01-.58-.787c.03-.27.07-.537.118-.798a.75.75 0 01.643-.686c.233-.047.473-.072.716-.077a.75.75 0 01.94.337c.302.494.61.956.918 1.386a.75.75 0 01.337.94c-.428 1.287-1.33 2.75-2.583 3.884-1.253 1.134-2.696 1.94-3.898 2.31a.75.75 0 01-.94 1.264c.31.43.617.892.918 1.386a.75.75 0 01.94.337z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <h6 class="font-semibold text-gray-900">WHATSAPP</h6>
+                            <h6 class="font-semibold" [class.text-gray-900]="!themeService.isDarkMode()"
+                                [class.text-gray-100]="themeService.isDarkMode()">WHATSAPP</h6>
                         </div>
-                        <p class="text-sm text-gray-700">+57 601 514 3505</p>
-                        <p class="text-xs text-gray-500 mt-1">Añade <strong>+57 601 514 3505</strong> a la lista de
-                            contactos en tu smartphone y comunícate con nosotros.</p>
-                        <p class="text-xs text-gray-500 mt-2">Si necesitas ayuda a través de WhatsApp, por favor
-                            comunícate
-                            con nosotros al número <strong>+57 601 514 3505</strong>. Recuerda que adidas
-                            <strong>nunca</strong> iniciará la comunicación ni te buscará por este canal, solamente
-                            responderemos a tus mensajes.
-                        </p>
-                        <a href="#" class="inline-flex items-center mt-4 text-sm text-gray-700 hover:text-cyan-600">
-                            <span class="font-semibold">ABRE WHATSAPP</span>
+                        <p class="text-sm" [class.text-gray-700]="!themeService.isDarkMode()"
+                            [class.text-gray-300]="themeService.isDarkMode()">+57 315 275 1612</p>
+                        <a href="https://wa.me/573152751612" target="_blank"
+                            class="inline-flex items-center mt-4 text-sm"
+                            [class.text-gray-700]="!themeService.isDarkMode()"
+                            [class.text-gray-300]="themeService.isDarkMode()"
+                            [class.hover:text-cyan-600]="!themeService.isDarkMode()"
+                            [class.hover:text-cyan-400]="themeService.isDarkMode()">
+                            <span class="font-semibold">ABRIR WHATSAPP</span>
                             <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12h-18"></path>
+                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12h-18" />
                             </svg>
                         </a>
                     </div>
 
-                    <!-- Facebook -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-6">
+                    <!-- Facebook Messenger -->
+                    <div class="bg-white border border-gray-200 rounded-lg p-6"
+                        [class.bg-gray-600]="themeService.isDarkMode()"
+                        [class.border-gray-500]="themeService.isDarkMode()">
                         <div class="flex items-center mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 class="w-6 h-6 text-blue-600 mr-2">
-                                <path fill-rule="evenodd"
-                                    d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 14.5V12h2.5l.3-2.5H13V8h-2.5v1.5H9.5v2.5h2V16.5h-2.5V19h5v-2.5H13z"
-                                    clip-rule="evenodd" />
+                                <path
+                                    d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.616 4.472 8.652V24l4.086-2.242c1.088.3 2.24.465 3.442.465 6.627 0 12-4.974 12-11.111S18.627 0 12 0zm0 20.007c-1.15 0-2.27-.15-3.34-.434l-.243-.065-2.512 1.378v-3.169l-.674-.362C3.422 15.868 2 13.604 2 11.111 2 6.037 6.486 2 12 2s10 4.037 10 9.111-4.486 9.111-10 9.111z" />
                             </svg>
-                            <h6 class="font-semibold text-gray-900">CONTÁCTANOS VÍA FACEBOOK</h6>
+                            <h6 class="font-semibold" [class.text-gray-900]="!themeService.isDarkMode()"
+                                [class.text-gray-100]="themeService.isDarkMode()">MESSENGER</h6>
                         </div>
-                        <p class="text-sm text-gray-700">Utiliza la opción de Facebook Messenger.</p>
-                        <a href="#" class="inline-flex items-center mt-4 text-sm text-gray-700 hover:text-cyan-600">
-                            <span class="font-semibold">ABRE MESSENGER</span>
+                        <a href="https://m.me/TuPaginaDeFacebook" target="_blank"
+                            class="inline-flex items-center mt-4 text-sm"
+                            [class.text-gray-700]="!themeService.isDarkMode()"
+                            [class.text-gray-300]="themeService.isDarkMode()"
+                            [class.hover:text-cyan-600]="!themeService.isDarkMode()"
+                            [class.hover:text-cyan-400]="themeService.isDarkMode()">
+                            <span class="font-semibold">ABRIR CHAT</span>
                             <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12h-18"></path>
+                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12h-18" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Correo Electrónico -->
+                    <div class="bg-white border border-gray-200 rounded-lg p-6"
+                        [class.bg-gray-600]="themeService.isDarkMode()"
+                        [class.border-gray-500]="themeService.isDarkMode()">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                class="w-6 h-6 text-red-500 mr-2">
+                                <path
+                                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                            </svg>
+                            <h6 class="font-semibold" [class.text-gray-900]="!themeService.isDarkMode()"
+                                [class.text-gray-100]="themeService.isDarkMode()">
+                                CORREO ELECTRÓNICO
+                            </h6>
+                        </div>
+
+                        <a [href]="gmailUrl" target="_blank" class="inline-flex items-center mt-4 text-sm"
+                            [class.text-gray-700]="!themeService.isDarkMode()"
+                            [class.text-gray-300]="themeService.isDarkMode()"
+                            [class.hover:text-cyan-600]="!themeService.isDarkMode()"
+                            [class.hover:text-cyan-400]="themeService.isDarkMode()">
+
+                            <span class="font-semibold">ENVIAR CORREO</span>
+                            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12h-18" />
                             </svg>
                         </a>
                     </div>
 
                     <!-- Teléfono -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-6">
+                    <div class="bg-white border border-gray-200 rounded-lg p-6"
+                        [class.bg-gray-600]="themeService.isDarkMode()"
+                        [class.border-gray-500]="themeService.isDarkMode()">
                         <div class="flex items-center mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 class="w-6 h-6 text-gray-500 mr-2">
@@ -147,58 +187,19 @@
                                     d="M19.5 6a3 3 0 00-3-3h-9a3 3 0 00-3 3v12a3 3 0 003 3h9a3 3 0 003-3V6zM6 18v-2a.75.75 0 01.75-.75h10.5a.75.75 0 01.75.75v2a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75zM6 10.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75v3a.75.75 0 01-.75.75h-3a.75.75 0 01-.75-.75v-3z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <h6 class="font-semibold text-gray-900">TELÉFONO</h6>
+                            <h6 class="font-semibold" [class.text-gray-900]="!themeService.isDarkMode()"
+                                [class.text-gray-100]="themeService.isDarkMode()">TELÉFONO</h6>
                         </div>
-                        <p class="text-sm text-gray-700">(601) 514 3505</p>
-                        <a href="tel:+576015143505"
-                            class="inline-flex items-center mt-4 text-sm text-gray-700 hover:text-cyan-600">
-                            <span class="font-semibold">LLÁMANOS</span>
+                        <a href="tel:+573152751612" class="inline-flex items-center mt-4 text-sm"
+                            [class.text-gray-700]="!themeService.isDarkMode()"
+                            [class.text-gray-300]="themeService.isDarkMode()"
+                            [class.hover:text-cyan-600]="!themeService.isDarkMode()"
+                            [class.hover:text-cyan-400]="themeService.isDarkMode()">
+                            <span class="font-semibold">LLAMAR AHORA</span>
                             <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12h-18"></path>
-                            </svg>
-                        </a>
-                    </div>
-
-                    <!-- Chat -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-6">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 text-blue-400 mr-2">
-                                <path fill-rule="evenodd"
-                                    d="M4.868 19.132A30.64 30.64 0 0012 21a30.64 30.64 0 007.132-1.868c.586-.586.92-1.502.92-2.432v-6.5c0-1.012-.61-1.96-1.636-2.314a30.19 30.19 0 01-4.217-.94l-1.188-1.188a3 3 0 00-2.121 0l-1.187 1.187a30.19 30.19 0 01-4.216.94C4.61 7.208 4 8.156 4 9.168v6.5c0 .93.334 1.847.92 2.432zM6.75 9.75a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6 1.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0zm4.5-1.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <h6 class="font-semibold text-gray-900">UTILIZA EL BOTÓN DEL CHAT</h6>
-                        </div>
-                        <p class="text-sm text-gray-700">Aparecerá en la parte inferior, al momento de tener un asesor
-                            disponible.</p>
-                        <p class="text-xs text-gray-500 mt-2"><strong>*Descarga nuestra aplicación desde tu App Store,
-                                Ubica
-                                el CHAT en la sección de Configuración > servicio al cliente.</strong></p>
-                    </div>
-
-                    <!-- Soporte App -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-6">
-                        <div class="flex items-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                class="w-6 h-6 text-purple-500 mr-2">
-                                <path
-                                    d="M4.5 6.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 6.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM1.5 10.5a3 3 0 013-3h15a3 3 0 013 3v7.5a3 3 0 01-3 3H4.5a3 3 0 01-3-3v-7.5z" />
-                            </svg>
-                            <h6 class="font-semibold text-gray-900">SOPORTE PARA ADIDAS RUNNING APP</h6>
-                        </div>
-                        <p class="text-sm text-gray-700">Envíanos un correo electrónico para obtener ayuda con la app
-                            adidas
-                            Running. Responderemos dentro de 72 horas.</p>
-                        <a href="mailto:soporte@adidasrunning.com"
-                            class="inline-flex items-center mt-4 text-sm text-gray-700 hover:text-cyan-600">
-                            <span class="font-semibold">ADIDAS RUNNING</span>
-                            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12h-18"></path>
+                                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12h-18" />
                             </svg>
                         </a>
                     </div>
@@ -255,7 +256,7 @@
                         <p class="text-sm text-gray-600">Devoluciones y reembolsos</p>
                     </button>
                     <button class="faq-item p-4 border border-gray-200 rounded-lg w-full text-left">
-                        <span class="font-medium">¿Cómo puedo dar seguimiento a la entrega de mi pedido?</span>routerLink="/sobre-nosotros" fragment="contacto"
+                        <span class="font-medium">¿Cómo puedo dar seguimiento a la entrega de mi pedido?</span>
                         <p class="text-sm text-gray-600">Entregas</p>
                     </button>
                 </div>
