@@ -17,12 +17,20 @@ export class SobreNosotrosComponent {
   mostrarFundadores = false;
   feedbackRespondido: boolean = false;
   mostrarContacto: boolean = false;
+  gmailUrl: string;
 
   constructor(
     private route: ActivatedRoute,
     private scroller: ViewportScroller,
     public themeService: ThemeService
-  ) {}
+  ) {
+    const subject = encodeURIComponent('Consulta AcceShoes');
+    const body = encodeURIComponent(
+      'Hola, quisiera hacer la siguiente consulta:\n\n'
+    );
+
+    this.gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=fcecepcomunitario@gmail.com&su=${subject}&body=${body}`;
+  }
 
   toggleFundadores(): void {
     this.mostrarFundadores = !this.mostrarFundadores;

@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { CarruselComponent } from '../../Shared/components/carrusel/carrusel.component';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, CarruselComponent, FooterComponent, NavbarComponent],
+  imports: [CommonModule, CarruselComponent, FooterComponent, NavbarComponent, RouterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
