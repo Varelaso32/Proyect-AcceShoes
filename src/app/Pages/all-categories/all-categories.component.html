@@ -1,8 +1,7 @@
 <app-navbar></app-navbar>
 
 <!-- Botón flotante volver -->
-<button (click)="goBack()" 
-        class="fixed top-24 left-4 z-50 btn btn-m btn-accent shadow-md">
+<button (click)="goBack()" class="fixed top-24 left-4 z-50 btn btn-m btn-accent shadow-md">
   ⬅ Atrás
 </button>
 
@@ -20,12 +19,10 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <div *ngFor="let product of category.value" 
-             class="card bg-base-100 shadow-xl hover:shadow-2xl transition">
+        <div *ngFor="let product of category.value" class="card bg-base-100 shadow-xl hover:shadow-2xl transition">
           <figure class="px-4 pt-4">
-            <img [src]="product.imageUrl" [alt]="product.name"
-                 class="rounded-xl h-48 w-full object-cover"
-                 (error)="product.imageUrl = '/api/placeholder/300/300'" />
+            <img [src]="product.imageUrl" [alt]="product.name" class="rounded-xl h-48 w-full object-cover"
+              (error)="product.imageUrl = '/api/placeholder/300/300'" />
           </figure>
           <div class="card-body">
             <h3 class="card-title text-cyan-700">{{ product.name }}</h3>
@@ -33,12 +30,19 @@
             <div class="mt-2">
               <span class="badge badge-outline">{{ product.category }}</span>
             </div>
-            <div class="mt-4 flex justify-between items-center">
+            <div class="mt-4 flex justify-between items-center gap-2">
               <span class="text-xl font-bold text-cyan-600">${{ product.price.toFixed(2) }}</span>
-              <button class="btn btn-sm bg-cyan-600 text-white hover:bg-cyan-700"
-                      [routerLink]="['/product', product.id]">
-                Ver detalles
-              </button>
+
+              <div class="flex gap-2">
+                <button (click)="addToCart(product)" class="btn btn-sm bg-green-500 text-white hover:bg-green-600">
+                  🛒 Agregar al carrito
+                </button>
+
+                <button class="btn btn-sm bg-cyan-600 text-white hover:bg-cyan-700"
+                  [routerLink]="['/product', product.id]">
+                  Ver detalles
+                </button>
+              </div>
             </div>
           </div>
         </div>
