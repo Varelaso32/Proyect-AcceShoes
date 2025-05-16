@@ -5,7 +5,6 @@ import { FooterComponent } from '../../Shared/components/footer/footer.component
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { ChatMessage } from '../../models/chat.model';
-import { ChatMessageComponent } from '../../Shared/components/chat-message/chat-message.component';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +14,6 @@ import { ChatMessageComponent } from '../../Shared/components/chat-message/chat-
     FooterComponent,
     NavbarComponent,
     RouterModule,
-    ChatMessageComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

@@ -1,0 +1,25 @@
+@keyframes pulseHighlight {
+  0% {
+    background-color: #e0f7fa;
+  }
+  50% {
+    background-color: #b2ebf2;
+  }
+  100% {
+    background-color: #e0f7fa;
+  }
+}
+
+.message-new {
+  animation: pulseHighlight 2s ease-in-out 1;
+}
+
+.convo-new-message::after {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #06b6d4; /* cian */
+  border-radius: 50%;
+  margin-left: 6px;
+}
