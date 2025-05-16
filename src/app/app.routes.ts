@@ -36,14 +36,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Pages/home/home.component').then((m) => m.default),
   },
-    {
+  {
     path: 'configuracion',
     title: 'Configuración',
     canActivate: [authGuard],
     loadComponent: () =>
-      import(
-        './Pages/config/configuracion/configuracion.component'
-      ).then((m) => m.ConfiguracionComponent),
+      import('./Pages/config/configuracion/configuracion.component').then(
+        (m) => m.ConfiguracionComponent
+      ),
   },
   {
     path: 'politica-privacidad',
@@ -117,14 +117,25 @@ export const routes: Routes = [
   },
   {
     path: 'all-products',
-    loadComponent: () => import('./Pages/all-categories/all-categories.component').then(m => m.AllCategoriesComponent),
+    loadComponent: () =>
+      import('./Pages/all-categories/all-categories.component').then(
+        (m) => m.AllCategoriesComponent
+      ),
   },
-
+  {
+    path: 'chat',
+    title: 'Chat de Mensajes',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./Pages/chat/chat.component').then((m) => m.ChatComponent),
+  },
   {
     path: 'cart',
     title: 'Carrito de Compras',
     loadComponent: () =>
-      import('./Shared/components/cart/cart.component').then((m) => m.CartComponent),
+      import('./Shared/components/cart/cart.component').then(
+        (m) => m.CartComponent
+      ),
   },
 
   {
