@@ -33,7 +33,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   messageContent = '';
   convosWithNewMessages: Set<number> = new Set();
   newMessagesIds: Set<number> = new Set();
-  private refreshSub?: Subscription;
+  private refreshSub?: Subscription; 
 
   constructor(
     private chatService: ChatService,
@@ -46,16 +46,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.currentUser = user;
       this.loadConversations();
       this.loadUsers();
-
-      // Empezar refresh automático
-      this.refreshSub = interval(10000).subscribe(() => {
-        this.loadConversations();
-
-        const convo = this.selectedConversation();
-        if (convo) {
-          this.loadConversationDetails(convo.id);
-        }
-      });
     });
   }
 
