@@ -12,3 +12,15 @@
   border-radius: 1rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
+
+/* Scrollbar minimalista */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+.scrollbar-thumb-cyan-300::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollbar-thumb-cyan-300::-webkit-scrollbar-thumb {
+  background-color: #67e8f9;
+  border-radius: 4px;
+}

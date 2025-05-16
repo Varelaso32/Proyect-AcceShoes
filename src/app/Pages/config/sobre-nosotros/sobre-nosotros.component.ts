@@ -4,6 +4,8 @@ import { FooterComponent } from '../../../Shared/components/footer/footer.compon
 import { NavbarComponent } from '../../../Shared/components/navbar/navbar.component';
 import { ActivatedRoute } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
+import { ThemeService } from '../../../Shared/services/theme.service';
+
 @Component({
   selector: 'app-sobre-nosotros',
   standalone: true,
@@ -15,11 +17,20 @@ export class SobreNosotrosComponent {
   mostrarFundadores = false;
   feedbackRespondido: boolean = false;
   mostrarContacto: boolean = false;
+  gmailUrl: string;
 
   constructor(
     private route: ActivatedRoute,
-    private scroller: ViewportScroller
-  ) {}
+    private scroller: ViewportScroller,
+    public themeService: ThemeService
+  ) {
+    const subject = encodeURIComponent('Consulta AcceShoes');
+    const body = encodeURIComponent(
+      'Hola, quisiera hacer la siguiente consulta:\n\n'
+    );
+
+    this.gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=fcecepcomunitario@gmail.com&su=${subject}&body=${body}`;
+  }
 
   toggleFundadores(): void {
     this.mostrarFundadores = !this.mostrarFundadores;

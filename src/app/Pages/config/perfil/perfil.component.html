@@ -1,0 +1,186 @@
+<app-navbar></app-navbar>
+
+<section class="mt-[60px] py-10 bg-gray-200 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Título -->
+        <h2 class="text-4xl font-bold text-cyan-600 mb-8">Perfil Usuario</h2>
+
+        <!-- Grid de Opciones -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Tarjeta de Perfil -->
+            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('perfilModal')">
+
+                <div *ngIf="isProfileLoading" class="flex justify-center items-center h-24">
+                    <span class="loading loading-spinner loading-lg"></span>
+                </div>
+
+                <div *ngIf="!isProfileLoading && usuario" class="flex items-center gap-4">
+                    <div class="avatar">
+                        <div class="w-16 h-16 rounded-full bg-cyan-100 flex items-center justify-center">
+                            <span
+                                class="text-2xl font-bold text-cyan-600 flex items-center justify-center w-full h-full">
+                                {{usuario.name?.charAt(0) || 'U'}}
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">{{usuario.name}}</h3>
+                        <p class="text-sm text-gray-500">{{usuario.email}}</p>
+                        <p class="text-xs text-gray-400 mt-1">Rol: {{usuario.role}}</p>
+                    </div>
+                </div>
+
+                <div *ngIf="!isProfileLoading && !usuario" class="text-error p-4">
+                    {{errorMessage}}
+                </div>
+
+                <div class="text-right mt-4 text-cyan-600 font-semibold">
+                    Editar perfil ⮞
+                </div>
+            </div>
+
+            <!-- Opción: Idioma -->
+            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('idiomaModal')">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        🌐 <span class="font-semibold">Idioma</span>
+                    </div>
+                    <span>⮞</span>
+                </div>
+            </div>
+
+            <!-- Opción: Modo Oscuro -->
+            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('darkModal')">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        🌙 <span class="font-semibold">Modo Oscuro</span>
+                    </div>
+                    <span>⮞</span>
+                </div>
+            </div>
+
+            <!-- Puedes duplicar esto para más opciones -->
+            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer"
+                (click)="abrirModal('ubicacionModal')">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        📍 <span class="font-semibold">Ubicación</span>
+                    </div>
+                    <span>⮞</span>
+                </div>
+            </div>
+
+            <!-- Agrega más tarjetas aquí -->
+        </div>
+    </div>
+</section>
+
+<app-footer></app-footer>
+
+
+<!-- Toast de Éxito -->
+<div *ngIf="successMessage"
+    class="absolute top-4 right-4 z-50 alert alert-success shadow-lg max-w-lg w-auto flex items-center justify-between space-x-4">
+    <div class="flex items-center space-x-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9
+               0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="truncate">{{ successMessage }}</span>
+    </div>
+    <button class="btn btn-sm btn-ghost p-1" aria-label="Cerrar alerta" (click)="successMessage = null">
+        ✕
+    </button>
+</div>
+
+<dialog id="perfilModal" class="modal" [class.modal-open]="modalAbierto === 'perfilModal'">
+
+    <!-- Toast de Error -->
+    <div *ngIf="errorMessage"
+        class="absolute top-4 right-4 z-50 alert alert-error shadow-lg max-w-lg w-auto flex items-center justify-between space-x-4">
+        <div class="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2
+                 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="truncate">{{ errorMessage }}</span>
+        </div>
+        <button class="btn btn-sm btn-ghost p-1" aria-label="Cerrar alerta" (click)="errorMessage = null">
+            ✕
+        </button>
+    </div>
+
+    <div class="modal-box relative">
+        <h3 class="font-bold text-lg mb-4">Editar Perfil</h3>
+
+        <div class="space-y-4">
+            <div>
+                <label class="label">Nombre completo</label>
+                <input type="text" class="input input-bordered w-full" [(ngModel)]="editData.name" required />
+            </div>
+
+            <div>
+                <label class="label">Correo electrónico</label>
+                <input type="email" class="input input-bordered w-full" [(ngModel)]="editData.email" required />
+            </div>
+
+            <button class="btn btn-primary w-full mt-4" (click)="guardarCambios()" [disabled]="isLoading">
+                <span *ngIf="!isLoading">Guardar cambios</span>
+                <span *ngIf="isLoading" class="loading loading-spinner"></span>
+            </button>
+        </div>
+
+        <div class="modal-action">
+            <button class="btn" (click)="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+</dialog>
+
+
+<!-- MODAL: Idioma -->
+<dialog id="idiomaModal" class="modal modal-open" *ngIf="modalAbierto === 'idiomaModal'">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Cambiar Idioma</h3>
+        <select class="select select-bordered w-full">
+            <option>Español</option>
+            <option>Inglés</option>
+            <option>Francés</option>
+        </select>
+        <div class="modal-action flex justify-end gap-2 mt-4">
+            <button class="btn btn-ghost" (click)="cerrarModal()">Cerrar</button>
+            <button class="btn btn-info text-white" (click)="aceptarModal('idiomaModal')">Aceptar</button>
+        </div>
+    </div>
+</dialog>
+
+
+<!-- MODAL: Modo Oscuro -->
+<dialog id="darkModal" class="modal modal-open" *ngIf="modalAbierto === 'darkModal'">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Modo Oscuro</h3>
+        <label class="flex items-center gap-4">
+            <span>Activar modo oscuro</span>
+            <input type="checkbox" class="toggle toggle-info" />
+        </label>
+        <div class="modal-action flex justify-end gap-2 mt-4">
+            <button class="btn btn-ghost" (click)="cerrarModal()">Cerrar</button>
+            <button class="btn btn-info text-white" (click)="aceptarModal('darkModal')">Aceptar</button>
+        </div>
+    </div>
+</dialog>
+
+
+<!-- MODAL: Ubicación -->
+<dialog id="ubicacionModal" class="modal modal-open" *ngIf="modalAbierto === 'ubicacionModal'">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Ubicación</h3>
+        <p class="text-sm text-gray-600">Aquí puedes configurar tu ubicación actual o dirección preferida.</p>
+        <input type="text" class="input input-bordered w-full mt-4" placeholder="Ciudad / Dirección" />
+        <div class="modal-action">
+            <button class="btn" (click)="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+</dialog>

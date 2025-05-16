@@ -5,7 +5,7 @@
     class="relative h-[100vh] bg-cover bg-center flex items-center justify-center text-white transition-all duration-1000"
     [ngStyle]="{ 'background-image': 'url(' + currentImage + ')' }">
 
-    
+
     <!-- Círculo indicador -->
     <div class="absolute top-20 right-6 w-12 h-12">
         <svg class="w-full h-full rotate-[-90deg]">
@@ -24,7 +24,7 @@
         <p class="text-xl md:text-2xl mb-6 text-gray-200 drop-shadow">
             Te ofrecemos todo tipo de prendas para que vistas a tu estilo.
         </p>
-        <button
+        <button routerLink="/all-products"
             class="btn relative overflow-hidden bg-cyan-600 hover:bg-cyan-700 text-white px-10 py-4 text-lg font-semibold rounded-full shadow-xl transition-all duration-300 group">
             <span class="relative z-10">Ver colección</span>
             <span
@@ -40,6 +40,14 @@
         <p class="mt-2 text-gray-600">Descubre nuestra colección destacada</p>
     </div>
 </section>
+
+<!-- Botón flotante -->
+<button [routerLink]="['/chat']"
+    class="fixed bottom-6 right-6 w-14 h-14 bg-cyan-600 hover:bg-cyan-700 text-white rounded-full shadow-lg flex items-center justify-center z-50"
+    aria-label="Abrir chat">
+    💬
+</button>
+
 
 <app-carrusel></app-carrusel>
 <app-footer></app-footer>

@@ -26,7 +26,7 @@ export class AuthService extends BaseHttpService {
 
   constructor(private router: Router) {
     super();
-    
+
     // Verificar token al inicio
     this.checkTokenValidity();
   }
@@ -39,7 +39,6 @@ export class AuthService extends BaseHttpService {
     }
   }
 
-  // Guardar el estado de login en localStorage
   saveLoginToLocalStorage = effect(() => {
     try {
       const login = JSON.stringify(this.login());
@@ -49,28 +48,27 @@ export class AuthService extends BaseHttpService {
     }
   });
 
-  // Obtener el token de autenticación
   getAuthToken(): Observable<boolean> {
     const token = localStorage.getItem(TOKEN_KEY);
-    return of(!!token); // Si el token existe, retorna true
+    return of(!!token);
   }
 
-  // Método para hacer login y guardar el token
   loginAuth(data: any) {
     return this.http.post(`${this.apiUrl}/users/login`, data).pipe(
       tap((response: any) => {
-        // Guardar el token en el localStorage
+        console.log(data);
+        
         localStorage.setItem(TOKEN_KEY, response.access_token);
-        this.login.set(true); // Establecer el estado de login a true
+        this.login.set(true); 
       })
     );
   }
 
   register(data: any) {
-    return this.http.post(`${this.apiUrl}/users/register`, data).pipe(
+    return this.http.post(`${this.apiUrl}/users/`, data).pipe(
       tap((response: any) => {
-        // Aquí puedes guardar el token o hacer cualquier otra acción después de registrar
-        console.log('Registro exitoso ✅', response);
+        localStorage.setItem('access_token', response.access_token);
+        this.login.set(true); 
       })
     );
   }
@@ -80,35 +78,27 @@ export class AuthService extends BaseHttpService {
       .post(`${this.apiUrl}/users/reset-password`, { email, newPassword })
       .pipe(
         tap((response: any) => {
-          // Aquí puedes manejar la respuesta después de la actualización de la contraseña
-          console.log('Contraseña actualizada ✅', response);
         })
       );
   }
 
-  // Método para cerrar sesión
   logout() {
     try {
       console.log('Cerrando sesión desde AuthService');
-      // Limpiar localStorage
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(STORE_KEY);
-      
-      // Actualizar estado
+
       this.login.set(false);
-      
-      // Navegar a la página de login
+
       this.router.navigate(['/login']).then(() => {
         console.log('Redirección a login completada');
-        
-        // Si la redirección falla por alguna razón, forzar recarga
+
         setTimeout(() => {
           window.location.href = '/login';
         }, 100);
       });
     } catch (error) {
       console.error('Error en proceso de logout:', error);
-      // Intento de recuperación
       window.location.href = '/login';
     }
   }
