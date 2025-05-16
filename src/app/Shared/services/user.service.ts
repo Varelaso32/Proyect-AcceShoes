@@ -21,4 +21,12 @@ export class UserService extends BaseHttpService {
   }): Observable<any> {
     return this.http.patch(`${this.apiUrl}/users/me/password`, data);
   }
+
+  getUserById(userId: number): Observable<UserResponse> {
+    return this.http.get<UserResponse>(`${this.apiUrl}/users/${userId}`);
+  }
+
+  getAllUsers(): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>(`${this.apiUrl}/users`);
+  }
 }
