@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  signal,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { ChatService } from '../../Shared/services/chat.service';
 import { Conversation, Message } from '../../models/chatMessage.model';
 import { UserService } from '../../Shared/services/user.service';
@@ -26,6 +34,9 @@ import { interval, Subscription } from 'rxjs';
   styleUrls: ['./chat.component.css'],
 })
 export class ChatComponent implements OnInit, OnDestroy {
+  @ViewChild('messagesContainer')
+  messagesContainer?: ElementRef<HTMLDivElement>;
+
   conversations = signal<Conversation[]>([]);
   usersMap = new Map<number, UserResponse>();
   selectedConversation = signal<Conversation | null>(null);
@@ -33,19 +44,27 @@ export class ChatComponent implements OnInit, OnDestroy {
   messageContent = '';
   convosWithNewMessages: Set<number> = new Set();
   newMessagesIds: Set<number> = new Set();
-  private refreshSub?: Subscription; 
+  private refreshSub?: Subscription;
 
   constructor(
     private chatService: ChatService,
-    private userService: UserService
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    // Cargar usuario actual y conversaciones iniciales
     this.userService.getCurrentUser().subscribe((user) => {
       this.currentUser = user;
       this.loadConversations();
-      this.loadUsers();
+
+      // Auto refrescar cada 10 segundos
+      this.refreshSub = interval(10000).subscribe(() => {
+        const selected = this.selectedConversation();
+        if (selected) {
+          this.loadConversationDetails(selected.id);
+        }
+        this.loadConversations(); // actualiza también lista de conversaciones
+      });
     });
   }
 
@@ -53,34 +72,58 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.refreshSub?.unsubscribe();
   }
 
-  loadUsers() {
-    this.userService.getAllUsers().subscribe((users) => {
-      for (const user of users) {
-        this.usersMap.set(user.id, user);
+  loadUsers(conversations: Conversation[]) {
+    const allUserIds = new Set<number>();
+
+    conversations.forEach((convo) => {
+      allUserIds.add(convo.buyer_id);
+      allUserIds.add(convo.seller_id);
+    });
+
+    allUserIds.forEach((id) => {
+      if (!this.usersMap.has(id)) {
+        this.userService.getUserById(id).subscribe((user) => {
+          this.usersMap.set(id, user);
+          this.conversations.update((prev) => [...prev]);
+          this.cdr.detectChanges(); // Forzar actualización aquí
+        });
       }
     });
   }
 
+  scrollToBottom() {
+    setTimeout(() => {
+      this.messagesContainer?.nativeElement.scrollTo({
+        top: this.messagesContainer.nativeElement.scrollHeight,
+        behavior: 'smooth',
+      });
+    }, 100); // esperar un poco para que el DOM se actualice
+  }
+
   loadConversations() {
     this.chatService.getConversations().subscribe((convos) => {
-      this.conversations.set(convos);
-
-      // Si hay conversación seleccionada, actualizarla también
-      const selected = this.selectedConversation();
-      if (selected) {
-        // Comprobar si la conversación sigue en la lista y actualizar su último mensaje
-        const updatedConvo = convos.find((c) => c.id === selected.id);
-        if (updatedConvo) {
-          this.selectedConversation.update((_) => ({ ...updatedConvo }));
-        }
-      }
+      this.loadUsers(convos); // Primero cargar usuarios
+      this.conversations.set(convos); // Luego las conversaciones
+      this.cdr.detectChanges();
     });
   }
 
   loadConversationDetails(convoId: number) {
     this.chatService.getConversationDetails(convoId).subscribe((details) => {
       this.selectedConversation.set(details);
+      if (details.messages) {
+        this.markNewMessages(details.messages);
+      }
+      this.scrollToBottom(); // 👈 hacer scroll
     });
+  }
+
+  markNewMessages(messages: Message[]) {
+    const newIds = messages
+      .filter((msg) => msg.sender_id !== this.currentUser.id) // puedes agregar más lógica si usas "read"
+      .map((msg) => msg.id);
+
+    this.newMessagesIds = new Set(newIds);
   }
 
   selectConversation(convo: Conversation) {
@@ -106,21 +149,26 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   getOtherUser(convo: Conversation): string {
-    const isBuyer = convo.buyer_id === this.currentUser.id;
-    return isBuyer
-      ? `Vendedor #${convo.seller_id}`
-      : `Comprador #${convo.buyer_id}`;
+    const otherUserId =
+      this.currentUser.id === convo.buyer_id ? convo.seller_id : convo.buyer_id;
+
+    return this.usersMap.get(otherUserId)?.name || `Usuario #${otherUserId}`;
   }
 
   getSenderName(senderId: number): string {
     if (senderId === this.currentUser.id) return 'Tú';
 
-    const convo = this.selectedConversation();
-    if (!convo) return `Usuario #${senderId}`;
+    // Si el usuario ya está en el mapa
+    if (this.usersMap.has(senderId)) {
+      return this.usersMap.get(senderId)?.name || `Usuario #${senderId}`;
+    }
 
-    if (senderId === convo.buyer_id) return `Comprador #${convo.buyer_id}`;
-    if (senderId === convo.seller_id) return `Vendedor #${convo.seller_id}`;
+    // Si no está, intentar cargarlo (solo si es necesario)
+    this.userService.getUserById(senderId).subscribe((user) => {
+      this.usersMap.set(senderId, user);
+      this.conversations.update((convos) => [...convos]); // Forzar actualización
+    });
 
-    return `Usuario #${senderId}`;
+    return `Usuario #${senderId}`; // Temporal hasta que se cargue
   }
 }

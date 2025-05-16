@@ -11,8 +11,10 @@
 }
 
 .message-new {
-  animation: pulseHighlight 2s ease-in-out 1;
+  animation: pulse 1s ease-in-out infinite;
+  background-color: #e0f7fa;
 }
+
 
 .convo-new-message::after {
   content: "";
@@ -23,3 +25,4 @@
   border-radius: 50%;
   margin-left: 6px;
 }
+
