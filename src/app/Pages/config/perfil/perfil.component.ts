@@ -7,12 +7,18 @@ import { UserService } from '../../../Shared/services/user.service';
 import { PlansService } from '../../../Shared/services/plans.service';
 import { UserResponse, UpdateUserDto } from './../../../models/user.model';
 import { Plan } from './../../../models/plan.model';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FooterComponent, NavbarComponent, FormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FooterComponent,
+    NavbarComponent,
+    FormsModule,
+    RouterModule,
+  ],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css'],
 })
@@ -21,7 +27,7 @@ export class PerfilComponent implements OnInit {
   modalAbierto: string | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
-  router: any;
+
   //Data de user
   usuario: UserResponse | null = null;
   editData: UpdateUserDto = { name: '', email: '' };
@@ -32,15 +38,19 @@ export class PerfilComponent implements OnInit {
   planes: Plan[] = [];
   isPlansLoading = false;
   planSeleccionado: Plan | null = null;
+  planActual: Plan | undefined;
 
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
-    private plansService: PlansService
+    private plansService: PlansService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.cargarPerfilUsuario();
+    this.cargarPlanes();
+    this.checkPaymentStatus();
   }
 
   cargarPerfilUsuario() {
@@ -50,15 +60,16 @@ export class PerfilComponent implements OnInit {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
         this.usuario = user;
-        this.editData = {
-          name: user.name,
-          email: user.email,
-        };
+        this.editData = { name: user.name, email: user.email };
+
+        // Obtenemos el plan actual usando el plan_id del usuario
+        if (user.plan_id) {
+          this.planActual = this.plansService.getPlanById(user.plan_id);
+        }
+
         this.isProfileLoading = false;
       },
-      error: (err) => {
-        this.handleProfileError(err);
-      },
+      error: (err) => this.handleProfileError(err),
     });
   }
 
@@ -66,13 +77,38 @@ export class PerfilComponent implements OnInit {
     this.isPlansLoading = true;
     this.plansService.getPlans().subscribe({
       next: (res) => {
-        this.planes = res;
+        this.planes = res; // Guardamos la lista de planes disponibles
+
+        // Actualizamos el plan actual si el usuario tiene uno asignado
+        if (this.usuario?.plan_id) {
+          this.planActual = res.find(
+            (plan) => plan.id === this.usuario?.plan_id
+          );
+        }
+
         this.isPlansLoading = false;
       },
-      error: () => {
-        console.error('Error al cargar planes');
+      error: (err) => {
+        console.error('Error al cargar planes:', err);
         this.isPlansLoading = false;
+        this.mostrarError('No se pudieron cargar los planes');
       },
+    });
+  }
+
+  private checkPaymentStatus() {
+    this.route.queryParams.subscribe((params) => {
+      if (params['payment'] === 'success') {
+        this.mostrarExito('¡Pago completado! Tu plan ha sido actualizado.');
+        // Recargar datos del usuario
+        this.cargarPerfilUsuario();
+
+        // Limpiar parámetro de URL
+        this.router.navigate([], {
+          queryParams: {},
+          replaceUrl: true,
+        });
+      }
     });
   }
 
@@ -166,7 +202,15 @@ export class PerfilComponent implements OnInit {
       this.cargarPlanes();
     }
   }
-  
+
+  irAMetodoPago() {
+    if (this.planSeleccionado) {
+      this.router.navigate(['/metodo-pago'], {
+        state: { plan: this.planSeleccionado },
+      });
+      this.cerrarModal();
+    }
+  }
 
   cerrarModal() {
     this.modalAbierto = null;
