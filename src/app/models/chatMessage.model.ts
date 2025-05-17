@@ -4,7 +4,7 @@ export interface Conversation {
   id: number;
   created_at: string;
   last_message: string;
-  messages?: Message[];
+  messages: Message[];
 }
 
 export interface Message {
