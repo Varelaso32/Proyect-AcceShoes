@@ -4,7 +4,8 @@ import { RouterModule } from '@angular/router';
 import { CartService, CartItem } from '../../services/cart.service';
 import { Location } from '@angular/common';
 import { NavbarComponent } from "../navbar/navbar.component";
-import { FooterComponent } from "../footer/footer.component";  
+import { FooterComponent } from "../footer/footer.component";
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { FooterComponent } from "../footer/footer.component";
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
 
-  constructor(private cartService: CartService, private location: Location) {}  // Inyecta el servicio Location
+  constructor(private cartService: CartService, private location: Location) { }  // Inyecta el servicio Location
 
   ngOnInit(): void {
     this.cartService.cartItems$.subscribe(items => {
@@ -29,12 +30,54 @@ export class CartComponent implements OnInit {
   }
 
   removeItem(productId: number): void {
-    this.cartService.removeFromCart(productId);
+    Swal.fire({
+      title: '¿Eliminar producto?',
+      text: 'Este producto será eliminado de tu carrito.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cartService.removeFromCart(productId);
+        Swal.fire({
+          title: 'Producto eliminado',
+          text: 'Se eliminó correctamente del carrito.',
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        });
+      }
+    });
   }
 
+
   clearCart(): void {
-    this.cartService.clearCart();
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esto eliminará todos los productos de tu carrito.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, vaciar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cartService.clearCart();
+        Swal.fire({
+          title: 'Carrito vaciado',
+          text: 'Todos los productos han sido eliminados.',
+          icon: 'success',
+          timer: 1500,
+          showConfirmButton: false
+        });
+      }
+    });
   }
+
 
   // Método para devolver al usuario a la página anterior
   goBack(): void {
@@ -50,5 +93,5 @@ export class CartComponent implements OnInit {
       item.quantity--;
       this.cartService.updateCart(this.cartItems);
     }
-}
+  }
 }
