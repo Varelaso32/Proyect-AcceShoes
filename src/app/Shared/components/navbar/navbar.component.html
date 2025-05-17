@@ -10,18 +10,19 @@
             </div>
             <ul class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li><a routerLink="/home">Inicio</a></li>
-                <li tabindex="0">
-                    <details>
-                        <summary>Categorías</summary>
-                        <ul class="p-2">
-                            <li><a [routerLink]="['/category', 'zapatos']">Zapatos</a></li>
-                            <li><a [routerLink]="['/category', 'gorras']">Gorras</a></li>
-                            <li><a [routerLink]="['/category', 'sacos']">Sacos</a></li>
-                            <li><a [routerLink]="['/category', 'collares']">Collares</a></li>
-                            <li><a [routerLink]="['/all-products']">Ver todo</a></li>
-                        </ul>
-                    </details>
+                <li>
+                    <button class="btn btn-ghost w-full justify-start" (click)="toggleCategorias()">
+                        Categorías
+                    </button>
+                    <ul *ngIf="showCategorias" class="p-2 pl-4">
+                        <li><a [routerLink]="['/category', 'zapatos']">Zapatos</a></li>
+                        <li><a [routerLink]="['/category', 'gorras']">Gorras</a></li>
+                        <li><a [routerLink]="['/category', 'sacos']">Sacos</a></li>
+                        <li><a [routerLink]="['/category', 'collares']">Collares</a></li>
+                        <li><a [routerLink]="['/all-products']">Ver todo</a></li>
+                    </ul>
                 </li>
+
 
                 <li><a routerLink="/ofertas">Ofertas</a></li>
                 <li><a routerLink="/sobre-nosotros" fragment="contacto">Contacto</a></li>

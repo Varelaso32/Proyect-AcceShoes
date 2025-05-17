@@ -36,6 +36,15 @@ export class AllCategoriesComponent {
     this.location.back();
   }
   addToCart(product: Product): void {
-    this.cartService.addToCart(product); 
+    this.cartService.addToCart(product);
   }
+  showBackButton = true;
+
+  hideBackButtonTemporarily() {
+    this.showBackButton = false;
+    setTimeout(() => {
+      this.showBackButton = true;
+    }, 3000); 
+  }
+
 }
