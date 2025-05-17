@@ -31,7 +31,7 @@ export class ProductService extends BaseHttpService {
       category: 'Zapatos',
       price: 120.00,
       description: 'Zapatos formales elegantes para ocasiones especiales',
-      imageUrl: 'assets/products/zapatos-formales.jpg',
+      imageUrl: 'https://img.kwcdn.com/product/fancy/60af71e3-72b5-416c-848d-8835723bd69a.jpg?imageMogr2/auto-orient%7CimageView2/2/w/800/q/70/format/webp',
     },
     {
       id: 3,
@@ -39,7 +39,7 @@ export class ProductService extends BaseHttpService {
       category: 'Zapatos',
       price: 75.50,
       description: 'Zapatos casuales para uso diario',
-      imageUrl: 'assets/products/zapatos-casuales.jpg',
+      imageUrl: 'https://media.revistagq.com/photos/622713b4eb46c38200386b9b/4:3/w_4114,h_3085,c_limit/GettyImages-1368472953.jpg',
     },
     {
       id: 4,
@@ -47,7 +47,7 @@ export class ProductService extends BaseHttpService {
       category: 'Gorras',
       price: 25.99,
       description: 'Gorra deportiva con protección UV',
-      imageUrl: 'assets/products/gorra-deportiva.jpg',
+      imageUrl: 'https://comptonstar.com.co/wp-content/uploads/2024/12/DSC01372_1080x.webp',
     },
     {
       id: 5,
@@ -55,7 +55,7 @@ export class ProductService extends BaseHttpService {
       category: 'Gorras',
       price: 34.50,
       description: 'Gorra moderna con diseño a la moda',
-      imageUrl: 'assets/products/gorra-moda.jpg',
+      imageUrl: 'https://www.sportline.com.co/media/catalog/product/b/v/bv1078-100-phsfh001-1000_1.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=&width=&canvas=:&format=jpeg',
     },
     {
       id: 6,
@@ -63,7 +63,7 @@ export class ProductService extends BaseHttpService {
       category: 'Sacos',
       price: 159.99,
       description: 'Saco cálido para temporada de frío',
-      imageUrl: 'assets/products/saco-invierno.jpg',
+      imageUrl: 'https://http2.mlstatic.com/D_NQ_NP_998583-MCO74718776020_032024-O.webp',
     },
     {
       id: 7,
@@ -71,7 +71,7 @@ export class ProductService extends BaseHttpService {
       category: 'Sacos',
       price: 189.95,
       description: 'Saco formal elegante para eventos',
-      imageUrl: 'assets/products/saco-formal.jpg',
+      imageUrl: 'https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/c37dba98716b4688bb73ac9f0109690c_9366/buzo-con-capucha-essentials_-felpa_-logo.jpg',
     },
     {
       id: 8,
@@ -79,7 +79,7 @@ export class ProductService extends BaseHttpService {
       category: 'Collares',
       price: 65.00,
       description: 'Collar de plata con diseño elegante',
-      imageUrl: 'assets/products/collar-plata.jpg',
+      imageUrl: 'https://down-co.img.susercontent.com/file/0dbd15943214d4799fc0f0b2ea6f62f9',
     },
     {
       id: 9,
@@ -87,7 +87,7 @@ export class ProductService extends BaseHttpService {
       category: 'Collares',
       price: 89.99,
       description: 'Collar de perlas cultivadas',
-      imageUrl: 'assets/products/collar-perlas.jpg',
+      imageUrl: 'https://tiendamarvi.com/cdn/shop/files/Collar_Perlas_de_Rio___Aretes_de_Perla_Para_Mujer_AVEMARIA_321159.jpg?v=1713879300',
     },
     {
       id: 10,
@@ -95,7 +95,7 @@ export class ProductService extends BaseHttpService {
       category: 'Collares',
       price: 250.00,
       description: 'Collar de oro de 18 quilates',
-      imageUrl: 'assets/products/collar-oro.jpg',
+      imageUrl: 'https://down-co.img.susercontent.com/file/d5c15838f877e289a7ee7ec344515727',
     },
   ];
 
@@ -107,7 +107,7 @@ export class ProductService extends BaseHttpService {
   getProducts(): Observable<Product[]> {
     // Aquí podrías conectar con tu API real cuando la tengas
     // return this.http.get<Product[]>(`${this.apiUrl}/products`);
-    
+
     // Por ahora, devuelve datos simulados
     return of(this.products);
   }
@@ -118,17 +118,17 @@ export class ProductService extends BaseHttpService {
     if (!query.trim()) {
       return of(this.products);
     }
-    
+
     // Búsqueda insensible a mayúsculas/minúsculas
     const searchTerm = query.toLowerCase();
-    
+
     // Filtrar productos que coincidan con la búsqueda
-    const filteredProducts = this.products.filter(product => 
-      product.name.toLowerCase().includes(searchTerm) || 
+    const filteredProducts = this.products.filter(product =>
+      product.name.toLowerCase().includes(searchTerm) ||
       product.category.toLowerCase().includes(searchTerm) ||
       product.description.toLowerCase().includes(searchTerm)
     );
-    
+
     return of(filteredProducts);
   }
 
