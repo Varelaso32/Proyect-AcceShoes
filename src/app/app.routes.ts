@@ -141,8 +141,19 @@ export const routes: Routes = [
   {
     path: 'peticiones-pqrsd',
     title: 'PQRSD',
+    canActivate: [authGuard],
+
     loadComponent: () =>
       import('./Pages/pqrsd/pqrsd.component').then((m) => m.PqrsdComponent),
+  },
+  {
+    path: 'ubicacion',
+    title: 'Ubicación',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./Pages/ubicacion/ubicacion.component').then(
+        (m) => m.UbicacionComponent
+      ),
   },
   {
     path: 'cart',
