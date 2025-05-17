@@ -48,7 +48,7 @@
         <p class="text-xl font-bold text-cyan-700">Total: ${{ getTotal().toFixed(2) }}</p>
         <div class="flex gap-2">
           <button (click)="clearCart()" class="btn btn-outline btn-warning">Vaciar Carrito</button>
-          <button (click)="goBack()" class="btn btn-outline btn-accent">⬅ Volver atrás</button>
+          <button class="btn btn-outline btn-accent" [routerLink]="['/chat']">Enviar Mensajes</button>
         </div>
       </div>
     </div>

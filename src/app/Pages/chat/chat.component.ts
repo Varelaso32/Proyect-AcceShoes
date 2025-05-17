@@ -63,7 +63,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         if (selected) {
           this.loadConversationDetails(selected.id);
         }
-        this.loadConversations(); // actualiza también lista de conversaciones
+        this.loadConversations(); 
       });
     });
   }
@@ -85,7 +85,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.userService.getUserById(id).subscribe((user) => {
           this.usersMap.set(id, user);
           this.conversations.update((prev) => [...prev]);
-          this.cdr.detectChanges(); // Forzar actualización aquí
+          this.cdr.detectChanges(); 
         });
       }
     });
@@ -120,7 +120,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   markNewMessages(messages: Message[]) {
     const newIds = messages
-      .filter((msg) => msg.sender_id !== this.currentUser.id) // puedes agregar más lógica si usas "read"
+      .filter((msg) => msg.sender_id !== this.currentUser.id) 
       .map((msg) => msg.id);
 
     this.newMessagesIds = new Set(newIds);
