@@ -4,32 +4,39 @@ import { NavbarComponent } from '../../../Shared/components/navbar/navbar.compon
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../Shared/services/user.service';
+import { PlansService } from '../../../Shared/services/plans.service';
 import { UserResponse, UpdateUserDto } from './../../../models/user.model';
-import { finalize } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { Plan } from './../../../models/plan.model';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FooterComponent, NavbarComponent, FormsModule],
+  imports: [CommonModule, FooterComponent, NavbarComponent, FormsModule, RouterModule],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css'],
 })
 export class PerfilComponent implements OnInit {
-  usuario: UserResponse | null = null;
-  editData: UpdateUserDto = { name: '', email: '' };
-  modoOscuro = false;
+  //Data general
   modalAbierto: string | null = null;
-  isLoading: boolean = false;
-  isProfileLoading: boolean = true;
-  isCurrentUser: boolean = true;
   errorMessage: string | null = null;
   successMessage: string | null = null;
   router: any;
+  //Data de user
+  usuario: UserResponse | null = null;
+  editData: UpdateUserDto = { name: '', email: '' };
+  isLoading: boolean = false;
+  isProfileLoading: boolean = true;
+  isCurrentUser: boolean = true;
+  //Data planes
+  planes: Plan[] = [];
+  isPlansLoading = false;
+  planSeleccionado: Plan | null = null;
 
   constructor(
     private userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private plansService: PlansService
   ) {}
 
   ngOnInit() {
@@ -53,6 +60,24 @@ export class PerfilComponent implements OnInit {
         this.handleProfileError(err);
       },
     });
+  }
+
+  cargarPlanes() {
+    this.isPlansLoading = true;
+    this.plansService.getPlans().subscribe({
+      next: (res) => {
+        this.planes = res;
+        this.isPlansLoading = false;
+      },
+      error: () => {
+        console.error('Error al cargar planes');
+        this.isPlansLoading = false;
+      },
+    });
+  }
+
+  seleccionarPlan(plan: Plan) {
+    this.planSeleccionado = plan;
   }
 
   private handleProfileError(err: any) {
@@ -136,7 +161,12 @@ export class PerfilComponent implements OnInit {
     this.modalAbierto = id;
     this.errorMessage = null;
     this.successMessage = null;
+
+    if (id === 'planesModal') {
+      this.cargarPlanes();
+    }
   }
+  
 
   cerrarModal() {
     this.modalAbierto = null;

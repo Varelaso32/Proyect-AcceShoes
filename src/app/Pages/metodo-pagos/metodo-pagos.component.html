@@ -1,0 +1,42 @@
+<app-navbar></app-navbar>
+
+<div class="min-h-screen bg-gray-100 pt-16 pb-16">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto space-y-8">
+
+            <!-- Resumen del pedido -->
+            <section class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-6 border-b pb-3">Resumen del Pedido</h2>
+
+                <div class="flex justify-between mb-3 text-gray-700">
+                    <span>Producto:</span>
+                    <span class="font-medium">Zapatos Deportivos Pro</span>
+                </div>
+
+                <div class="flex justify-between mb-6 text-gray-900">
+                    <span>Total:</span>
+                    <span class="font-bold text-lg">$100.00 MXN</span>
+                </div>
+
+                <!-- Componente PayPal -->
+                <app-paypal></app-paypal>
+            </section>
+
+            <!-- Información adicional -->
+            <section class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold mb-4 border-b pb-2">¿Necesitas ayuda?</h3>
+
+                <p class="text-gray-600 mb-3 flex items-center">
+                    <i class="fas fa-phone-alt mr-3"></i> +52 55 1234 5678
+                </p>
+
+                <p class="text-gray-600 flex items-center">
+                    <i class="fas fa-envelope mr-3"></i> soporteacceshoes.com
+                </p>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>
