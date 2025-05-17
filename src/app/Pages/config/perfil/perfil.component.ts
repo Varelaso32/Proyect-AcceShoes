@@ -50,6 +50,7 @@ export class PerfilComponent implements OnInit {
   ngOnInit() {
     this.cargarPerfilUsuario();
     this.cargarPlanes();
+    this.checkPaymentStatus();
   }
 
   cargarPerfilUsuario() {
@@ -92,6 +93,22 @@ export class PerfilComponent implements OnInit {
         this.isPlansLoading = false;
         this.mostrarError('No se pudieron cargar los planes');
       },
+    });
+  }
+
+  private checkPaymentStatus() {
+    this.route.queryParams.subscribe((params) => {
+      if (params['payment'] === 'success') {
+        this.mostrarExito('¡Pago completado! Tu plan ha sido actualizado.');
+        // Recargar datos del usuario
+        this.cargarPerfilUsuario();
+
+        // Limpiar parámetro de URL
+        this.router.navigate([], {
+          queryParams: {},
+          replaceUrl: true,
+        });
+      }
     });
   }
 

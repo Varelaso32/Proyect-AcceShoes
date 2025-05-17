@@ -159,6 +159,15 @@
     </div>
 </dialog>
 
+<!-- perfil.component.html -->
+<div *ngIf="successMessage" class="alert alert-success mb-4">
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span>{{ successMessage }}</span>
+</div>
+
 <dialog id="planesModal" class="modal" [class.modal-open]="modalAbierto === 'planesModal'">
     <div class="modal-box max-w-5xl">
         <h3 class="font-bold text-xl text-center mb-6">Elige un plan</h3>
