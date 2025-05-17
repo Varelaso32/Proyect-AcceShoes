@@ -29,4 +29,5 @@ export class UserService extends BaseHttpService {
   getAllUsers(): Observable<UserResponse[]> {
     return this.http.get<UserResponse[]>(`${this.apiUrl}/users`);
   }
+  
 }

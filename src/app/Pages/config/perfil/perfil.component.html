@@ -40,22 +40,55 @@
                 </div>
             </div>
 
-            <!-- Tarjeta de Planes -->
-            <div class="card bg-white shadow-md p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('planesModal')">
-                <div class="flex items-center gap-4">
-                    <div class="avatar">
-                        <div class="w-16 h-16 rounded-full overflow-hidden">
-                            <img src="assets/membresia.jpg" alt="Plan Icon" class="w-full h-full object-cover">
+            <!-- En perfil.component.html -->
+            <div class="card bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-cyan-100 p-3 rounded-full">
+                            <i class="fas fa-crown text-cyan-600 text-xl"></i>
                         </div>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg">Tu plan actual</h3>
-                        <p class="text-sm text-gray-500">No tienes ningún plan activo</p>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Tu Plan Actual</h3>
+
+                            <div *ngIf="planActual; else sinPlan">
+                                <p class="text-2xl font-bold text-cyan-700 mt-2">{{ planActual.name }}</p>
+                                <p class="text-gray-600 text-sm mt-1">{{ planActual.description }}</p>
+
+                                <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-clone mr-2 text-cyan-600"></i>
+                                        {{ planActual.maxActivePosts || 'Ilimitadas' }} publicaciones
+                                    </div>
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-bullhorn mr-2 text-cyan-600"></i>
+                                        {{ planActual.promotionsIncluded }} promociones
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <span class="text-lg font-bold text-gray-800">
+                                        {{ planActual.price | currency:'COP ' }}
+                                    </span>
+                                    <span class="text-gray-500 text-sm">/mes</span>
+                                </div>
+                            </div>
+
+                            <ng-template #sinPlan>
+                                <p class="text-gray-600 mt-2">No tienes un plan activo</p>
+                                <button class="btn btn-primary mt-4" (click)="abrirModal('planesModal')">
+                                    <i class="fas fa-plus-circle mr-2"></i>
+                                    Elegir plan
+                                </button>
+                            </ng-template>
+                        </div>
                     </div>
                 </div>
 
-                <div class="text-right mt-4 text-cyan-600 font-semibold">
-                    Ver planes disponibles ⮞
+                <div class="bg-gray-50 px-6 py-3 border-t">
+                    <button class="text-cyan-600 font-medium text-sm" (click)="abrirModal('planesModal')">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Cambiar de plan
+                    </button>
                 </div>
             </div>
 
@@ -168,7 +201,7 @@
         </div>
 
         <div class="modal-action">
-            <button class="btn btn-primary" [disabled]="!planSeleccionado" [routerLink]="['/metodo-pago']" >
+            <button class="btn btn-primary" [disabled]="!planSeleccionado" [routerLink]="['/metodo-pago']">
                 Continuar con el plan {{ planSeleccionado?.name }}
             </button>
             <button class="btn" (click)="cerrarModal()">Cancelar</button>
