@@ -7,7 +7,7 @@ import { UserService } from '../../../Shared/services/user.service';
 import { PlansService } from '../../../Shared/services/plans.service';
 import { UserResponse, UpdateUserDto } from './../../../models/user.model';
 import { Plan } from './../../../models/plan.model';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -27,7 +27,7 @@ export class PerfilComponent implements OnInit {
   modalAbierto: string | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
-  router: any;
+
   //Data de user
   usuario: UserResponse | null = null;
   editData: UpdateUserDto = { name: '', email: '' };
@@ -43,7 +43,8 @@ export class PerfilComponent implements OnInit {
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
-    private plansService: PlansService
+    private plansService: PlansService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -182,6 +183,15 @@ export class PerfilComponent implements OnInit {
 
     if (id === 'planesModal') {
       this.cargarPlanes();
+    }
+  }
+
+  irAMetodoPago() {
+    if (this.planSeleccionado) {
+      this.router.navigate(['/metodo-pago'], {
+        state: { plan: this.planSeleccionado },
+      });
+      this.cerrarModal();
     }
   }
 

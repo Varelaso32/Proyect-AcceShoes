@@ -5,5 +5,5 @@ export const environment = {
 export const environmentPaypal = {
   production: false,
   paypalClientId:
-    'AUPNS5b3-jIxLu3SaMMWZGogs4wMztcD9Cko-EUGS_K3RSDS2fOwAX_D3L-0-LmYu5eL_KOFmO7HweQ-',
+    'AWzorEEFkhMfA_OctR52opMbY8UbjVXvCgQOzIuCZ3szFgVCZi9yJ74UlZ6DFKuXRRKXHtIuvY6wkNt5&currency=MXN',
 };
