@@ -1,0 +1,11 @@
+/* Ejemplo básico */
+body {
+  background-color: white;
+  color: black;
+}
+
+textarea,
+select,
+input {
+  font-family: inherit;
+}

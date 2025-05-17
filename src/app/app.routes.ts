@@ -129,16 +129,25 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./Pages/chat/chat.component').then((m) => m.ChatComponent),
   },
-    {
+  {
     path: 'metodo-pago',
     title: 'Pasarela de Pago',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./Pages/metodo-pagos/metodo-pagos.component').then((m) => m.MetodoPagosComponent),
+      import('./Pages/metodo-pagos/metodo-pagos.component').then(
+        (m) => m.MetodoPagosComponent
+      ),
+  },
+  {
+    path: 'peticiones-pqrsd',
+    title: 'PQRSD',
+    loadComponent: () =>
+      import('./Pages/pqrsd/pqrsd.component').then((m) => m.PqrsdComponent),
   },
   {
     path: 'cart',
     title: 'Carrito de Compras',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./Shared/components/cart/cart.component').then(
         (m) => m.CartComponent
