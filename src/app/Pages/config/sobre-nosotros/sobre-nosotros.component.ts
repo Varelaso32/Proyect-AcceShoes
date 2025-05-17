@@ -29,7 +29,7 @@ export class SobreNosotrosComponent {
       'Hola, quisiera hacer la siguiente consulta:\n\n'
     );
 
-    this.gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=fcecepcomunitario@gmail.com&su=${subject}&body=${body}`;
+    this.gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=acceshoescol@gmail.com&su=${subject}&body=${body}`;
   }
 
   toggleFundadores(): void {
