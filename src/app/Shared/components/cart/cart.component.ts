@@ -53,7 +53,6 @@ export class CartComponent implements OnInit {
     });
   }
 
-
   clearCart(): void {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -77,8 +76,6 @@ export class CartComponent implements OnInit {
       }
     });
   }
-
-
   // Método para devolver al usuario a la página anterior
   goBack(): void {
     this.location.back();
