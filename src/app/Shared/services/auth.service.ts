@@ -1,5 +1,6 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { BaseHttpService } from '../services/base-http.service';
+import { UserResponse } from '../../models/user.model';
 import { Observable, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -56,19 +57,21 @@ export class AuthService extends BaseHttpService {
   loginAuth(data: any) {
     return this.http.post(`${this.apiUrl}/users/login`, data).pipe(
       tap((response: any) => {
-        console.log(data);
-        
         localStorage.setItem(TOKEN_KEY, response.access_token);
-        this.login.set(true); 
+        this.login.set(true);
       })
     );
   }
+
+getUserProfile(): Observable<UserResponse> {
+  return this.http.get<UserResponse>(`${this.apiUrl}/users/me`);
+}
 
   register(data: any) {
     return this.http.post(`${this.apiUrl}/users/`, data).pipe(
       tap((response: any) => {
         localStorage.setItem('access_token', response.access_token);
-        this.login.set(true); 
+        this.login.set(true);
       })
     );
   }
@@ -76,10 +79,7 @@ export class AuthService extends BaseHttpService {
   resetPassword(email: string, newPassword: string) {
     return this.http
       .post(`${this.apiUrl}/users/reset-password`, { email, newPassword })
-      .pipe(
-        tap((response: any) => {
-        })
-      );
+      .pipe(tap((response: any) => {}));
   }
 
   logout() {

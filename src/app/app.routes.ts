@@ -81,6 +81,22 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'home-admin',
+        title: 'Inicio Admin',
+        loadComponent: () =>
+          import('./Pages/admin/home-admin/home-admin.component').then(
+            (m) => m.HomeAdminComponent
+          ),
+      },
+      {
+        path: 'home-selector',
+        title: 'Seleccionar Home',
+        loadComponent: () =>
+          import('./Pages/admin/components/home-selector/home-selector.component').then(
+            (m) => m.HomeSelectorComponent
+          ),
+      },
+      {
         path: 'politica-privacidad',
         title: 'Política de Privacidad',
         loadComponent: () =>
