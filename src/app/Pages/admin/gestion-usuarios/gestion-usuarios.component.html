@@ -1,0 +1,122 @@
+<div class="max-w-9xl mx-auto p-6 bg-white rounded-xl shadow-xl mt-6">
+    <h2 class="text-4xl font-extrabold mb-8 text-gray-900 tracking-wide">Gestión de Usuarios</h2>
+
+    <button (click)="abrirModalCrear()"
+        class="btn bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 mb-6 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition duration-300 font-semibold">
+        Crear nuevo usuario
+    </button>
+
+    <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-md">
+        <table class="table w-full text-gray-800">
+            <thead class="bg-cyan-600 text-white">
+                <tr>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide">Nombre</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide">Email</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide">Plan</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide">Rol</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of usuariosOrdenadosPorRol"
+                    class="even:bg-gray-50 hover:bg-cyan-50 transition-colors duration-200">
+                    <td class="py-4 px-6 font-medium text-black">{{ user.name }}</td>
+                    <td class="py-4 px-6 text-black">{{ user.email }}</td>
+                    <td class="py-4 px-6 text-black">{{ getPlanName(user.plan_id) || 'Sin plan' }}</td>
+                    <td class="py-4 px-6 capitalize text-black">{{ user.role || 'Sin rol' }}</td>
+                    <td class="py-4 px-6 space-x-3">
+                        <button (click)="abrirModalEditar(user)"
+                            class="btn btn-sm bg-yellow-400 hover:bg-yellow-500 text-black font-semibold shadow">
+                            Editar
+                        </button>
+                        <button (click)="eliminarUsuario(user)"
+                            class="btn btn-sm bg-red-500 hover:bg-red-600 text-white font-semibold shadow">
+                            Eliminar
+                        </button>
+
+                        <button class="btn btn-sm bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow"
+                            (click)="confirmarCambioRol(user)">
+                            {{ user.role === 'admin' ? 'Volver Usuario' : 'Volver Admin' }}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Crear -->
+<div *ngIf="modalAbierto === 'crear'" class="modal modal-open">
+    <div class="modal-box rounded-2xl shadow-2xl border border-gray-200">
+        <h3 class="text-2xl font-bold mb-6 text-center text-cyan-700">Crear nuevo usuario</h3>
+        <form (submit)="$event.preventDefault(); crearUsuario()">
+            <label class="label">Nombre</label>
+            <input type="text" [(ngModel)]="nuevoUsuario.name" name="nombre" placeholder="Ej. Juan Pérez"
+                class="input input-bordered w-full" required />
+
+            <label class="label mt-3">Email</label>
+            <input type="email" [(ngModel)]="nuevoUsuario.email" name="email" placeholder="correo@ejemplo.com"
+                class="input input-bordered w-full" required />
+
+            <label class="label mt-3">Contraseña</label>
+            <input type="password" [(ngModel)]="nuevoUsuario.password" name="password" placeholder="Mínimo 8 caracteres"
+                class="input input-bordered w-full" required />
+
+            <label class="label mt-3">Confirmar Contraseña</label>
+            <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword"
+                placeholder="Repite la contraseña" class="input input-bordered w-full" required />
+
+            <div *ngIf="passwordMismatch" class="text-red-600 mt-2 text-sm font-semibold">
+                Las contraseñas no coinciden
+            </div>
+
+            <div class="modal-action mt-6 flex justify-end gap-2">
+                <button type="button" class="btn bg-gray-300 hover:bg-gray-400 text-black"
+                    (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn bg-cyan-600 hover:bg-cyan-700 text-white" [disabled]="isLoading">
+                    Crear
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Modal Editar -->
+<div *ngIf="modalAbierto === 'editar'" class="modal modal-open">
+    <div *ngIf="errorMessage"
+        class="absolute top-4 right-4 bg-red-100 text-red-800 border border-red-300 shadow rounded-md px-4 py-2 z-50">
+        {{ errorMessage }}
+    </div>
+
+    <div class="modal-box relative rounded-2xl shadow-2xl border border-gray-200">
+        <h3 class="text-2xl font-bold mb-6 text-center text-yellow-700">Editar usuario</h3>
+        <form (submit)="$event.preventDefault(); guardarCambios()">
+            <label class="label">Nombre</label>
+            <input type="text" [(ngModel)]="editData.name" name="nombre" placeholder="Ej. Ana Gómez"
+                class="input input-bordered w-full" required />
+
+            <label class="label mt-3">Email</label>
+            <input type="email" [(ngModel)]="editData.email" name="email" placeholder="correo@dominio.com"
+                class="input input-bordered w-full" required />
+
+            <label class="label mt-3">Plan</label>
+            <select [(ngModel)]="editData.plan_id" name="plan" class="select select-bordered w-full">
+                <option [ngValue]="null">Sin plan</option>
+                <option *ngFor="let plan of planes" [ngValue]="plan.id">{{ plan.name }}</option>
+            </select>
+
+            <label class="label mt-3">Contraseña (dejar vacío para no cambiar)</label>
+            <input type="password" [(ngModel)]="editData.password" name="password" placeholder="Nueva contraseña"
+                class="input input-bordered w-full" />
+
+            <div class="modal-action mt-6 flex justify-end gap-2">
+                <button type="button" class="btn bg-gray-300 hover:bg-gray-400 text-black"
+                    (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn bg-yellow-500 hover:bg-yellow-600 text-black" [disabled]="isLoading">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
