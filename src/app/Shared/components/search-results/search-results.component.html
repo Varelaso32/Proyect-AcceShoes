@@ -1,10 +1,14 @@
 <app-navbar></app-navbar>
 
-<div class="container mx-auto px-4 pt-32 min-h-screen">
-    <div class="max-w-7xl mx-auto">
-        <!-- Header de resultados -->
+<!-- Fondo gris claro -->
+<div class="flex justify-center bg-gray-100 px-2 pt-32 min-h-screen">
+    <!-- Card grande central con espacio debajo -->
+    <div class="w-full max-w-[95%] xl:max-w-[1600px] bg-white rounded-xl shadow-xl text-gray-800 px-8 py-10 mb-24">
+
+
+        <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-cyan-700">Resultados de búsqueda</h1>
+            <h1 class="text-4xl font-bold text-cyan-700">🔍 Resultados de búsqueda</h1>
             <p class="text-gray-600 mt-2" *ngIf="searchQuery">
                 Se encontraron {{ searchResults.length }} resultados para "{{ searchQuery }}"
             </p>
@@ -15,22 +19,27 @@
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-700"></div>
         </div>
 
-        <!-- Mensaje si no hay resultados -->
+        <!-- Sin resultados -->
         <div *ngIf="!loading && searchResults.length === 0" class="text-center my-20">
-            <h2 class="text-2xl font-medium text-gray-600">No se encontraron productos que coincidan con tu búsqueda</h2>
+            <h2 class="text-2xl font-medium text-gray-600">No se encontraron productos que coincidan con tu búsqueda
+            </h2>
             <p class="mt-4 text-gray-500">Intenta con otras palabras o navega por nuestras categorías</p>
             <div class="mt-8">
-                <a routerLink="/" class="btn bg-cyan-600 text-white hover:bg-cyan-700">Volver al inicio</a>
+                <button (click)="goHome()" class="btn bg-cyan-600 text-white hover:bg-cyan-700">
+                    Volver al inicio
+                </button>
             </div>
+
         </div>
 
-        <!-- Grid de resultados -->
-        <div *ngIf="!loading && searchResults.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10">
-            <!-- Tarjeta de producto -->
-            <div *ngFor="let product of searchResults" class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+        <!-- Resultados -->
+        <div *ngIf="!loading && searchResults.length > 0"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10">
+            <div *ngFor="let product of searchResults"
+                class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                 <figure class="px-4 pt-4">
-                    <img [src]="product.imageUrl" alt="{{ product.name }}" class="rounded-xl h-48 w-full object-cover" 
-                         onerror="this.src='/api/placeholder/300/300'; this.onerror=null;" />
+                    <img [src]="product.imageUrl" alt="{{ product.name }}" class="rounded-xl h-48 w-full object-cover"
+                        onerror="this.src='/api/placeholder/300/300'; this.onerror=null;" />
                 </figure>
                 <div class="card-body">
                     <h2 class="card-title text-cyan-700">{{ product.name }}</h2>
@@ -41,8 +50,8 @@
                     <div class="flex justify-between items-center mt-4">
                         <span class="text-xl font-bold text-cyan-600">${{ product.price.toFixed(2) }}</span>
                         <div class="card-actions">
-                            <button class="btn btn-sm bg-cyan-600 text-white hover:bg-cyan-700" 
-                                    (click)="navigateToProductDetail(product.id)">
+                            <button class="btn btn-sm bg-cyan-600 text-white hover:bg-cyan-700"
+                                (click)="navigateToProductDetail(product.id)">
                                 Ver detalles
                             </button>
                         </div>
@@ -50,6 +59,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 

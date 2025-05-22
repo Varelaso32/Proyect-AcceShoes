@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../Shared/services/auth.service';
+import { UserResponse } from '../../models/user.model';
 import { finalize } from 'rxjs/operators';
+import { UserService } from '../../Shared/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +26,11 @@ export class LoginComponent {
   isUserBlocked: boolean = false;
   isLoading: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {}
 
@@ -58,6 +64,14 @@ export class LoginComponent {
     localStorage.removeItem(this.getUserKey('failedAttempts'));
   }
 
+  getCurrentUserRole(): string | null {
+    const user = localStorage.getItem('user');
+    if (user) {
+      return JSON.parse(user).role;
+    }
+    return null;
+  }
+
   onSubmit() {
     this.loadUserStatus();
 
@@ -66,7 +80,6 @@ export class LoginComponent {
       return;
     }
 
-    // Validar si faltan campos
     if (!this.user.email || !this.user.password) {
       this.showError('Por favor, completa todos los campos.');
       return;
@@ -74,49 +87,56 @@ export class LoginComponent {
 
     this.isLoading = true;
 
-    this.authService
-      .loginAuth(this.user)
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
-      .subscribe({
-        next: (response) => {
-          localStorage.setItem('access_token', response.access_token);
-          this.unblockUser();            
-          setTimeout(() => {
-            this.router.navigate(['/home']);
-          }, 0);
-        },
-        error: (error) => {
-          this.failedAttempts++;
-          localStorage.setItem(
-            this.getUserKey('failedAttempts'),
-            this.failedAttempts.toString()
-          );
+    this.authService.loginAuth(this.user).subscribe({
+      next: () => {
+        this.authService.getUserProfile().subscribe({
+          next: (user: UserResponse) => {
+            localStorage.setItem('user', JSON.stringify(user));
+            this.unblockUser();
 
-          if (this.failedAttempts >= 3) {
-            this.isUserBlocked = true;
-            localStorage.setItem(this.getUserKey('isUserBlocked'), 'true');
-            this.showError('Demasiados intentos fallidos. Usuario bloqueado.');
-            return;
-          }
+            const role = user.role;
+            if (role === 'admin') {
+              this.router.navigate(['/home-selector']);
+            } else if (role === 'user') {
+              this.router.navigate(['/home']);
+            } else {
+              this.router.navigate(['/unauthorized']);
+            }
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.showError('Error al obtener perfil del usuario');
+            console.error(err);
+          },
+        });
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error al iniciar sesión:', error);
+        this.failedAttempts++;
+        localStorage.setItem(
+          this.getUserKey('failedAttempts'),
+          this.failedAttempts.toString()
+        );
 
-          if (error.status === 401) {
-            this.showError(error.error?.detail);
-          } else if (
-            error.status === 422 &&
-            Array.isArray(error.error?.detail)
-          ) {
-            const validationErrors = error.error.detail
-              .map((e: any) => e.msg.charAt(0).toUpperCase() + e.msg.slice(1))
-              .join(', ');
-            this.showError(validationErrors);
-          } else {
-            this.showError('Error del servidor. Intenta más tarde.');
-          }
-        },
-      });
+        if (this.failedAttempts >= 3) {
+          this.isUserBlocked = true;
+          localStorage.setItem(this.getUserKey('isUserBlocked'), 'true');
+          this.showError('Demasiados intentos fallidos. Usuario bloqueado.');
+          return;
+        }
+
+        if (error.status === 401) {
+          this.showError(error.error?.detail);
+        } else if (error.status === 422 && Array.isArray(error.error?.detail)) {
+          const validationErrors = error.error.detail
+            .map((e: any) => e.msg.charAt(0).toUpperCase() + e.msg.slice(1))
+            .join(', ');
+          this.showError(validationErrors);
+        } else {
+          this.showError('Error del servidor. Intenta más tarde.');
+        }
+      },
+    });
   }
 }

@@ -16,13 +16,13 @@ export class SearchResultsComponent implements OnInit {
   searchQuery: string = '';
   searchResults: Product[] = [];
   loading: boolean = true;
-  
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService
-  ) {}
-  
+  ) { }
+
   ngOnInit(): void {
     // Obtener la consulta de búsqueda desde la URL
     this.route.queryParams.subscribe(params => {
@@ -35,7 +35,7 @@ export class SearchResultsComponent implements OnInit {
       }
     });
   }
-  
+
   searchProducts(): void {
     this.loading = true;
     this.productService.searchProducts(this.searchQuery).subscribe({
@@ -49,8 +49,11 @@ export class SearchResultsComponent implements OnInit {
       }
     });
   }
-  
+
   navigateToProductDetail(productId: number): void {
     this.router.navigate(['/product', productId]);
+  }
+  goHome(): void {
+    this.router.navigate(['/home']);
   }
 }

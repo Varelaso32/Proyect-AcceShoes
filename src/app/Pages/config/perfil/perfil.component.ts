@@ -4,36 +4,53 @@ import { NavbarComponent } from '../../../Shared/components/navbar/navbar.compon
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../Shared/services/user.service';
+import { PlansService } from '../../../Shared/services/plans.service';
 import { UserResponse, UpdateUserDto } from './../../../models/user.model';
-import { finalize } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { Plan } from './../../../models/plan.model';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FooterComponent, NavbarComponent, FormsModule],
+  imports: [
+    CommonModule,
+    FooterComponent,
+    NavbarComponent,
+    FormsModule,
+    RouterModule,
+  ],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css'],
 })
 export class PerfilComponent implements OnInit {
+  //Data general
+  modalAbierto: string | null = null;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
+
+  //Data de user
   usuario: UserResponse | null = null;
   editData: UpdateUserDto = { name: '', email: '' };
-  modoOscuro = false;
-  modalAbierto: string | null = null;
   isLoading: boolean = false;
   isProfileLoading: boolean = true;
   isCurrentUser: boolean = true;
-  errorMessage: string | null = null;
-  successMessage: string | null = null;
-  router: any;
+  //Data planes
+  planes: Plan[] = [];
+  isPlansLoading = false;
+  planSeleccionado: Plan | null = null;
+  planActual: Plan | undefined;
 
   constructor(
     private userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private plansService: PlansService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.cargarPerfilUsuario();
+    this.cargarPlanes();
+    this.checkPaymentStatus();
   }
 
   cargarPerfilUsuario() {
@@ -43,16 +60,60 @@ export class PerfilComponent implements OnInit {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
         this.usuario = user;
-        this.editData = {
-          name: user.name,
-          email: user.email,
-        };
+        this.editData = { name: user.name, email: user.email };
+
+        // Obtenemos el plan actual usando el plan_id del usuario
+        if (user.plan_id) {
+          this.planActual = this.plansService.getPlanById(user.plan_id);
+        }
+
         this.isProfileLoading = false;
       },
+      error: (err) => this.handleProfileError(err),
+    });
+  }
+
+  cargarPlanes() {
+    this.isPlansLoading = true;
+    this.plansService.getPlans().subscribe({
+      next: (res) => {
+        this.planes = res; // Guardamos la lista de planes disponibles
+
+        // Actualizamos el plan actual si el usuario tiene uno asignado
+        if (this.usuario?.plan_id) {
+          this.planActual = res.find(
+            (plan) => plan.id === this.usuario?.plan_id
+          );
+        }
+
+        this.isPlansLoading = false;
+      },
       error: (err) => {
-        this.handleProfileError(err);
+        console.error('Error al cargar planes:', err);
+        this.isPlansLoading = false;
+        this.mostrarError('No se pudieron cargar los planes');
       },
     });
+  }
+
+  private checkPaymentStatus() {
+    this.route.queryParams.subscribe((params) => {
+      if (params['payment'] === 'success') {
+        this.mostrarExito('¡Pago completado! Tu plan ha sido actualizado.');
+        // Recargar datos del usuario
+        this.cargarPerfilUsuario();
+
+        // Limpiar parámetro de URL
+        this.router.navigate([], {
+          queryParams: {},
+          replaceUrl: true,
+        });
+      }
+    });
+  }
+
+  seleccionarPlan(plan: Plan) {
+    this.planSeleccionado = plan;
   }
 
   private handleProfileError(err: any) {
@@ -136,6 +197,19 @@ export class PerfilComponent implements OnInit {
     this.modalAbierto = id;
     this.errorMessage = null;
     this.successMessage = null;
+
+    if (id === 'planesModal') {
+      this.cargarPlanes();
+    }
+  }
+
+  irAMetodoPago() {
+    if (this.planSeleccionado) {
+      this.router.navigate(['/metodo-pago'], {
+        state: { plan: this.planSeleccionado },
+      });
+      this.cerrarModal();
+    }
   }
 
   cerrarModal() {

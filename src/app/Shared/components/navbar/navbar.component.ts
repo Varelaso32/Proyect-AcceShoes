@@ -20,6 +20,8 @@ export class NavbarComponent {
   showSearchSuggestions: boolean = false;
   searchSuggestions: any[] = [];
   cartItemCount: number = 0;
+  showUserDropdown: boolean = false;
+  showCategorias = false;
 
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -29,8 +31,15 @@ export class NavbarComponent {
 
     this.cartService.cartItems$.subscribe(items => {
       this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
-    });
 
+      this.renderer.listen('document', 'click', (event) => {
+        const clickedInside = (event.target as HTMLElement).closest('.user-dropdown');
+        if (!clickedInside) {
+          this.showUserDropdown = false;
+        }
+      });
+    }
+    );
   }
 
   toggleSearch() {
@@ -110,4 +119,7 @@ export class NavbarComponent {
       this.showSearchSuggestions = false;
     }, 200);
   }
+  toggleCategorias() {
+  this.showCategorias = !this.showCategorias;
+}
 }

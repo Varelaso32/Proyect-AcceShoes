@@ -1,32 +1,44 @@
 <app-navbar></app-navbar>
 
-<div class="container mx-auto px-4 pt-32 min-h-screen">
-  <div class="mb-6">
-    <button (click)="goBack()" class="btn btn-outline btn-accent">
-      ⬅ Volver atrás
-    </button>
-  </div>
+<!-- Fondo general con padding y min-height -->
+<div class="flex justify-center bg-gray-100 px-2 pt-32 min-h-screen pb-20">
+  <!-- Contenedor central más ancho -->
+  <div class="w-full max-w-[90%] xl:max-w-[1500px] bg-white rounded-xl shadow-xl text-gray-800 px-8 py-10 space-y-5">
 
-  <h2 class="text-3xl font-bold text-cyan-700 mb-6">Productos por categoría</h2>
+    <!-- Botón volver -->
+    <div>
+      <button (click)="goBack()" class="btn btn-outline btn-accent">
+        ⬅ Volver atrás
+      </button>
+    </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <div *ngFor="let product of products$ | async"
-      class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-      <figure class="px-4 pt-4">
-        <img [src]="product.imageUrl" [alt]="product.name" class="rounded-xl h-48 w-full object-cover"
-          onerror="this.src='/api/placeholder/300/300'; this.onerror=null;" />
-      </figure>
-      <div class="card-body">
-        <h3 class="card-title text-cyan-700">{{ product.name }}</h3>
-        <p class="text-gray-500">{{ product.description }}</p>
-        <div class="mt-2">
-          <span class="badge badge-outline">{{ product.category }}</span>
-        </div>
-        <div class="flex justify-between items-center mt-4">
-          <span class="text-xl font-bold text-cyan-600">${{ product.price.toFixed(2) }}</span>
-          <button (click)="addToCart(product)" class="btn btn-sm bg-green-500 text-white">Agregar al carrito</button>
+    <h2 class="text-4xl font-bold text-cyan-700">Productos por categoría</h2>
 
-          <div class="card-actions">
+    <!-- Grid de productos -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+      <div *ngFor="let product of products$ | async"
+        class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+
+        <figure class="px-4 pt-4">
+          <img [src]="product.imageUrl" [alt]="product.name" class="rounded-xl h-48 w-full object-cover"
+            onerror="this.src='/api/placeholder/300/300'; this.onerror=null;" />
+        </figure>
+
+        <div class="card-body">
+          <h3 class="card-title text-cyan-700">{{ product.name }}</h3>
+          <p class="text-gray-500">{{ product.description }}</p>
+
+          <div class="mt-2">
+            <span class="badge badge-outline">{{ product.category }}</span>
+          </div>
+
+          <div class="mt-4 flex flex-wrap justify-between items-center gap-2">
+            <span class="text-xl font-bold text-cyan-600">${{ product.price.toFixed(2) }}</span>
+
+            <button (click)="addToCart(product)" class="btn btn-sm bg-green-500 text-white hover:bg-green-600">
+              🛒 Agregar al carrito
+            </button>
+
             <button class="btn btn-sm bg-cyan-600 text-white hover:bg-cyan-700" [routerLink]="['/product', product.id]">
               Ver detalles
             </button>

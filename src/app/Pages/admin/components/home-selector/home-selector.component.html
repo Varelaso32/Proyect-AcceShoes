@@ -1,0 +1,28 @@
+<!-- Tarjeta modal centrada -->
+<div class="fixed inset-0 flex items-center justify-center bg-gray-400 bg-opacity-30 z-50 p-4">
+    <div class="bg-white rounded-3xl shadow-xl max-w-sm w-full p-8 flex flex-col items-center text-center
+           border-2 border-cyan-600
+           hover:shadow-cyan-500/40
+           transition-shadow duration-300">
+        <!-- Nombre usuario -->
+        <h2 class="text-cyan-700 font-extrabold text-2xl mb-4 tracking-wide">
+            Bienvenido, {{ userName }}
+        </h2>
+
+        <!-- Pregunta -->
+        <h1 class="text-cyan-900 font-semibold text-3xl mb-8 leading-snug">
+            ¿Dónde deseas ingresar?
+        </h1>
+
+        <!-- Botones -->
+        <button (click)="goToHome()" class="btn btn-wide bg-cyan-600 hover:bg-cyan-700 text-white font-bold mb-5 rounded-xl shadow-md
+             transition-colors duration-300">
+            Home Cliente
+        </button>
+
+        <button (click)="goToAdmin()" class="btn btn-wide bg-transparent border-2 border-cyan-600 text-cyan-700 font-semibold rounded-xl
+             hover:bg-cyan-600 hover:text-white transition-all duration-300">
+            Home Admin
+        </button>
+    </div>
+</div>

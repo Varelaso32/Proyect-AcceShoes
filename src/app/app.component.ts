@@ -14,7 +14,6 @@ import { FooterComponent } from './Shared/components/footer/footer.component';
   imports: [RouterOutlet, CommonModule, NavbarComponent, FooterComponent],
   template: `
     <div [class.dark]="isDarkMode" [class.light]="!isDarkMode">
-      <app-navbar></app-navbar>
       <main class="min-h-[calc(100vh-130px)]">
         <router-outlet></router-outlet>
       </main>
