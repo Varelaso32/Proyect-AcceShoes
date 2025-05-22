@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Product } from '../../models/products.model';
 
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl: string;
-  description: string;
-  category: string;
-}
 
 export interface CartItem {
   product: Product;
@@ -56,8 +49,8 @@ export class CartService {
     this.updateCart([]);
   }
 
-  getTotalPrice(): number {
-    return this.getCart().reduce((total, item) => total + item.product.price * item.quantity, 0);
-  }
+  // getTotalPrice(): number {
+  //   return this.getCart().reduce((total, item) => total + item.product.price * item.quantity, 0);
+  // }
 
 }

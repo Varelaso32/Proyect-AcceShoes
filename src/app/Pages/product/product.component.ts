@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProductService, Product } from '../../Shared/services/product.service';
+import { ProductService } from '../../Shared/services/product.service';
 import { CommonModule, Location } from '@angular/common';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { CartService } from '../../Shared/services/cart.service';
+import { Product } from '../../models/products.model';
 
 @Component({
   selector: 'app-product-detail',
