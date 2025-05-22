@@ -1,0 +1,29 @@
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo">
+            <a routerLink="/home-admin">
+                <img src="assets/logo-acceshoes.png" alt="AcceShoes Logo" style="height: 60px; cursor: pointer;" />
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a routerLink="/admin/usuarios"><i class="fas fa-cog"></i> Gestion de Usuarios</a></li>
+                <li><a routerLink="/categorias"><i class="fas fa-th-large"></i> Categorías</a></li>
+                <li><a routerLink="/compras"><i class="fas fa-shopping-cart"></i> Compras</a></li>
+                <li><a routerLink="/productos"><i class="fas fa-box"></i> Productos</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main content -->
+    <div class="main">
+        <header class="topbar">
+            <div class="admin-info">
+            </div>
+        </header>
+
+        <main class="content">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>
