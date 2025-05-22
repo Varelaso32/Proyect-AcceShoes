@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guard/auth.guard';
+import { NavbarLateralComponent } from './Pages/admin/components/navbar-lateral/navbar-lateral/navbar-lateral.component';
 
 export const routes: Routes = [
   // Redirección inicial
@@ -92,9 +93,9 @@ export const routes: Routes = [
         path: 'home-selector',
         title: 'Seleccionar Home',
         loadComponent: () =>
-          import('./Pages/admin/components/home-selector/home-selector.component').then(
-            (m) => m.HomeSelectorComponent
-          ),
+          import(
+            './Pages/admin/components/home-selector/home-selector.component'
+          ).then((m) => m.HomeSelectorComponent),
       },
       {
         path: 'politica-privacidad',
@@ -176,6 +177,27 @@ export const routes: Routes = [
         path: 'create-category',
         loadComponent: () => import('./Pages/category-create/category-create.component').then(m => m.CategoryCreateComponent)
       }
+    ],
+  },
+
+  {
+    path: 'admin',
+    canActivate: [authGuard],
+    component: NavbarLateralComponent,
+    children: [
+      {
+        path: 'usuarios',
+        title: 'Gestión de Usuarios',
+        loadComponent: () =>
+          import(
+            './Pages/admin/gestion-usuarios/gestion-usuarios.component'
+          ).then((m) => m.GestionUsuariosComponent),
+      },
+      {
+        path: '',
+        redirectTo: 'usuarios',
+        pathMatch: 'full',
+      },
     ],
   },
 

@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CarruselComponent } from '../../Shared/components/carrusel/carrusel.component';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
@@ -10,7 +9,6 @@ import { ChatMessage } from '../../models/chat.model';
   selector: 'app-home',
   imports: [
     CommonModule,
-    CarruselComponent,
     FooterComponent,
     NavbarComponent,
     RouterModule,
