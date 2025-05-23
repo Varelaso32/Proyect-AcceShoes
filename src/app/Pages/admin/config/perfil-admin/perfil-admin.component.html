@@ -1,1 +1,76 @@
-<p>perfil-admin works!</p>
+<!-- Loading State con Progress bar de daisyUI -->
+<div *ngIf="isLoading" class="w-full max-w-md mx-auto py-6">
+    <progress class="progress progress-primary w-full"></progress>
+    <p class="text-center text-gray-500 mt-2 text-base font-medium">Cargando perfil...</p>
+</div>
+
+<!-- Error State con alerta -->
+<div *ngIf="error" class="alert alert-error shadow-lg max-w-md mx-auto my-4">
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728" />
+        </svg>
+        <span>{{ error }}</span>
+    </div>
+</div>
+
+<!-- Perfil Principal -->
+<div *ngIf="userData && !isLoading" class="max-w-4xl mx-auto mt-8 px-4">
+    <!-- Tarjeta de perfil -->
+    <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col md:flex-row gap-6 items-center">
+        <img [src]="userData.img || 'assets/default-avatar.png'" alt="Foto de perfil"
+            class="w-28 h-28 rounded-full object-cover border-4 border-gray-300" />
+        <div class="text-center md:text-left flex-1">
+            <h2 class="text-2xl font-bold text-gray-900">{{ userData.name }}</h2>
+            <p class="text-base text-gray-600 mt-1">{{ userData.role }}</p>
+            <p class="text-base text-gray-600 mt-1">Plan actual: <span class="font-semibold">{{ planData?.name || 'Sin
+                    plan' }}</span></p>
+            <div class="mt-4 flex justify-center md:justify-start gap-4">
+                <button (click)="onEditProfile()"
+                    class="px-4 py-1 text-sm rounded-full bg-blue-600 text-white hover:bg-blue-700 transition">Editar
+                    perfil</button>
+                <button (click)="onSendMessage()"
+                    class="px-4 py-1 text-sm rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300 transition">Enviar
+                    mensaje</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 mt-6 text-center">
+        <div *ngFor="let stat of stats" class="bg-indigo-100 text-indigo-900 p-4 rounded-xl shadow-sm">
+            <p class="text-xl font-bold">{{ stat.value }}</p>
+            <p class="text-sm mt-1">{{ stat.label }}</p>
+        </div>
+    </div>
+
+    <!-- Tabs tipo dashboard -->
+    <div class="mt-8 bg-white rounded-xl shadow-md p-6">
+        <div class="flex border-b border-gray-300">
+            <button (click)="selectedTab='about'" [class.active]="selectedTab === 'about'"
+                class="pb-2 px-4 text-lg font-semibold hover:text-blue-600 border-b-2 transition"
+                [ngClass]="{'border-blue-600 text-blue-600': selectedTab === 'about', 'border-transparent text-gray-500': selectedTab !== 'about'}">Acerca
+                de</button>
+            <button (click)="selectedTab='activity'" [class.active]="selectedTab === 'activity'"
+                class="pb-2 px-4 text-lg font-semibold hover:text-blue-600 border-b-2 transition"
+                [ngClass]="{'border-blue-600 text-blue-600': selectedTab === 'activity', 'border-transparent text-gray-500': selectedTab !== 'activity'}">Actividad</button>
+            <button (click)="selectedTab='settings'" [class.active]="selectedTab === 'settings'"
+                class="pb-2 px-4 text-lg font-semibold hover:text-blue-600 border-b-2 transition"
+                [ngClass]="{'border-blue-600 text-blue-600': selectedTab === 'settings', 'border-transparent text-gray-500': selectedTab !== 'settings'}">Configuración</button>
+        </div>
+
+        <div class="mt-6 text-base text-gray-800" *ngIf="selectedTab === 'about'">
+            <p><strong>Email:</strong> {{ userData.email }}</p>
+        </div>
+
+        <div class="mt-6 text-gray-700" *ngIf="selectedTab === 'activity'">
+            <p class="italic">No hay actividad reciente.</p>
+        </div>
+
+        <div class="mt-6 text-gray-700" *ngIf="selectedTab === 'settings'">
+            <p class="italic">Configuración en desarrollo...</p>
+        </div>
+    </div>
+</div>
