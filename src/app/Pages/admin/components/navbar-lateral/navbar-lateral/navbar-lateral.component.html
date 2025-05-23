@@ -90,9 +90,13 @@
                             <li><a [routerLink]="['/admin/perfil']"
                                     class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-cyan-50 hover:text-cyan-500 rounded-md">
                                     <i class="fas fa-user text-xs"></i> Mi Perfil</a></li>
-                            <li><a href="#"
+                            <li>
+                                <a [routerLink]="['/admin/configuracion']"
                                     class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-cyan-50 hover:text-cyan-500 rounded-md">
-                                    <i class="fas fa-cog text-xs"></i> Configuracion</a></li>
+                                    <i class="fas fa-cog text-xs"></i> Configuración
+                                </a>
+                            </li>
+
                             <li><a href="#" (click)="cerrarSesion()"
                                     class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-cyan-50 hover:text-cyan-500 rounded-md">
                                     <i class="fas fa-sign-out-alt text-xs"></i> Cerrar Seccion</a></li>
