@@ -205,6 +205,14 @@ export const routes: Routes = [
           ).then((m) => m.GestionCategoriasComponent),
       },
       {
+        path: 'perfil',
+        title: 'Perfil',
+        loadComponent: () =>
+          import(
+            './Pages/admin/config/perfil-admin/perfil-admin.component'
+          ).then((m) => m.PerfilAdminComponent),
+      },
+      {
         path: '',
         redirectTo: 'usuarios',
         pathMatch: 'full',
