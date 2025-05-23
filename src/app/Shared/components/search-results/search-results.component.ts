@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ProductService, Product } from '../../services/product.service';
+import { ProductService } from '../../services/product.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
+import { Product } from '../../../models/products.model';
 
 @Component({
   selector: 'app-search-results',

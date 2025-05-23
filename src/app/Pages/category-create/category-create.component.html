@@ -1,0 +1,20 @@
+<h2 class="text-2xl font-bold mb-4">Crear nueva categoría</h2>
+
+<form (ngSubmit)="onSubmit()" class="space-y-4">
+  <div>
+    <label class="block font-medium">Nombre:</label>
+    <input type="text" [(ngModel)]="name" name="name" required class="input input-bordered w-full" />
+  </div>
+
+  <div>
+    <label class="block font-medium">Descripción:</label>
+    <textarea [(ngModel)]="description" name="description" class="textarea textarea-bordered w-full"></textarea>
+  </div>
+
+  <div>
+    <label class="block font-medium">ID de categoría padre (opcional):</label>
+    <input type="number" [(ngModel)]="parent_id" name="parent_id" class="input input-bordered w-full" />
+  </div>
+
+  <button type="submit" class="btn btn-primary">Crear</button>
+</form>
