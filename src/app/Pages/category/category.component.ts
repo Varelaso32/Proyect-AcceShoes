@@ -1,12 +1,13 @@
 import { Component, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ProductService, Product } from '../../Shared/services/product.service';
+import { ProductService } from '../../Shared/services/product.service';
 import { Observable, switchMap } from 'rxjs';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { Location } from '@angular/common';
 import { CartService } from '../../Shared/services/cart.service';
+import { Product } from '../../models/products.model';
 
 @Component({
   selector: 'app-category',
@@ -19,6 +20,7 @@ export class CategoryComponent {
   products$: Observable<Product[]>;
   @ViewChild('modalRef') modalRef!: ElementRef<HTMLDialogElement>;
   addedProductName: string = '';
+  categoryName: string = '';
 
   // Constructor no ha sido alterado
   constructor(
@@ -26,10 +28,12 @@ export class CategoryComponent {
     private productService: ProductService,
     private location: Location,
     private cartService: CartService,
+    
   ) {
     this.products$ = this.route.paramMap.pipe(
       switchMap(params => {
         const category = params.get('category') || '';
+        this.categoryName = category;
         return this.productService.getProductsByCategory(category);
       })
     );

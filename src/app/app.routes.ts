@@ -173,6 +173,10 @@ export const routes: Routes = [
             (m) => m.CartComponent
           ),
       },
+      {
+        path: 'create-category',
+        loadComponent: () => import('./Pages/category-create/category-create.component').then(m => m.CategoryCreateComponent)
+      }
     ],
   },
 

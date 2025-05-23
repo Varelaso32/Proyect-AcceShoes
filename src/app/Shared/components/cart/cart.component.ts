@@ -25,9 +25,7 @@ export class CartComponent implements OnInit {
     });
   }
 
-  getTotal(): number {
-    return this.cartService.getTotalPrice();
-  }
+  
 
   removeItem(productId: number): void {
     Swal.fire({
