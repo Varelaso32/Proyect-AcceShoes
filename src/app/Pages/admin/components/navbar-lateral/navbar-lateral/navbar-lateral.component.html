@@ -1,29 +1,75 @@
 <div class="layout">
+
+    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
             <a routerLink="/home-admin">
-                <img src="assets/logo-acceshoes.png" alt="AcceShoes Logo" style="height: 60px; cursor: pointer;" />
+                <img src="assets/logo-acceshoes.png" alt="AcceShoes Logo" />
             </a>
         </div>
+
         <nav>
             <ul>
-                <li><a routerLink="/admin/usuarios"><i class="fas fa-cog"></i> Gestion de Usuarios</a></li>
-                <li><a routerLink="/categorias"><i class="fas fa-th-large"></i> Categorías</a></li>
-                <li><a routerLink="/compras"><i class="fas fa-shopping-cart"></i> Compras</a></li>
-                <li><a routerLink="/productos"><i class="fas fa-box"></i> Productos</a></li>
+                <li>
+                    <a routerLink="/admin/usuarios" class="menu-link">
+                        <i class="fas fa-cog"></i> Gestión de Usuarios
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/compras" class="menu-link">
+                        <i class="fas fa-shopping-cart"></i> Gestión de Categorias
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/productos" class="menu-link">
+                        <i class="fas fa-box"></i> Productos
+                    </a>
+                </li>
             </ul>
         </nav>
     </aside>
 
-    <!-- Main content -->
+    <!-- Main Content -->
     <div class="main">
+
+        <!-- Topbar -->
         <header class="topbar">
-            <div class="admin-info">
+            <div class="topbar-left">
+                <span class="app-title">AcceShoes Admin</span>
+            </div>
+            <div class="topbar-right">
+
+                <!-- Aquí puedes agregar iconos de notificaciones si quieres -->
+
+                <div class="profile-dropdown-container" (click)="toggleProfileMenu()">
+                    <div class="profile-trigger">
+                        <img src="https://via.placeholder.com/40x40/cyan/fff?text=A" alt="User Avatar"
+                            class="profile-avatar" />
+                    </div>
+
+                    <div class="profile-dropdown-menu" [class.open]="profileMenuOpen">
+                        <div class="dropdown-header">
+                            <span class="welcome-text">Welcome Admin!</span>
+                            <span class="username">Trevor James</span>
+                        </div>
+                        <ul class="dropdown-links">
+                            <li><a href="#"><i class="fas fa-user icon-sm"></i> My Profile</a></li>
+                            <li><a href="#"><i class="fas fa-cog icon-sm"></i> Settings</a></li>
+                            <li class="logout-link"><a href="#"><i class="fas fa-sign-out-alt icon-sm"></i> Log Out</a>
+                            </li>
+                        </ul>
+                        <div class="dropdown-arrow"></div>
+                    </div>
+                </div>
+
             </div>
         </header>
 
+        <!-- Contenido principal -->
         <main class="content">
             <router-outlet></router-outlet>
         </main>
+
     </div>
+
 </div>
