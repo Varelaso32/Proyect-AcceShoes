@@ -1,75 +1,98 @@
-<div class="layout">
+<div class="flex min-h-screen bg-[#f0f2f5]">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="logo">
+    <aside class="flex flex-col w-[250px] bg-cyan-800 text-white py-6">
+        <div class="logo mb-6 flex justify-center">
             <a routerLink="/home-admin">
-                <img src="assets/logo-acceshoes.png" alt="AcceShoes Logo" />
+                <img src="assets/logo-acceshoes.png" alt="AcceShoes Logo" class="h-15" />
             </a>
         </div>
 
-        <nav>
-            <ul>
-                <li>
-                    <a routerLink="/admin/usuarios" class="menu-link">
-                        <i class="fas fa-cog"></i> Gestión de Usuarios
-                    </a>
-                </li>
-                <li>
-                    <a routerLink="/admin/categorias" class="menu-link">
-                        <i class="fas fa-shopping-cart"></i> Gestión de Categorias
-                    </a>
-                </li>
-                <li>
-                    <a routerLink="/productos" class="menu-link">
-                        <i class="fas fa-box"></i> Productos
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <hr class="border-white/30 mx-5 my-2" />
+
+        <ul class="menu bg-transparent text-white text-base">
+            <li>
+                <a routerLink="/admin/usuarios" routerLinkActive="bg-white/30"
+                    class="flex items-center whitespace-nowrap truncate text-white font-semibold px-5 py-3 rounded-lg hover:bg-white/20 transition-colors duration-300">
+                    <i class="fas fa-cog mr-0 text-xl"></i>
+                    Gestión de Usuarios
+                </a>
+            </li>
+            <li>
+                <a routerLink="/admin/categorias" routerLinkActive="bg-white/30"
+                    class="flex items-center whitespace-nowrap truncate text-white font-semibold px-5 py-3 rounded-lg hover:bg-white/20 transition-colors duration-300">
+                    <i class="fas fa-shopping-cart mr-0 text-xl"></i>
+                    Gestión de Categorías
+                </a>
+            </li>
+            <li>
+                <details class="group text-white" open>
+                    <summary
+                        class="flex items-center justify-between font-semibold px-6 py-3 rounded-lg hover:bg-white/20 transition-colors duration-300 cursor-pointer whitespace-nowrap truncate">
+                        <span class="flex items-center truncate">
+                            <i class="fa-solid fa-box mr-1 text-xl"></i> Revisiones
+                        </span>
+                        <i
+                            class="fa-solid fa-chevron-right text-base transition-transform duration-300 group-open:rotate-90"></i>
+                    </summary>
+                    <ul class="pl-10 mt-2 space-y-1">
+                        <li>
+                            <a routerLink="/productos/revision1" routerLinkActive="bg-white/30"
+                                class="block py-2 text-sm hover:bg-white/10 rounded-md transition whitespace-nowrap truncate">
+                                PQRSD
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/productos/revision2" routerLinkActive="bg-white/30"
+                                class="block py-2 text-sm hover:bg-white/10 rounded-md transition whitespace-nowrap truncate">
+                                SOPORTE
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+
+
     </aside>
 
-    <!-- Main Content -->
-    <div class="main">
+    <div class="flex flex-col flex-1 h-screen overflow-hidden">
 
-        <!-- Topbar -->
-        <header class="topbar">
+        <header class="h-[60px] bg-white border-b border-gray-300 px-5 flex justify-between items-center">
             <div class="topbar-left">
-                <span class="app-title">AcceShoes Admin</span>
+                <span class="font-bold text-lg text-gray-800">AcceShoes Admin</span>
             </div>
-            <div class="topbar-right">
-
-                <!-- Aquí puedes agregar iconos de notificaciones si quieres -->
-
-                <div class="profile-dropdown-container" (click)="toggleProfileMenu()">
-                    <div class="profile-trigger">
+            <div class="topbar-right flex items-center gap-4">
+                <div class="profile-dropdown-container relative cursor-pointer" (click)="toggleProfileMenu()">
+                    <div
+                        class="w-10 h-10 rounded-full overflow-hidden border-2 border-cyan-500 hover:border-cyan-700 transition-colors duration-300">
                         <img src="https://via.placeholder.com/40x40/cyan/fff?text=A" alt="User Avatar"
-                            class="profile-avatar" />
+                            class="w-full h-full object-cover" />
                     </div>
-
-                    <div class="profile-dropdown-menu" [class.open]="profileMenuOpen">
-                        <div class="dropdown-header">
-                            <span class="welcome-text">Welcome Admin!</span>
-                            <span class="username">Trevor James</span>
+                    <div class="profile-dropdown-menu absolute top-12 right-0 w-44 bg-white shadow-lg rounded-lg opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-200 z-10"
+                        [class.open]="profileMenuOpen">
+                        <div class="dropdown-header border-b border-gray-200 px-4 py-3">
+                            <span class="block text-gray-600 text-sm">Welcome Admin!</span>
+                            <span class="font-semibold text-cyan-500">Trevor James</span>
                         </div>
-                        <ul class="dropdown-links">
-                            <li><a href="#"><i class="fas fa-user icon-sm"></i> My Profile</a></li>
-                            <li><a href="#"><i class="fas fa-cog icon-sm"></i> Settings</a></li>
-                            <li class="logout-link"><a href="#"><i class="fas fa-sign-out-alt icon-sm"></i> Log Out</a>
-                            </li>
+                        <ul class="dropdown-links py-2">
+                            <li><a href="#"
+                                    class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-cyan-50 hover:text-cyan-500 rounded-md"><i
+                                        class="fas fa-user text-xs"></i> My Profile</a></li>
+                            <li><a href="#"
+                                    class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-cyan-50 hover:text-cyan-500 rounded-md"><i
+                                        class="fas fa-cog text-xs"></i> Settings</a></li>
+                            <li><a href="#"
+                                    class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-cyan-50 hover:text-cyan-500 rounded-md"><i
+                                        class="fas fa-sign-out-alt text-xs"></i> Log Out</a></li>
                         </ul>
                         <div class="dropdown-arrow"></div>
                     </div>
                 </div>
-
             </div>
         </header>
 
-        <!-- Contenido principal -->
-        <main class="content">
+        <main class="flex-1 overflow-y-auto p-4 bg-[#f4f6f9]">
             <router-outlet></router-outlet>
         </main>
-
     </div>
-
 </div>

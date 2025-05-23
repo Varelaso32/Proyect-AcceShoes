@@ -12,6 +12,11 @@ import { CommonModule } from '@angular/common';
 export class NavbarLateralComponent {
   submenuStates: { [key: string]: boolean } = {};
   profileMenuOpen = false;
+  sublistaAbierta = false;
+  
+  toggleSublista() {
+    this.sublistaAbierta = !this.sublistaAbierta;
+  }
 
   toggleSubmenu(name: string) {
     this.submenuStates[name] = !this.submenuStates[name];
