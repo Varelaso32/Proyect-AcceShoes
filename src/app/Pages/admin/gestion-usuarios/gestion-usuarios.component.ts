@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../Shared/services/user.service';
 import {
-  CreateUserDto,
   UpdateUserDto,
   UpdateUserWithPasswordDto,
   UserResponse,
