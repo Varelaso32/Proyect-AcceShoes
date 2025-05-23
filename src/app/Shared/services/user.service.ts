@@ -12,6 +12,8 @@ import { BaseHttpService } from './base-http.service';
   providedIn: 'root',
 })
 export class UserService extends BaseHttpService {
+  private readonly BLOCKED_USERS_KEY = 'blocked_users';
+
   getCurrentUser(): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${this.apiUrl}/users/me`);
   }
@@ -81,5 +83,27 @@ export class UserService extends BaseHttpService {
       `${this.apiUrl}/users/${userId}/plan?plan_id=${planId}`,
       {}
     );
+  }
+  getBlockedUsers(): string[] {
+    const blocked = localStorage.getItem(this.BLOCKED_USERS_KEY);
+    return blocked ? JSON.parse(blocked) : [];
+  }
+
+  blockUser(email: string): void {
+    const blocked = this.getBlockedUsers();
+    if (!blocked.includes(email)) {
+      blocked.push(email);
+      localStorage.setItem(this.BLOCKED_USERS_KEY, JSON.stringify(blocked));
+    }
+  }
+
+  unblockUser(email: string): void {
+    const blocked = this.getBlockedUsers();
+    const updated = blocked.filter((e) => e !== email);
+    localStorage.setItem(this.BLOCKED_USERS_KEY, JSON.stringify(updated));
+  }
+
+  isUserBlocked(email: string): boolean {
+    return this.getBlockedUsers().includes(email);
   }
 }

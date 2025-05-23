@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../Shared/services/user.service';
+import { AuthService } from '../../../Shared/services/auth.service';
 import {
   UpdateUserDto,
   UpdateUserWithPasswordDto,
@@ -64,8 +65,9 @@ export class GestionUsuariosComponent implements OnInit {
   isLoading = false;
 
   constructor(
-    private userService: UserService,
-    private plansService: PlansService
+    public userService: UserService,
+    private plansService: PlansService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -197,6 +199,35 @@ export class GestionUsuariosComponent implements OnInit {
     };
     this.modalAbierto = 'editar';
     this.limpiarMensajes();
+  }
+
+  // Función para bloquear/desbloquear
+  toggleUserBlock(user: UserResponse) {
+    const action = this.userService.isUserBlocked(user.email)
+      ? 'desbloquear'
+      : 'bloquear';
+
+    Swal.fire({
+      title: `¿Estás seguro?`,
+      text: `¿Deseas ${action} al usuario "${user.name}"?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#06b6d4',
+      cancelButtonColor: '#d33',
+      confirmButtonText: `Sí, ${action}`,
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (action === 'bloquear') {
+          this.userService.blockUser(user.email);
+        } else {
+          this.userService.unblockUser(user.email);
+          // Opcional: Resetear intentos fallidos al desbloquear
+          this.authService.resetFailedAttempts(user.email);
+        }
+        this.mostrarExito(`Usuario "${user.name}" ${action} correctamente`);
+      }
+    });
   }
 
   async guardarCambios() {

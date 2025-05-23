@@ -15,6 +15,7 @@
                     <th class="py-4 px-6 text-left font-semibold tracking-wide">Email</th>
                     <th class="py-4 px-6 text-left font-semibold tracking-wide">Plan</th>
                     <th class="py-4 px-6 text-left font-semibold tracking-wide">Rol</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide">Estado</th>
                     <th class="py-4 px-6 text-left font-semibold tracking-wide">Acciones</th>
                 </tr>
             </thead>
@@ -29,6 +30,14 @@
                     <td class="py-4 px-6 text-black">{{ user.email }}</td>
                     <td class="py-4 px-6 text-black">{{ getPlanName(user.plan_id) || 'Sin plan' }}</td>
                     <td class="py-4 px-6 capitalize text-black">{{ user.role || 'Sin rol' }}</td>
+                    <td class="py-4 px-6">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="{
+            'bg-red-100 text-red-800': userService.isUserBlocked(user.email),
+            'bg-green-100 text-green-800': !userService.isUserBlocked(user.email)
+        }">
+                            {{ userService.isUserBlocked(user.email) ? 'Bloqueado' : 'Activo' }}
+                        </span>
+                    </td>
                     <td class="py-4 px-6 space-x-3">
                         <button (click)="abrirModalEditar(user)"
                             class="btn btn-sm bg-cyan-600 hover:bg-cyan-700 text-white font-semibold shadow p-2 rounded">
@@ -51,6 +60,15 @@
                         <button class="btn btn-sm bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow"
                             (click)="confirmarCambioRol(user)">
                             {{ user.role === 'admin' ? 'Volver Usuario' : 'Volver Admin' }}
+                        </button>
+
+                        <!-- NUEVO BOTÓN DE BLOQUEO/DESBLOQUEO -->
+                        <button (click)="toggleUserBlock(user)"
+                            class="btn btn-sm font-semibold shadow px-3 py-2 rounded" [ngClass]="{
+            'bg-yellow-500 hover:bg-yellow-600 text-white': !userService.isUserBlocked(user.email),
+            'bg-green-500 hover:bg-green-600 text-white': userService.isUserBlocked(user.email)
+        }">
+                            {{ userService.isUserBlocked(user.email) ? 'Desbloquear' : 'Bloquear' }}
                         </button>
                     </td>
                 </tr>
