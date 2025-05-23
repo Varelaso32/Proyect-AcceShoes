@@ -175,8 +175,11 @@ export const routes: Routes = [
       },
       {
         path: 'create-category',
-        loadComponent: () => import('./Pages/category-create/category-create.component').then(m => m.CategoryCreateComponent)
-      }
+        loadComponent: () =>
+          import('./Pages/category-create/category-create.component').then(
+            (m) => m.CategoryCreateComponent
+          ),
+      },
     ],
   },
 
@@ -192,6 +195,14 @@ export const routes: Routes = [
           import(
             './Pages/admin/gestion-usuarios/gestion-usuarios.component'
           ).then((m) => m.GestionUsuariosComponent),
+      },
+      {
+        path: 'categorias',
+        title: 'Gestión de Categorias',
+        loadComponent: () =>
+          import(
+            './Pages/admin/gestion-categorias/gestion-categorias.component'
+          ).then((m) => m.GestionCategoriasComponent),
       },
       {
         path: '',
