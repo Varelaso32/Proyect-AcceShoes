@@ -1,0 +1,122 @@
+<div class="flex justify-center bg-gray-100 px-2 pt-32 min-h-screen pb-20">
+    <div class="w-full max-w-2xl bg-white rounded-xl shadow-xl p-8">
+        <h2 class="text-3xl font-bold text-cyan-700 mb-6">Crear Nuevo Producto</h2>
+
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-4">
+            <!-- Nombre -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Nombre del Producto*</span>
+                </label>
+                <input type="text" formControlName="name" class="input input-bordered w-full"
+                    [class.input-error]="productForm.get('name')?.invalid && (productForm.get('name')?.dirty || productForm.get('name')?.touched)">
+                <div *ngIf="productForm.get('name')?.invalid && (productForm.get('name')?.dirty || productForm.get('name')?.touched)"
+                    class="text-red-500 text-sm">
+                    El nombre es requerido
+                </div>
+            </div>
+
+            <!-- Precio -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Precio*</span>
+                </label>
+                <input type="number" formControlName="price" class="input input-bordered w-full"
+                    [class.input-error]="productForm.get('price')?.invalid && (productForm.get('price')?.dirty || productForm.get('price')?.touched)"
+                    min="0" step="0.01">
+                <div *ngIf="productForm.get('price')?.errors?.['required'] && (productForm.get('price')?.dirty || productForm.get('price')?.touched)"
+                    class="text-red-500 text-sm">
+                    El precio es requerido
+                </div>
+                <div *ngIf="productForm.get('price')?.errors?.['min']" class="text-red-500 text-sm">
+                    El precio debe ser mayor o igual a 0
+                </div>
+            </div>
+
+            <!-- Descripción -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Descripción*</span>
+                </label>
+                <textarea formControlName="description" class="textarea textarea-bordered w-full h-32"
+                    [class.textarea-error]="productForm.get('description')?.invalid && (productForm.get('description')?.dirty || productForm.get('description')?.touched)"></textarea>
+                <div *ngIf="productForm.get('description')?.invalid && (productForm.get('description')?.dirty || productForm.get('description')?.touched)"
+                    class="text-red-500 text-sm">
+                    La descripción es requerida
+                </div>
+            </div>
+
+            <!-- Talla -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Talla*</span>
+                </label>
+                <select formControlName="size" class="select select-bordered w-full"
+                    [class.select-error]="productForm.get('size')?.invalid && (productForm.get('size')?.dirty || productForm.get('size')?.touched)">
+                    <option value="" disabled selected>Selecciona una talla</option>
+                    <option *ngFor="let size of sizes" [value]="size">{{ size }}</option>
+                </select>
+                <div *ngIf="productForm.get('size')?.invalid && (productForm.get('size')?.dirty || productForm.get('size')?.touched)"
+                    class="text-red-500 text-sm">
+                    La talla es requerida
+                </div>
+            </div>
+
+            <!-- Tipo de Producto -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Tipo de Producto*</span>
+                </label>
+                <select formControlName="type_of_product" class="select select-bordered w-full"
+                    [class.select-error]="productForm.get('type_of_product')?.invalid && (productForm.get('type_of_product')?.dirty || productForm.get('type_of_product')?.touched)">
+                    <option value="" disabled selected>Selecciona un tipo</option>
+                    <option *ngFor="let type of productTypes" [value]="type">{{ type }}</option>
+                </select>
+                <div *ngIf="productForm.get('type_of_product')?.invalid && (productForm.get('type_of_product')?.dirty || productForm.get('type_of_product')?.touched)"
+                    class="text-red-500 text-sm">
+                    El tipo de producto es requerido
+                </div>
+            </div>
+
+            <!-- Categoría -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Categoría*</span>
+                </label>
+                <select formControlName="category_id" class="select select-bordered w-full"
+                    [class.select-error]="productForm.get('category_id')?.invalid && (productForm.get('category_id')?.dirty || productForm.get('category_id')?.touched)">
+                    <option value="" disabled selected>Selecciona una categoría</option>
+                    <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+                </select>
+                <div *ngIf="productForm.get('category_id')?.invalid && (productForm.get('category_id')?.dirty || productForm.get('category_id')?.touched)"
+                    class="text-red-500 text-sm">
+                    La categoría es requerida
+                </div>
+            </div>
+
+            <!-- Imagen (comentado para futuro uso) -->
+            <!-- <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Imagen del Producto*</span>
+                </label>
+                <input type="file" (change)="onFileSelected($event)" class="file-input file-input-bordered w-full"
+                    accept="image/*" required>
+                <div *ngIf="productForm.get('image')?.invalid && (productForm.get('image')?.dirty || productForm.get('image')?.touched)"
+                    class="text-red-500 text-sm">
+                    La imagen es requerida
+                </div>
+            </div> -->
+
+            <!-- Botones -->
+            <div class="flex justify-end space-x-4 pt-6">
+                <button type="button" (click)="onCancel()" class="btn btn-outline btn-error">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid || isLoading">
+                    <span *ngIf="!isLoading">Crear Producto</span>
+                    <span *ngIf="isLoading" class="loading loading-spinner"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
