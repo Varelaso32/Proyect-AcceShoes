@@ -175,8 +175,11 @@ export const routes: Routes = [
       },
       {
         path: 'create-category',
-        loadComponent: () => import('./Pages/category-create/category-create.component').then(m => m.CategoryCreateComponent)
-      }
+        loadComponent: () =>
+          import('./Pages/category-create/category-create.component').then(
+            (m) => m.CategoryCreateComponent
+          ),
+      },
     ],
   },
   {
@@ -213,6 +216,30 @@ export const routes: Routes = [
           import(
             './Pages/admin/gestion-usuarios/gestion-usuarios.component'
           ).then((m) => m.GestionUsuariosComponent),
+      },
+      {
+        path: 'categorias',
+        title: 'Gestión de Categorias',
+        loadComponent: () =>
+          import(
+            './Pages/admin/gestion-categorias/gestion-categorias.component'
+          ).then((m) => m.GestionCategoriasComponent),
+      },
+      {
+        path: 'planes',
+        title: 'Gestión de Planes',
+        loadComponent: () =>
+          import(
+            './Pages/admin/gestion-planes/gestion-planes.component'
+          ).then((m) => m.GestionPlanesComponent),
+      },
+      {
+        path: 'perfil',
+        title: 'Perfil',
+        loadComponent: () =>
+          import(
+            './Pages/admin/config/perfil-admin/perfil-admin.component'
+          ).then((m) => m.PerfilAdminComponent),
       },
       {
         path: '',

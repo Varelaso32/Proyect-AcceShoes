@@ -6,3 +6,6 @@ export interface Plan {
   maxActivePosts: number | null;
   promotionsIncluded: number;
 }
+
+
+export type CreatePlanDto = Omit<Plan, 'id'>;
