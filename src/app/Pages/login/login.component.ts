@@ -75,8 +75,11 @@ export class LoginComponent {
   onSubmit() {
     this.loadUserStatus();
 
-    if (this.isUserBlocked) {
-      this.showError('Usuario bloqueado. Intenta de nuevo en unos segundos.');
+    // Primero verificar si el usuario está bloqueado
+    if (this.userService.isUserBlocked(this.user.email)) {
+      this.showError(
+        'Usuario bloqueado. Por favor, contacte al administrador del sistema.'
+      );
       return;
     }
 
@@ -92,8 +95,9 @@ export class LoginComponent {
         this.authService.getUserProfile().subscribe({
           next: (user: UserResponse) => {
             localStorage.setItem('user', JSON.stringify(user));
-            this.unblockUser();
+            this.resetFailedAttempts(); // Limpiar intentos fallidos al iniciar sesión correctamente
 
+            // Redirección según rol
             const role = user.role;
             if (role === 'admin') {
               this.router.navigate(['/home-selector']);
@@ -112,31 +116,52 @@ export class LoginComponent {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('Error al iniciar sesión:', error);
-        this.failedAttempts++;
-        localStorage.setItem(
-          this.getUserKey('failedAttempts'),
-          this.failedAttempts.toString()
-        );
 
-        if (this.failedAttempts >= 3) {
-          this.isUserBlocked = true;
-          localStorage.setItem(this.getUserKey('isUserBlocked'), 'true');
-          this.showError('Demasiados intentos fallidos. Usuario bloqueado.');
+        // Registrar intento fallido
+        this.registerFailedAttempt();
+
+        // Verificar si ahora está bloqueado
+        if (this.userService.isUserBlocked(this.user.email)) {
+          this.showError(
+            'Usuario bloqueado por múltiples intentos fallidos. Contacte al administrador.'
+          );
           return;
         }
 
+        // Manejar otros tipos de errores
         if (error.status === 401) {
-          this.showError(error.error?.detail);
+          this.showError(error.error?.detail || 'Credenciales incorrectas');
         } else if (error.status === 422 && Array.isArray(error.error?.detail)) {
           const validationErrors = error.error.detail
             .map((e: any) => e.msg.charAt(0).toUpperCase() + e.msg.slice(1))
             .join(', ');
           this.showError(validationErrors);
         } else {
-          this.showError('Error del servidor. Intenta más tarde.');
+          this.showError('Error del servidor. Intente más tarde.');
         }
       },
     });
+  }
+
+  // Nuevos métodos auxiliares
+  private registerFailedAttempt(): void {
+    this.failedAttempts++;
+    localStorage.setItem(
+      this.getUserKey('failedAttempts'),
+      this.failedAttempts.toString()
+    );
+
+    if (this.failedAttempts >= 3) {
+      this.userService.blockUser(this.user.email);
+      this.isUserBlocked = true;
+      localStorage.setItem(this.getUserKey('isUserBlocked'), 'true');
+    }
+  }
+
+  private resetFailedAttempts(): void {
+    this.failedAttempts = 0;
+    this.isUserBlocked = false;
+    localStorage.removeItem(this.getUserKey('failedAttempts'));
+    localStorage.removeItem(this.getUserKey('isUserBlocked'));
   }
 }

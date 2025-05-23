@@ -1,52 +1,45 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { BaseHttpService } from '../services/base-http.service';
 import { UserResponse } from '../../models/user.model';
-import { Observable, of, tap } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
 
 const STORE_KEY = 'login';
-const TOKEN_KEY = 'access_token'; // Nombre para el token
-
-const loadFromLocalStorage = () => {
-  try {
-    const loginFromLocalStorage = localStorage.getItem(STORE_KEY);
-    if (loginFromLocalStorage === null) return false;
-    return JSON.parse(loginFromLocalStorage.toString());
-  } catch (error) {
-    console.error('Error loading login state from localStorage:', error);
-    return false;
-  }
-};
+const TOKEN_KEY = 'access_token';
+const FAILED_ATTEMPTS_KEY = 'failed_attempts';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService extends BaseHttpService {
   // Estado de login usando señales
-  login = signal<boolean>(loadFromLocalStorage());
+  login = signal<boolean>(this.loadFromLocalStorage());
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private userService: UserService) {
     super();
-
-    // Verificar token al inicio
     this.checkTokenValidity();
   }
 
   // Verificar si el token es válido
   private checkTokenValidity() {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (!token) {
+    if (!localStorage.getItem(TOKEN_KEY)) {
       this.login.set(false);
     }
   }
 
-  saveLoginToLocalStorage = effect(() => {
+  private loadFromLocalStorage(): boolean {
     try {
-      const login = JSON.stringify(this.login());
-      localStorage.setItem(STORE_KEY, login);
+      const loginFromLocalStorage = localStorage.getItem(STORE_KEY);
+      return loginFromLocalStorage ? JSON.parse(loginFromLocalStorage) : false;
     } catch (error) {
-      console.error('Error saving login state to localStorage:', error);
+      console.error('Error loading login state:', error);
+      return false;
     }
+  }
+
+  saveLoginToLocalStorage = effect(() => {
+    localStorage.setItem(STORE_KEY, JSON.stringify(this.login()));
   });
 
   getAuthToken(): Observable<boolean> {
@@ -54,18 +47,48 @@ export class AuthService extends BaseHttpService {
     return of(!!token);
   }
 
-  loginAuth(data: any) {
+  loginAuth(data: { email: string; password: string }) {
+    if (this.userService.isUserBlocked(data.email)) {
+      return throwError(
+        () => new Error('Usuario bloqueado. Contacte al administrador.')
+      );
+    }
+
     return this.http.post(`${this.apiUrl}/users/login`, data).pipe(
       tap((response: any) => {
         localStorage.setItem(TOKEN_KEY, response.access_token);
         this.login.set(true);
+        this.resetFailedAttempts(data.email);
+      }),
+      catchError((error) => {
+        this.registerFailedAttempt(data.email);
+        return throwError(() => error);
       })
     );
   }
 
-getUserProfile(): Observable<UserResponse> {
-  return this.http.get<UserResponse>(`${this.apiUrl}/users/me`);
-}
+  // Método para registrar intento fallido
+  registerFailedAttempt(email: string): void {
+    const attemptsKey = `${FAILED_ATTEMPTS_KEY}_${email}`;
+    const attempts = Number(localStorage.getItem(attemptsKey)) || 0;
+    const newAttempts = attempts + 1;
+
+    localStorage.setItem(attemptsKey, newAttempts.toString());
+
+    if (newAttempts >= 3) {
+      this.userService.blockUser(email);
+    }
+  }
+
+  // Método para resetear intentos fallidos
+  resetFailedAttempts(email: string): void {
+    const attemptsKey = `${FAILED_ATTEMPTS_KEY}_${email}`;
+    localStorage.removeItem(attemptsKey);
+  }
+
+  getUserProfile(): Observable<UserResponse> {
+    return this.http.get<UserResponse>(`${this.apiUrl}/users/me`);
+  }
 
   register(data: any) {
     return this.http.post(`${this.apiUrl}/users/`, data).pipe(

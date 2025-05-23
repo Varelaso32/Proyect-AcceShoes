@@ -1,0 +1,110 @@
+<div class="flex min-h-screen bg-[#f0f2f5]">
+  <!-- Sidebar -->
+  <aside class="flex flex-col w-[250px] bg-cyan-800 text-white py-6">
+    <div class="logo mb-6 flex justify-center">
+      <a routerLink="/home-admin">
+        <img src="assets/logo-acceshoes.png" alt="Logo" class="h-15" />
+      </a>
+    </div>
+    <hr class="border-white/30 mx-5 my-2" />
+    <ul class="menu text-white text-base">
+      <li>
+        <a routerLink="/admin/configuracion" routerLinkActive="bg-white/30"
+          class="flex items-center px-5 py-3 rounded-lg hover:bg-white/20 font-semibold">
+          <i class="fas fa-cog mr-2 text-xl"></i> Configuración
+        </a>
+      </li>
+      <!-- Puedes agregar más elementos aquí -->
+    </ul>
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="flex flex-col flex-1 h-screen overflow-hidden">
+    <!-- Topbar -->
+    <header class="h-[60px] bg-white border-b px-5 flex justify-between items-center">
+      <span class="font-bold text-lg text-gray-800">Panel Administrativo</span>
+      <div class="relative cursor-pointer" (click)="toggleProfileMenu()">
+        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-cyan-500">
+          <img *ngIf="user?.img; else defaultAvatar" [src]="user?.img" alt="Avatar" class="w-full h-full object-cover" />
+          <ng-template #defaultAvatar>
+            <img src="assets/user_pordefault.jpg" alt="Default Avatar" class="w-full h-full object-cover" />
+          </ng-template>
+        </div>
+
+        <!-- Menú desplegable -->
+        <div class="absolute top-12 right-0 w-44 bg-white shadow-lg rounded-lg opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-200 z-10"
+             [class.opacity-100]="profileMenuOpen" [class.pointer-events-auto]="profileMenuOpen" [class.translate-y-0]="profileMenuOpen">
+          <div class="border-b px-4 py-3">
+            <span class="block text-sm text-gray-600">Bienvenido</span>
+            <span class="font-semibold text-cyan-500">{{ user?.name }}</span>
+          </div>
+          <ul class="py-2">
+            <li><a routerLink="/admin/perfil" class="flex items-center gap-2 px-4 py-2 hover:bg-cyan-50 text-gray-700">
+              <i class="fas fa-user text-xs"></i> Mi Perfil</a></li>
+            <li><a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-cyan-50 text-gray-700">
+              <i class="fas fa-cog text-xs"></i> Configuración</a></li>
+            <li><a href="#" (click)="cerrarSesion()" class="flex items-center gap-2 px-4 py-2 hover:bg-cyan-50 text-gray-700">
+              <i class="fas fa-sign-out-alt text-xs"></i> Cerrar Sesión</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido de configuraciones -->
+    <main class="flex-1 overflow-y-auto p-6 bg-[#f4f6f9]">
+      <h2 class="text-3xl font-bold text-cyan-600 mb-6">Configuraciones</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Idioma -->
+        <div class="bg-white shadow p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('idiomaModal')">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              🌐 <span class="font-semibold">Idioma</span>
+            </div>
+            <span>⮞</span>
+          </div>
+        </div>
+
+        <!-- Tema -->
+        <div class="bg-white shadow p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('temaModal')">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              🌙 <span class="font-semibold">Tema</span>
+            </div>
+            <span>⮞</span>
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="bg-white shadow p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('ubicacionModal')">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              📍 <span class="font-semibold">Ubicación</span>
+            </div>
+            <span>⮞</span>
+          </div>
+        </div>
+
+        <!-- Cerrar sesión -->
+        <div class="bg-white shadow p-5 hover:shadow-xl cursor-pointer" (click)="abrirModal('logoutModal')">
+          <div class="flex items-center justify-between text-red-500">
+            <div class="flex items-center gap-3">
+              <i class="fas fa-sign-out-alt text-xl"></i> <span class="font-semibold">Cerrar Sesión</span>
+            </div>
+            <span>⮞</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Idioma -->
+      <div *ngIf="modalAbierto === 'idiomaModal'" class="mt-6 bg-white p-6 rounded shadow">
+        <h3 class="text-lg font-semibold mb-2">Seleccionar Idioma</h3>
+        <select [(ngModel)]="idiomaSeleccionado" class="border px-4 py-2 rounded-md w-full mb-3">
+          <option *ngFor="let idioma of idiomasDisponibles" [value]="idioma.codigo">{{ idioma.nombre }}</option>
+        </select>
+        <button (click)="cambiarIdioma()" class="px-4 py-2 bg-cyan-600 text-white rounded">Guardar</button>
+        <button (click)="cerrarModal()" class="ml-2 px-4 py-2 bg-gray-300 rounded">Cancelar</button>
+      </div>
+    </main>
+  </div>
+</div>
