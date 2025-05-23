@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Product } from '../../../app/models/products.model';
 import { BaseHttpService } from './base-http.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -44,14 +46,34 @@ export class ProductService extends BaseHttpService {
 
   // Obtener productos por categoría - si no hay endpoint, filtro local (similar a search)
   getProductsByCategory(category: string): Observable<Product[]> {
-    return new Observable<Product[]>(observer => {
-      this.getProducts().subscribe(products => {
-        const filtered = products.filter(
-          p => p.category && p.category.toString().toLowerCase() === category.toLowerCase()
-        );
-        observer.next(filtered);
-        observer.complete();
-      });
+  return this.http.get<Product[]>(`${this.apiUrl}/products/category/${category}`);
+}
+
+  // Crear un nuevo producto
+  createProduct(productData: any): Observable<Product> {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
     });
+
+    return this.http.post<Product>(
+      'https://fastacceshoes.onrender.com/sales/products',
+      productData,
+      { headers }
+    );
+  }
+
+
+  // Actualizar un producto existente
+  updateProduct(id: number, productData: FormData): Observable<Product> {
+    return this.http.put<Product>(`${this.apiUrl}/products/${id}`, productData);
+  }
+
+  // Eliminar un producto
+  deleteProduct(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/products/${id}`);
   }
 }
+

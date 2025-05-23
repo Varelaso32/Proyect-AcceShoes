@@ -179,6 +179,27 @@ export const routes: Routes = [
       }
     ],
   },
+  {
+    path: 'create-product',
+    title: 'Crear Producto',
+    canActivate: [authGuard], // Si requiere autenticación
+    loadComponent: () =>
+      import('./Pages/create-product/create-product.component').then(
+        (m) => m.CreateProductComponent
+      ),
+  },
+  {
+    path: 'all-products',
+    title: 'Todos los Productos',
+    loadComponent: () =>
+      import('./Pages/all-categories/all-categories.component').then(
+        (m) => m.AllCategoriesComponent
+      ),
+  },
+  {
+    path: 'category/:category',
+    loadComponent: () => import('./Pages/category/category.component').then(m => m.CategoryComponent),
+  },
 
   {
     path: 'admin',

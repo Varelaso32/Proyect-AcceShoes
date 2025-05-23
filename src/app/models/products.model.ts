@@ -12,6 +12,7 @@ export interface Product {
   description: string;
   size: string;
   status: string;
+  price: number;
   created_at: string;
   seller: Seller;
   type_of_product: string;
