@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseHttpService } from './base-http.service';
-import { Observable, tap } from 'rxjs';
-import { Plan } from '../../models/plan.model';
+import { Observable } from 'rxjs';
+import { CreatePlanDto, Plan,  } from '../../models/plan.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,5 +15,9 @@ export class PlansService extends BaseHttpService {
 
   getPlanById(planId: number): Plan | undefined {
     return this.plansCache.find((plan) => plan.id === planId);
+  }
+
+  createPlan(plan: CreatePlanDto): Observable<Plan> {
+    return this.http.post<Plan>(`${this.apiUrl}/plans`, plan);
   }
 }

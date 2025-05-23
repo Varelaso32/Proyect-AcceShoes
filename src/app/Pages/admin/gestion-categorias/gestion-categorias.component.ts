@@ -5,6 +5,7 @@ import { Category, CreateCategoryDto } from '../../../models/category.model';
 import { CategoryService } from '../../../Shared/services/categories.service';
 import { firstValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-gestion-categorias',
   standalone: true,
