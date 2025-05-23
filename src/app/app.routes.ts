@@ -208,9 +208,9 @@ export const routes: Routes = [
         path: 'planes',
         title: 'Gestión de Planes',
         loadComponent: () =>
-          import(
-            './Pages/admin/gestion-planes/gestion-planes.component'
-          ).then((m) => m.GestionPlanesComponent),
+          import('./Pages/admin/gestion-planes/gestion-planes.component').then(
+            (m) => m.GestionPlanesComponent
+          ),
       },
       {
         path: 'perfil',
@@ -219,6 +219,14 @@ export const routes: Routes = [
           import(
             './Pages/admin/config/perfil-admin/perfil-admin.component'
           ).then((m) => m.PerfilAdminComponent),
+      },
+      {
+        path: 'reportes-user',
+        title: 'Reportes de Usuarios',
+        loadComponent: () =>
+          import(
+            './Pages/admin/revisiones/reportes-user/reportes-user.component'
+          ).then((m) => m.ReportesUserComponent),
       },
       {
         path: '',
