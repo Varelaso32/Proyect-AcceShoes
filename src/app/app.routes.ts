@@ -205,6 +205,14 @@ export const routes: Routes = [
           ).then((m) => m.GestionCategoriasComponent),
       },
       {
+        path: 'planes',
+        title: 'Gestión de Planes',
+        loadComponent: () =>
+          import(
+            './Pages/admin/gestion-planes/gestion-planes.component'
+          ).then((m) => m.GestionPlanesComponent),
+      },
+      {
         path: 'perfil',
         title: 'Perfil',
         loadComponent: () =>
