@@ -11,6 +11,7 @@ export interface UserResponse {
   id: number;
   role: string;
   plan_id: number;
+  img?: string;
 }
 
 export interface UpdateUserDto {

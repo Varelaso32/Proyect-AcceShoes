@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../Shared/services/user.service';
 import {
-  CreateUserDto,
   UpdateUserDto,
   UpdateUserWithPasswordDto,
   UserResponse,
@@ -35,18 +34,23 @@ export class GestionUsuariosComponent implements OnInit {
     plan_id?: number;
     password?: string;
     role?: string;
+    img?: string;
   } = {
     name: '',
     email: '',
     plan_id: undefined,
     password: '',
     role: '',
+    img: '',
   };
   confirmPassword = '';
 
   // Para editar usuario
   usuarioEditando: UserResponse | null = null;
-  editData: UpdateUserWithPasswordDto & { role?: string } = {
+  editData: UpdateUserWithPasswordDto & {
+    role?: string;
+    img?: string;
+  } = {
     name: '',
     email: '',
     plan_id: undefined,
@@ -78,6 +82,28 @@ export class GestionUsuariosComponent implements OnInit {
         this.mostrarError('Error cargando usuarios');
       },
     });
+  }
+
+  onImageSelectedCrear(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.nuevoUsuario.img = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onImageSelectedEditar(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.editData.img = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   cargarPlanes() {
@@ -130,6 +156,7 @@ export class GestionUsuariosComponent implements OnInit {
       password: this.nuevoUsuario.password,
       plan_id: 1,
       role: 'user',
+      img: this.nuevoUsuario.img,
     };
 
     this.userService.createUser(payload).subscribe({
@@ -154,6 +181,10 @@ export class GestionUsuariosComponent implements OnInit {
     });
   }
 
+  getImagenUsuario(img?: string): string {
+    return img ? img : 'assets/user_pordefault.jpg';
+  }
+
   abrirModalEditar(user: UserResponse) {
     this.usuarioEditando = user;
     this.editData = {
@@ -162,6 +193,7 @@ export class GestionUsuariosComponent implements OnInit {
       plan_id: user.plan_id ?? null,
       password: '',
       role: user.role ?? '',
+      img: user.img ?? '',
     };
     this.modalAbierto = 'editar';
     this.limpiarMensajes();
@@ -178,9 +210,10 @@ export class GestionUsuariosComponent implements OnInit {
     this.isLoading = true;
 
     try {
-      const userUpdatePayload: UpdateUserWithPasswordDto = {
+      const userUpdatePayload: UpdateUserWithPasswordDto & { img?: string } = {
         name: this.editData.name,
         email: this.editData.email,
+        img: this.editData.img,
       };
 
       if (this.editData.password && this.editData.password.trim() !== '') {

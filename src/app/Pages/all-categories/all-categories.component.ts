@@ -1,12 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService, Product } from '../../Shared/services/product.service';
-import { Observable, map } from 'rxjs';
+import { ProductService } from '../../Shared/services/product.service';
+import { CategoryService } from '../../Shared/services/category.service';
+import { Observable, combineLatest, map } from 'rxjs';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
 import { CartService } from '../../Shared/services/cart.service';
+import { Product } from '../../models/products.model';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-all-categories',
@@ -17,17 +20,36 @@ import { CartService } from '../../Shared/services/cart.service';
 export class AllCategoriesComponent {
   groupedProducts$: Observable<Record<string, Product[]>>;
   private productService = inject(ProductService);
+  private categoryService = inject(CategoryService);
   private location = inject(Location);
   private cartService = inject(CartService);
 
+  showBackButton = true;
+
   constructor() {
-    this.groupedProducts$ = this.productService.getProducts().pipe(
-      map((products) => {
-        return products.reduce((acc: Record<string, Product[]>, product) => {
-          acc[product.category] = acc[product.category] || [];
-          acc[product.category].push(product);
-          return acc;
-        }, {});
+    this.groupedProducts$ = combineLatest([
+      this.productService.getProducts(),
+      this.categoryService.getCategories(),
+    ]).pipe(
+      map(([products, categories]) => {
+        const categoryMap: Record<number, string> = {};
+        categories.forEach(cat => categoryMap[cat.id] = cat.name);
+
+        const grouped: Record<string, Product[]> = {};
+
+        // Inicializar con todas las categorías vacías
+        categories.forEach(cat => {
+          grouped[cat.name] = [];
+        });
+
+        // Asignar productos a sus categorías
+        products.forEach(product => {
+          const categoryName = categoryMap[product.category] ?? 'Sin categoría';
+          grouped[categoryName] = grouped[categoryName] || [];
+          grouped[categoryName].push(product);
+        });
+
+        return grouped;
       })
     );
   }
@@ -35,16 +57,15 @@ export class AllCategoriesComponent {
   goBack(): void {
     this.location.back();
   }
+
   addToCart(product: Product): void {
     this.cartService.addToCart(product);
   }
-  showBackButton = true;
 
   hideBackButtonTemporarily() {
     this.showBackButton = false;
     setTimeout(() => {
       this.showBackButton = true;
-    }, 3000); 
+    }, 3000);
   }
-
 }
