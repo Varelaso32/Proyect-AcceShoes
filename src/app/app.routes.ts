@@ -182,6 +182,27 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'create-product',
+    title: 'Crear Producto',
+    canActivate: [authGuard], // Si requiere autenticación
+    loadComponent: () =>
+      import('./Pages/create-product/create-product.component').then(
+        (m) => m.CreateProductComponent
+      ),
+  },
+  {
+    path: 'all-products',
+    title: 'Todos los Productos',
+    loadComponent: () =>
+      import('./Pages/all-categories/all-categories.component').then(
+        (m) => m.AllCategoriesComponent
+      ),
+  },
+  {
+    path: 'category/:category',
+    loadComponent: () => import('./Pages/category/category.component').then(m => m.CategoryComponent),
+  },
 
   {
     path: 'admin',
@@ -204,6 +225,15 @@ export const routes: Routes = [
             './Pages/admin/gestion-categorias/gestion-categorias.component'
           ).then((m) => m.GestionCategoriasComponent),
       },
+      {
+        path: 'configuracion',
+        title: 'Configuración Admin',
+        loadComponent: () =>
+          import('./Pages/admin/configuracion-admin/configuracion-admin.component').then(
+            (m) => m.ConfiguracionAdminComponent
+          ),
+      },
+
       {
         path: 'planes',
         title: 'Gestión de Planes',
