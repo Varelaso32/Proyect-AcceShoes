@@ -1,1 +1,84 @@
-<p>gestion-pqrsd works!</p>
+<!-- Listado de los PQRSD -->
+<div class="max-w-9xl mx-auto p-6 bg-white rounded-xl shadow-xl mt-6">
+    <h2 class="text-4xl font-extrabold mb-8 text-cyan-700 tracking-wide">Gestión de PQRSD</h2>
+
+    <div *ngIf="isLoading" class="text-center text-cyan-600 font-semibold mb-6">Cargando...</div>
+    <div *ngIf="error" class="text-center text-red-600 font-semibold mb-6">{{ error }}</div>
+
+    <div *ngIf="!isLoading && pqrsList.length > 0" class="overflow-x-auto rounded-lg border border-gray-200 shadow-md">
+        <table class="table w-full text-gray-900">
+            <thead class="bg-cyan-600 text-white">
+                <tr>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">ID</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">Categoría</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">Descripción</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">Usuario</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pqrs of pqrsList" (click)="seleccionarPqrs(pqrs)"
+                    [class.bg-cyan-100]="pqrs === pqrsSeleccionada"
+                    class="even:bg-gray-50 hover:bg-cyan-50 transition-colors cursor-pointer">
+                    <td class="py-4 px-6 font-medium text-black">{{ pqrs.id }}</td>
+                    <td class="py-4 px-6 text-black">{{ pqrs.category }}</td>
+                    <td class="py-4 px-6 text-black truncate max-w-xs" [title]="pqrs.description">{{ pqrs.description }}
+                    </td>
+                    <td class="py-4 px-6 text-black">{{ pqrs.user?.name || 'N/A' }}</td>
+                    <td class="py-4 px-6 text-black">{{ pqrs.datetime | date: 'short' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p *ngIf="!isLoading && pqrsList.length === 0" class="text-center text-gray-600 mt-6">
+        No hay PQRSD registradas.
+    </p>
+</div>
+
+<!-- Panel lateral detalles PQRS -->
+<div *ngIf="pqrsSeleccionada"
+    class="fixed top-0 right-0 w-96 h-full bg-white shadow-2xl border-l border-cyan-700 p-6 overflow-y-auto z-50 flex flex-col">
+
+    <header class="mb-6 flex items-center justify-between border-b border-cyan-300 pb-3">
+        <h3 class="text-2xl font-extrabold text-cyan-800">
+            Detalles de PQRS <span class="text-cyan-600">#{{ pqrsSeleccionada.id }}</span>
+        </h3>
+        <button (click)="pqrsSeleccionada = null" aria-label="Cerrar panel detalles"
+            class="text-cyan-600 hover:text-cyan-800 transition-colors text-3xl font-bold leading-none">&times;</button>
+    </header>
+
+    <section class="mb-5">
+        <h4 class="text-lg font-semibold text-cyan-700 mb-1">Categoría</h4>
+        <p class="text-gray-900 bg-cyan-50 p-3 rounded border border-cyan-200">{{ pqrsSeleccionada.category }}</p>
+    </section>
+
+    <section class="mb-5">
+        <h4 class="text-lg font-semibold text-cyan-700 mb-1">Descripción</h4>
+        <p class="whitespace-pre-line bg-cyan-100 p-4 rounded border border-cyan-300 text-gray-900 shadow-sm">
+            {{ pqrsSeleccionada.description }}
+        </p>
+    </section>
+
+    <section class="mb-5 flex flex-col gap-1">
+        <div>
+            <span class="font-semibold text-cyan-700">Usuario: </span>
+            <span class="text-gray-800">{{ pqrsSeleccionada.user?.name || 'N/A' }}</span>
+        </div>
+        <div>
+            <span class="font-semibold text-cyan-700">Correo: </span>
+            <span class="text-gray-800">{{ pqrsSeleccionada.user?.email || 'N/A' }}</span>
+        </div>
+        <div>
+            <span class="font-semibold text-cyan-700">Fecha: </span>
+            <span class="text-gray-800">{{ pqrsSeleccionada.datetime | date: 'fullDate' }}</span>
+        </div>
+    </section>
+
+    <footer class="mt-auto">
+        <button (click)="pqrsSeleccionada = null"
+            class="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded shadow-lg font-semibold transition duration-300">
+            Cerrar
+        </button>
+    </footer>
+</div>
