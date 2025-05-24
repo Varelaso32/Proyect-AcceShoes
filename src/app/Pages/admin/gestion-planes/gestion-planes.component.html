@@ -69,3 +69,51 @@
         </form>
     </div>
 </div>
+
+<!-- Modal Crear/Editar -->
+<div *ngIf="modalAbierto === 'crear' || modalAbierto === 'editar'" class="modal modal-open">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">
+            {{ modalAbierto === 'crear' ? 'Crear nuevo plan' : 'Editar plan' }}
+        </h3>
+        <form (submit)="$event.preventDefault(); modalAbierto === 'crear' ? crearPlan() : guardarCambiosPlan()"
+            class="space-y-4">
+            <div>
+                <label for="name" class="label font-medium">Nombre del plan</label>
+                <input [(ngModel)]="nuevoPlan.name" id="name" name="name" type="text"
+                    class="input input-bordered w-full" placeholder="Ej: Plan Básico" required />
+            </div>
+
+            <div>
+                <label for="description" class="label font-medium">Descripción</label>
+                <textarea [(ngModel)]="nuevoPlan.description" id="description" name="description"
+                    class="textarea textarea-bordered w-full" placeholder="Descripción del plan..."></textarea>
+            </div>
+
+            <div>
+                <label for="price" class="label font-medium">Precio</label>
+                <input [(ngModel)]="nuevoPlan.price" id="price" name="price" type="number"
+                    class="input input-bordered w-full" placeholder="Ej: 25000" required />
+            </div>
+
+            <div>
+                <label for="maxActivePosts" class="label font-medium">Publicaciones activas</label>
+                <input [(ngModel)]="nuevoPlan.maxActivePosts" id="maxActivePosts" name="maxActivePosts" type="number"
+                    class="input input-bordered w-full" placeholder="Ej: 10 (opcional)" />
+            </div>
+
+            <div>
+                <label for="promotionsIncluded" class="label font-medium">Promociones incluidas</label>
+                <input [(ngModel)]="nuevoPlan.promotionsIncluded" id="promotionsIncluded" name="promotionsIncluded"
+                    type="number" class="input input-bordered w-full" placeholder="Ej: 3" required />
+            </div>
+
+            <div class="modal-action">
+                <button type="button" class="btn" (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+                    {{ modalAbierto === 'crear' ? 'Crear' : 'Guardar cambios' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
