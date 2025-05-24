@@ -5,13 +5,11 @@ import { filter } from 'rxjs/operators';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './Shared/services/theme.service';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from './Shared/components/navbar/navbar.component';
-import { FooterComponent } from './Shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, CommonModule],
   template: `
     <div [class.dark]="isDarkMode" [class.light]="!isDarkMode">
       <main class="min-h-[calc(100vh-130px)]">
