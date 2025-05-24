@@ -7,11 +7,13 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Product } from '../../models/products.model';
 import { Category } from '../../models/category.model';
 import Swal from 'sweetalert2';
+import { NavbarComponent } from "../../Shared/components/navbar/navbar.component";
+import { FooterComponent } from "../../Shared/components/footer/footer.component";
 
 @Component({
   selector: 'app-create-product',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, NavbarComponent, FooterComponent],
   templateUrl: './create-product.component.html',
 })
 export class CreateProductComponent {

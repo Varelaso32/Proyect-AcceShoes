@@ -54,7 +54,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'all-products',
+    path: 'all-categories',
     title: 'Todos los Productos',
     loadComponent: () =>
       import('./Pages/all-categories/all-categories.component').then(
