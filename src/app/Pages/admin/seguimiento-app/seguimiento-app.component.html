@@ -55,24 +55,16 @@
                         <td class="py-2">{{ formatDate(log.timestamp) }}</td>
 
                         <!-- Detalles -->
-                        <td class="py-2 text-center align-middle">
-                            <div class="flex justify-left items-center h-full">
-                                <div *ngIf="log.details" class="relative group">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-5 w-5 text-cyan-600 group-hover:text-cyan-800 transition duration-150 ease-in-out hover:scale-110 cursor-pointer"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <!-- Tooltip opcional -->
-                                    <div
-                                        class="absolute z-10 hidden group-hover:block bg-white text-sm text-gray-700 border border-gray-200 rounded shadow-lg w-64 p-3 top-7 left-1/2 -translate-x-1/2">
-                                        <pre
-                                            class="whitespace-pre-wrap break-words">{{ formatDetails(log.details) }}</pre>
-                                    </div>
-                                </div>
-                            </div>
+                        <td class="py-2 text-left align-middle">
+                            <button (click)="openDetails(log)">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5 text-cyan-600 hover:text-cyan-800 transition duration-150 ease-in-out hover:scale-110 cursor-pointer"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
                         </td>
 
                     </tr>
@@ -83,6 +75,32 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detalles -->
+<div *ngIf="selectedLog" class="modal modal-open">
+    <div class="modal-box rounded-2xl shadow-2xl border border-gray-200 max-w-xl w-full">
+        <h3 class="text-2xl font-bold mb-4 text-center text-cyan-700">Detalles de la acción</h3>
+
+        <div class="space-y-2 text-sm text-gray-700">
+            <p><strong>Acción:</strong> {{ selectedLog.action }}</p>
+            <p><strong>Entidad:</strong> {{ selectedLog.entity }}</p>
+            <p><strong>Fecha:</strong> {{ formatDate(selectedLog.timestamp) }}</p>
+            <div>
+                <p class="font-semibold mb-1">Cambios:</p>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li *ngFor="let change of formattedChanges">{{ change }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Botón cerrar -->
+        <div class="modal-action mt-6 flex justify-end">
+            <button type="button" class="btn bg-gray-300 hover:bg-gray-400 text-black" (click)="closeDetails()">
+                Cerrar
+            </button>
         </div>
     </div>
 </div>

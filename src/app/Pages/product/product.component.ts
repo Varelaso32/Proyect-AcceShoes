@@ -9,8 +9,8 @@ import { Product } from '../../models/products.model';
 
 @Component({
   selector: 'app-product-detail',
-  templateUrl: './product.component.html',
   imports: [CommonModule, FooterComponent, NavbarComponent],
+  templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
 export class ProductDetailComponent implements OnInit {

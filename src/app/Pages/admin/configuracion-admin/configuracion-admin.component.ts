@@ -15,10 +15,9 @@ import Swal from 'sweetalert2';
   styleUrls: ['./configuracion-admin.component.css'],
 })
 export class ConfiguracionAdminComponent {
-  modalAbierto: string | null = null;
-  confirmarDesactivacion: boolean = false;
-
   idiomaSeleccionado: string = 'es';
+  temaSeleccionado: 'light' | 'dark' | 'system' = 'system';
+
   idiomasDisponibles = [
     { codigo: 'es', nombre: 'Español' },
     { codigo: 'en', nombre: 'Inglés' },
@@ -26,23 +25,34 @@ export class ConfiguracionAdminComponent {
     { codigo: 'de', nombre: 'Alemán' },
   ];
 
-  temaSeleccionado: 'light' | 'dark' | 'system' = 'system';
+  paises = [
+    'Argentina', 'Chile', 'Colombia', 'España', 'México', 'Perú',
+    'Estados Unidos', 'Otro',
+  ];
 
-  ubicacion = {
-    pais: '',
-    ciudad: '',
+  // Ciudades agrupadas por país (objeto)
+  ciudadesPorPais: { [pais: string]: string[] } = {
+    'Argentina': ['Buenos Aires', 'Córdoba', 'Rosario'],
+    'Chile': ['Santiago', 'Valparaíso', 'Concepción'],
+    'Colombia': ['Bogotá', 'Medellín', 'Cali'],
+    'España': ['Madrid', 'Barcelona', 'Valencia'],
+    'México': ['Ciudad de México', 'Guadalajara', 'Monterrey'],
+    'Perú': ['Lima', 'Arequipa', 'Cusco'],
+    'Estados Unidos': ['Nueva York', 'Los Ángeles', 'Chicago'],
+    'Otro': [],
   };
 
-  paises = [
-    'Argentina',
-    'Chile',
-    'Colombia',
-    'España',
-    'México',
-    'Perú',
-    'Estados Unidos',
-    'Otro',
-  ];
+  ubicacion = {
+    pais: 'Colombia',
+    ciudad: 'Cali',
+  };
+
+  nuevaUbicacion = {
+    pais: 'Colombia',  // Añadimos país para la nueva ubicación
+    ciudad: '',
+    nombre: '',
+    descripcion: ''
+  };
 
   constructor(
     private router: Router,
@@ -56,26 +66,85 @@ export class ConfiguracionAdminComponent {
   cargarConfiguraciones() {
     this.idiomaSeleccionado = this.languageService.getIdiomaActual();
     this.temaSeleccionado = this.themeService.getCurrentTheme();
-    this.ubicacion = {
-      pais: 'Colombia',
-      ciudad: 'Cali',
-    };
+
+    // Si el país no está en el listado, asignar uno por defecto
+    if (!this.paises.includes(this.ubicacion.pais)) {
+      this.ubicacion.pais = this.paises[0];
+    }
+
+    // Si la ciudad no está en ciudadesPorPais, asignar la primera ciudad disponible
+    const ciudades = this.ciudadesPorPais[this.ubicacion.pais];
+    if (!ciudades.includes(this.ubicacion.ciudad)) {
+      this.ubicacion.ciudad = ciudades.length > 0 ? ciudades[0] : '';
+    }
+
+    this.nuevaUbicacion.pais = this.ubicacion.pais;
   }
 
-  abrirModal(modal: string) {
-    this.modalAbierto = modal;
+  // Cuando cambias el país en el selector principal (ubicación)
+  cambiarPais() {
+    const ciudades = this.ciudadesPorPais[this.ubicacion.pais] || [];
+    this.ubicacion.ciudad = ciudades.length > 0 ? ciudades[0] : '';
   }
 
-  cerrarModal() {
-    this.modalAbierto = null;
-    this.confirmarDesactivacion = false;
+  // Cuando cambias el país en la sección de crear nueva ubicación
+  cambiarPaisNuevaUbicacion() {
+    this.nuevaUbicacion.ciudad = '';
+  }
+
+  guardarUbicacion() {
+    // Aquí podrías enviar esta información a una API en el futuro
+    console.log('Ubicación guardada (quemado):', this.ubicacion);
+
+    Swal.fire({
+      icon: 'success',
+      title: '¡Éxito!',
+      text: `Ubicación guardada: ${this.ubicacion.ciudad}, ${this.ubicacion.pais}`,
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  }
+
+  crearUbicacion() {
+    const { pais, ciudad, nombre, descripcion } = this.nuevaUbicacion;
+
+    if (!pais || !ciudad || !nombre || !descripcion) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos incompletos',
+        text: 'Por favor completa todos los campos antes de guardar.',
+      });
+      return;
+    }
+
+    // Verificar si la ciudad ya existe para ese país
+    if (!this.ciudadesPorPais[pais]) {
+      this.ciudadesPorPais[pais] = [];
+    }
+
+    if (!this.ciudadesPorPais[pais].includes(ciudad)) {
+      this.ciudadesPorPais[pais].push(ciudad);
+    }
+
+    // Opcional: cambiar la ubicación seleccionada a la nueva creada
+    this.ubicacion.pais = pais;
+    this.ubicacion.ciudad = ciudad;
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Ubicación creada',
+      text: `La ubicación "${nombre}" en ${ciudad}, ${pais} ha sido creada.`,
+      timer: 2000,
+      showConfirmButton: false,
+    });
+
+    // Limpiar campos
+    this.nuevaUbicacion = { pais, ciudad: '', nombre: '', descripcion: '' };
   }
 
   async cambiarIdioma() {
     this.languageService.cambiarIdioma(this.idiomaSeleccionado);
-    this.cerrarModal();
-
-    await Swal.fire({
+    Swal.fire({
       icon: 'success',
       title: 'Idioma cambiado',
       text: `El idioma ha sido cambiado a ${this.idiomaSeleccionado.toUpperCase()}.`,
@@ -86,9 +155,7 @@ export class ConfiguracionAdminComponent {
 
   async cambiarTema() {
     this.themeService.changeTheme(this.temaSeleccionado);
-    this.cerrarModal();
-
-    await Swal.fire({
+    Swal.fire({
       icon: 'success',
       title: 'Tema cambiado',
       text: `El tema ha sido cambiado a "${this.temaSeleccionado}".`,
@@ -97,21 +164,7 @@ export class ConfiguracionAdminComponent {
     });
   }
 
-  guardarUbicacion() {
-    console.log('Ubicación guardada:', this.ubicacion);
-    this.cerrarModal();
-
-    Swal.fire({
-      icon: 'success',
-      title: '¡Éxito!',
-      text: 'La ubicación ha sido guardada correctamente.',
-      timer: 2000,
-      showConfirmButton: false,
-    });
-  }
-
   async cerrarSesion() {
-    
     const result = await Swal.fire({
       title: '¿Estás seguro?',
       text: 'Se cerrará tu sesión actual.',
@@ -123,7 +176,6 @@ export class ConfiguracionAdminComponent {
 
     if (result.isConfirmed) {
       this.authService.logout();
-      this.cerrarModal();
       this.router.navigate(['/login']);
 
       await Swal.fire({
