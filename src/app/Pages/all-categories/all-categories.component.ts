@@ -30,7 +30,7 @@ export class AllCategoriesComponent {
   constructor() {
     this.groupedProducts$ = combineLatest([
       this.productService.getProducts(),
-      this.categoryService.getMainCategories(), // <-- Solo categorías padre
+      this.categoryService.getMainCategories(),
     ]).pipe(
       map(([products, categories]) => {
         const categoryMap: Record<number, string> = {};
@@ -75,8 +75,10 @@ export class AllCategoriesComponent {
     this.router.navigate(['/create-product']);
   }
 
+  navigateToCategoryById(categoryId: number): void {
+    this.router.navigate(['/category-products', categoryId]);
+  }
   navigateToCategory(categoryName: string): void {
-    // Navega a la vista filtrada pasando la categoría como parámetro
-    this.router.navigate(['/category-products', categoryName]);
+    this.router.navigate(['/category', categoryName]);
   }
 }

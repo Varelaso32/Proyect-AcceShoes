@@ -15,6 +15,9 @@ export class CategoryService {
   getCategories(skip = 0, limit = 100): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.apiUrl}?skip=${skip}&limit=${limit}`);
   }
+  getSubcategoriesByParent(parentCategoryName: string): Observable<Category[]> {
+    return this.http.get<Category[]>(`/api/categories?parent=${parentCategoryName}`);
+  }
 
   // Obtener categorías principales
   getMainCategories(): Observable<Category[]> {
@@ -29,6 +32,9 @@ export class CategoryService {
   // Obtiene una categoría con sus subcategorías anidadas
   getCategoryDetails(categoryId: number): Observable<Category> {
     return this.http.get<Category>(`${this.apiUrl}${categoryId}`);
+  }
+  getAllCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>('/api/categories');
   }
 
   // Crear nueva categoría
