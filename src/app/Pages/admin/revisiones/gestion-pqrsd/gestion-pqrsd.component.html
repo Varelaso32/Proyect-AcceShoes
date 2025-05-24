@@ -13,6 +13,7 @@
                     <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">Categoría</th>
                     <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">Descripción</th>
                     <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">Usuario</th>
+                    <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">¿Contestada?</th>
                     <th class="py-4 px-6 text-left font-semibold tracking-wide cursor-default">Fecha</th>
                 </tr>
             </thead>
@@ -25,6 +26,12 @@
                     <td class="py-4 px-6 text-black truncate max-w-xs" [title]="pqrs.description">{{ pqrs.description }}
                     </td>
                     <td class="py-4 px-6 text-black">{{ pqrs.user?.name || 'N/A' }}</td>
+                    <td class="py-4 px-6 text-black">
+                        <span
+                            [ngClass]="pqrs.answered_at ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'">
+                            {{ pqrs.answered_at ? 'Sí' : 'No' }}
+                        </span>
+                    </td>
                     <td class="py-4 px-6 text-black">{{ pqrs.datetime | date: 'short' }}</td>
                 </tr>
             </tbody>
@@ -73,6 +80,32 @@
             <span class="font-semibold text-cyan-700">Fecha: </span>
             <span class="text-gray-800">{{ pqrsSeleccionada.datetime | date: 'fullDate' }}</span>
         </div>
+    </section>
+
+    <section class="mb-6" *ngIf="!pqrsSeleccionada.answered">
+        <button (click)="mostrandoInputRespuesta = !mostrandoInputRespuesta"
+            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded shadow-md font-semibold mb-4 transition duration-300">
+            {{ mostrandoInputRespuesta ? 'Cancelar' : 'Contestar PQRS' }}
+        </button>
+
+        <div *ngIf="mostrandoInputRespuesta" class="space-y-4">
+            <textarea [(ngModel)]="respuesta" rows="4"
+                class="w-full p-3 border border-cyan-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                placeholder="Escribe tu respuesta aquí..."></textarea>
+
+            <button (click)="enviarRespuesta(pqrsSeleccionada.id)" [disabled]="!respuesta.trim()"
+                class="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-2 rounded shadow-md font-semibold transition duration-300">
+                Enviar Respuesta
+            </button>
+        </div>
+    </section>
+
+    <!-- Mostrar la respuesta solo si ya fue respondida -->
+    <section class="mb-6" *ngIf="pqrsSeleccionada.response_message">
+        <h4 class="text-lg font-semibold text-green-700 mb-1">Respuesta enviada</h4>
+        <p class="whitespace-pre-line bg-green-100 p-4 rounded border border-green-300 text-gray-900 shadow-sm">
+            {{ pqrsSeleccionada.response_message }}
+        </p>
     </section>
 
     <footer class="mt-auto">
