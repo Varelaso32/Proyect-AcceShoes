@@ -24,7 +24,7 @@ export interface CreateUserDto {
   email: string;
   password: string;
   plan_id?: number | null;
-  role?: string; // <-- agregar esta línea
+  role?: string;
 }
 
 export interface UpdateUserWithPasswordDto {
@@ -32,5 +32,5 @@ export interface UpdateUserWithPasswordDto {
   email: string;
   password?: string;
   plan_id?: number | null;
-  role?: string; // <-- agregar esta línea
+  role?: string;
 }
