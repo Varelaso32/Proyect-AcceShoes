@@ -269,6 +269,14 @@ export const routes: Routes = [
           ).then((m) => m.TerminosCondicionesComponent),
       },
       {
+        path: 'gestion-contactenos',
+        title: 'Gestión de Contactenos',
+        loadComponent: () =>
+          import(
+            './Pages/admin/gestion-contactenos/gestion-contactenos.component'
+          ).then((m) => m.GestionContactenosComponent),
+      },
+      {
         path: 'seguimiento-app',
         title: 'Hisoriales de la Aplicación',
         loadComponent: () =>
