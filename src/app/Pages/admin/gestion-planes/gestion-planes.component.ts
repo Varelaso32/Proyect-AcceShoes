@@ -14,6 +14,8 @@ import Swal from 'sweetalert2';
 })
 export class GestionPlanesComponent implements OnInit {
   planes: Plan[] = [];
+  planEditando: Plan | null = null;
+
   nuevoPlan: CreatePlanDto = {
     name: '',
     description: '',
@@ -84,10 +86,63 @@ export class GestionPlanesComponent implements OnInit {
   }
 
   abrirModalEditar(plan: Plan) {
-    // implementación futura
+    this.planEditando = plan;
+    this.nuevoPlan = {
+      name: plan.name,
+      description: plan.description,
+      price: plan.price,
+      maxActivePosts: plan.maxActivePosts,
+      promotionsIncluded: plan.promotionsIncluded,
+    };
+    this.modalAbierto = 'editar';
   }
 
+  guardarCambiosPlan() {
+    if (!this.planEditando) return;
+
+    this.isLoading = true;
+
+    this.plansService
+      .updatePlan(this.planEditando.id, this.nuevoPlan)
+      .subscribe({
+        next: (updatedPlan) => {
+          const index = this.planes.findIndex((p) => p.id === updatedPlan.id);
+          if (index !== -1) {
+            this.planes[index] = updatedPlan;
+          }
+          this.mostrarExito('Plan actualizado correctamente');
+          this.cerrarModal();
+          this.isLoading = false;
+        },
+        error: () => {
+          this.mostrarError('Error al actualizar el plan');
+          this.isLoading = false;
+        },
+      });
+  }
+  
   eliminarPlan(plan: Plan) {
-    // implementación futura
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Deseas eliminar el plan "${plan.name}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.plansService.deletePlan(plan.id).subscribe({
+          next: () => {
+            this.planes = this.planes.filter((p) => p.id !== plan.id);
+            this.mostrarExito('Plan eliminado correctamente');
+          },
+          error: () => {
+            this.mostrarError('Error al eliminar el plan');
+          },
+        });
+      }
+    });
   }
 }

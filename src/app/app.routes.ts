@@ -245,6 +245,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'gestion-pqrsd',
+        title: 'Gestión de PQRSD',
+        loadComponent: () =>
+          import(
+            './Pages/admin/revisiones/gestion-pqrsd/gestion-pqrsd.component'
+          ).then((m) => m.GestionPqrsdComponent),
+      },
+      {
         path: 'seguimiento-app',
         title: 'Hisoriales de la Aplicación',
         loadComponent: () =>
