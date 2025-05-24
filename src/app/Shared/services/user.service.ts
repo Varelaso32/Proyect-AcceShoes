@@ -7,12 +7,17 @@ import {
 } from '../../models/user.model';
 import { Observable, tap } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
+import { AuditService } from './audit.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService extends BaseHttpService {
   private readonly BLOCKED_USERS_KEY = 'blocked_users';
+
+  constructor(private auditService: AuditService) {
+    super();
+  }
 
   getCurrentUser(): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${this.apiUrl}/users/me`);
@@ -37,7 +42,6 @@ export class UserService extends BaseHttpService {
     return this.http.get<UserResponse[]>(`${this.apiUrl}/users`);
   }
 
-  // Agrega este método en tu UserService
   updateUserPlan(planId: number | null): Observable<UserResponse> {
     const params = planId !== null ? `?plan_id=${planId}` : '';
     return this.http
@@ -50,7 +54,16 @@ export class UserService extends BaseHttpService {
   }
 
   createUser(data: CreateUserDto): Observable<UserResponse> {
-    return this.http.post<UserResponse>(`${this.apiUrl}/users/`, data);
+    return this.http.post<UserResponse>(`${this.apiUrl}/users/`, data).pipe(
+      tap((response) => {
+        this.auditService.addLog({
+          action: 'CREATE',
+          entity: 'USER',
+          entityId: response.id,
+          details: { email: response.email, role: response.role },
+        });
+      })
+    );
   }
 
   updateUser(
@@ -59,20 +72,45 @@ export class UserService extends BaseHttpService {
   ): Observable<UserResponse> {
     return this.http
       .put<UserResponse>(`${this.apiUrl}/users/${userId}`, data)
-      .pipe(tap((response) => console.log('Respuesta del backend:', response)));
+      .pipe(
+        tap((response) => {
+          this.auditService.addLog({
+            action: 'UPDATE',
+            entity: 'USER',
+            entityId: userId,
+            details: { changes: data },
+          });
+        })
+      );
   }
 
   deleteUser(userId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/users/${userId}`);
+    return this.http.delete(`${this.apiUrl}/users/${userId}`).pipe(
+      tap(() => {
+        this.auditService.addLog({
+          action: 'DELETE',
+          entity: 'USER',
+          entityId: userId,
+        });
+      })
+    );
   }
 
   changeUserRole(userId: number, role: string) {
-    if (!role || role.trim() === '') {
-      throw new Error('El rol no puede estar vacío');
-    }
-    return this.http.patch(`${this.apiUrl}/users/${userId}/role`, {
-      new_role: role.trim(),
-    });
+    return this.http
+      .patch(`${this.apiUrl}/users/${userId}/role`, {
+        new_role: role.trim(),
+      })
+      .pipe(
+        tap(() => {
+          this.auditService.addLog({
+            action: 'UPDATE_ROLE',
+            entity: 'USER',
+            entityId: userId,
+            details: { newRole: role },
+          });
+        })
+      );
   }
 
   changeUserPlan(userId: number, planId: number) {
