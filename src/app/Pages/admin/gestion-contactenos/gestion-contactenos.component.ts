@@ -101,6 +101,11 @@ export class GestionContactenosComponent {
     this.respuesta = correo.respuesta || '';
   }
 
+  cerrarModal() {
+    this.correoSeleccionado = null;
+    this.respuesta = '';
+  }
+
   enviarRespuesta() {
     if (this.correoSeleccionado) {
       this.correoSeleccionado.respondido = true;
