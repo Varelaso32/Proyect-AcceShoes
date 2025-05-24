@@ -1,0 +1,7 @@
+/* Estilos para el tooltip de DaisyUI */
+.tooltip::before {
+  white-space: pre-wrap;
+  max-width: 500px;
+  font-family: monospace;
+  font-size: 12px;
+}

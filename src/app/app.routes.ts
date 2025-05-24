@@ -201,7 +201,10 @@ export const routes: Routes = [
   },
   {
     path: 'category/:category',
-    loadComponent: () => import('./Pages/category/category.component').then(m => m.CategoryComponent),
+    loadComponent: () =>
+      import('./Pages/category/category.component').then(
+        (m) => m.CategoryComponent
+      ),
   },
 
   {
@@ -229,18 +232,25 @@ export const routes: Routes = [
         path: 'configuracion',
         title: 'Configuración Admin',
         loadComponent: () =>
-          import('./Pages/admin/configuracion-admin/configuracion-admin.component').then(
-            (m) => m.ConfiguracionAdminComponent
-          ),
+          import(
+            './Pages/admin/configuracion-admin/configuracion-admin.component'
+          ).then((m) => m.ConfiguracionAdminComponent),
       },
-
       {
         path: 'planes',
         title: 'Gestión de Planes',
         loadComponent: () =>
+          import('./Pages/admin/gestion-planes/gestion-planes.component').then(
+            (m) => m.GestionPlanesComponent
+          ),
+      },
+      {
+        path: 'seguimiento-app',
+        title: 'Hisoriales de la Aplicación',
+        loadComponent: () =>
           import(
-            './Pages/admin/gestion-planes/gestion-planes.component'
-          ).then((m) => m.GestionPlanesComponent),
+            './Pages/admin/seguimiento-app/seguimiento-app.component'
+          ).then((m) => m.SeguimientoAppComponent),
       },
       {
         path: 'perfil',
@@ -249,6 +259,14 @@ export const routes: Routes = [
           import(
             './Pages/admin/config/perfil-admin/perfil-admin.component'
           ).then((m) => m.PerfilAdminComponent),
+      },
+      {
+        path: 'reportes-user',
+        title: 'Reportes de Usuarios',
+        loadComponent: () =>
+          import(
+            './Pages/admin/revisiones/reportes-user/reportes-user.component'
+          ).then((m) => m.ReportesUserComponent),
       },
       {
         path: '',
