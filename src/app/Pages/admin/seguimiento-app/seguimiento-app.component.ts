@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class SeguimientoAppComponent implements OnInit {
   logs: AuditLog[] = [];
+  selectedLog: AuditLog | null = null;
+  formattedChanges: string[] = [];
 
   constructor(private auditService: AuditService, private datePipe: DatePipe) {}
 
@@ -54,5 +56,38 @@ export class SeguimientoAppComponent implements OnInit {
       default:
         return `${baseClass} other-action`;
     }
+  }
+
+  openDetails(log: AuditLog): void {
+    this.selectedLog = log;
+    this.formattedChanges = this.parseDetails(log.details);
+  }
+
+  closeDetails(): void {
+    this.selectedLog = null;
+    this.formattedChanges = [];
+  }
+
+  parseDetails(details: any): string[] {
+    if (!details) return [];
+
+    const changes: string[] = [];
+
+    for (const [key, value] of Object.entries(details)) {
+      if (
+        value &&
+        typeof value === 'object' &&
+        'old' in value &&
+        'new' in value
+      ) {
+        changes.push(
+          `Se actualizó el campo "${key}" de "${value.old}" a "${value.new}"`
+        );
+      } else {
+        changes.push(`Se modificó "${key}" → ${JSON.stringify(value)}`);
+      }
+    }
+
+    return changes;
   }
 }

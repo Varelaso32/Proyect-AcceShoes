@@ -28,7 +28,7 @@
                         <div class="flex-1">
                             <div class="font-semibold">
                                 {{
-                                convo.messages?.length
+                                convo.messages.length
                                 ? (usersMap.get(convo.messages[convo.messages.length - 1].sender_id)?.name
                                 || getSenderName(convo.messages[convo.messages.length - 1].sender_id))
                                 : (usersMap.get(currentUser.id === convo.buyer_id ? convo.seller_id :
