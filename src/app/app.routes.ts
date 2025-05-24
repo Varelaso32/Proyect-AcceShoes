@@ -253,6 +253,30 @@ export const routes: Routes = [
           ).then((m) => m.GestionPqrsdComponent),
       },
       {
+        path: 'gestion-politicas-privacidad',
+        title: 'Gestión de Políticas de Privacidad',
+        loadComponent: () =>
+          import(
+            './Pages/admin/terminos-legales/politicas-privacidad/politicas-privacidad.component'
+          ).then((m) => m.PoliticasPrivacidadComponent),
+      },
+      {
+        path: 'gestion-terminos-condiciones',
+        title: 'Gestión de Términos y Condiciones',
+        loadComponent: () =>
+          import(
+            './Pages/admin/terminos-legales/terminos-condiciones/terminos-condiciones.component'
+          ).then((m) => m.TerminosCondicionesComponent),
+      },
+      {
+        path: 'gestion-contactenos',
+        title: 'Gestión de Contactenos',
+        loadComponent: () =>
+          import(
+            './Pages/admin/gestion-contactenos/gestion-contactenos.component'
+          ).then((m) => m.GestionContactenosComponent),
+      },
+      {
         path: 'seguimiento-app',
         title: 'Hisoriales de la Aplicación',
         loadComponent: () =>

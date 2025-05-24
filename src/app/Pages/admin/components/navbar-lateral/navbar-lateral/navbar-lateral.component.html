@@ -39,6 +39,13 @@
                 </a>
             </li>
             <li>
+                <a routerLink="/admin/gestion-contactenos" routerLinkActive="bg-white/30"
+                    class="flex items-center whitespace-nowrap truncate text-white font-semibold px-5 py-3 rounded-lg hover:bg-white/20 transition-colors duration-300">
+                    <i class="fas fa-shopping-cart mr-0 text-xl"></i>
+                    Gestion de Contactenos
+                </a>
+            </li>
+            <li>
                 <details class="group text-white" open>
                     <summary
                         class="flex items-center justify-between font-semibold px-6 py-3 rounded-lg hover:bg-white/20 transition-colors duration-300 cursor-pointer whitespace-nowrap truncate">
@@ -48,7 +55,7 @@
                         <i
                             class="fa-solid fa-chevron-right text-base transition-transform duration-300 group-open:rotate-90"></i>
                     </summary>
-                    <ul class="pl-10 mt-2 space-y-1">
+                    <ul class="pl-8 mt-2 space-y-1">
                         <li>
                             <a routerLink="/admin/gestion-pqrsd" routerLinkActive="bg-white/30"
                                 class="block py-2 text-sm hover:bg-white/10 rounded-md transition whitespace-nowrap truncate">
@@ -56,15 +63,35 @@
                             </a>
                         </li>
                         <li>
-                            <a routerLink="/productos/revision2" routerLinkActive="bg-white/30"
+                            <a routerLink="/admin/reportes-user" routerLinkActive="bg-white/30"
                                 class="block py-2 text-sm hover:bg-white/10 rounded-md transition whitespace-nowrap truncate">
-                                SOPORTE
+                                Rerportes USER
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+            <li>
+                <details class="group text-white" open>
+                    <summary
+                        class="flex items-center justify-between font-semibold px-6 py-3 rounded-lg hover:bg-white/20 transition-colors duration-300 cursor-pointer whitespace-nowrap truncate">
+                        <span class="flex items-center truncate">
+                            <i class="fa-solid fa-box mr-1 text-xl"></i> Terminos Legales
+                        </span>
+                        <i
+                            class="fa-solid fa-chevron-right text-base transition-transform duration-300 group-open:rotate-90"></i>
+                    </summary>
+                    <ul class="pl-8 mt-2 space-y-1">
+                        <li>
+                            <a routerLink="/admin/gestion-terminos-condiciones" routerLinkActive="bg-white/30"
+                                class="block py-2 text-sm hover:bg-white/10 rounded-md transition whitespace-nowrap truncate">
+                                Terminos y condiciones
                             </a>
                         </li>
                         <li>
-                            <a routerLink="/admin/reportes-user" routerLinkActive="bg-white/30"
+                            <a routerLink="/admin/gestion-politicas-privacidad" routerLinkActive="bg-white/30"
                                 class="block py-2 text-sm hover:bg-white/10 rounded-md transition whitespace-nowrap truncate">
-                                REPORTES DE USER
+                                Politica de privacidad
                             </a>
                         </li>
                     </ul>
