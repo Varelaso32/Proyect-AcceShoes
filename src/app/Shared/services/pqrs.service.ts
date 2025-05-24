@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { BaseHttpService } from '../../Shared/services/base-http.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuditService } from './audit.service';
 
@@ -28,5 +28,46 @@ export class PqrsService extends BaseHttpService {
         });
       })
     );
+  }
+
+  // Obtener todas las PQRSD
+  getAllPqrs(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/pqrs/`).pipe(
+      tap(() => {
+        this.auditService.addLog({
+          action: 'READ_ALL',
+          entity: 'PQRS',
+          details: 'Se consultaron todas las PQRSD',
+        });
+      })
+    );
+  }
+
+  getMyPqrs(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/pqrs/my-pqrs`).pipe(
+      tap(() => {
+        this.auditService.addLog({
+          action: 'READ_MINE',
+          entity: 'PQRS',
+          details: 'Se consultaron las PQRSD del usuario actual',
+        });
+      })
+    );
+  }
+
+  answerPqrs(pqrId: number, responseMessage: string): Observable<any> {
+    const params = new HttpParams().set('response_message', responseMessage);
+
+    return this.http
+      .post(`${this.apiUrl}/pqrs/${pqrId}/answer`, null, { params })
+      .pipe(
+        tap(() => {
+          this.auditService.addLog({
+            action: 'ANSWER',
+            entity: 'PQRS',
+            details: { id: pqrId, response: responseMessage },
+          });
+        })
+      );
   }
 }

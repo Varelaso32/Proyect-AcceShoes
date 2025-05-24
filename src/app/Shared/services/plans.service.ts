@@ -34,4 +34,30 @@ export class PlansService extends BaseHttpService {
       })
     );
   }
+
+  updatePlan(planId: number, plan: Partial<Plan>): Observable<Plan> {
+    return this.http.put<Plan>(`${this.apiUrl}/plans/${planId}`, plan).pipe(
+      tap((response) => {
+        this.auditService.addLog({
+          action: 'UPDATE',
+          entity: 'PLAN',
+          entityId: response.id,
+          details: { name: response.name, price: response.price },
+        });
+      })
+    );
+  }
+
+  deletePlan(planId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/plans/${planId}`).pipe(
+      tap(() => {
+        this.auditService.addLog({
+          action: 'DELETE',
+          entity: 'PLAN',
+          entityId: planId,
+          details: null,
+        });
+      })
+    );
+  }
 }

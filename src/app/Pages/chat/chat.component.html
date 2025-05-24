@@ -18,7 +18,7 @@
                     <div *ngFor="let convo of conversations()"
                         class="flex items-center gap-3 p-3 hover:bg-gray-100 cursor-pointer"
                         [class.bg-gray-100]="selectedConversation()?.id === convo.id"
-                        [class.convo-new-message]="convosWithNewMessages?.has?.(convo.id)"
+                        [class.convo-new-message]="convosWithNewMessages.has(convo.id)"
                         (click)="selectConversation(convo)">
                         <div class="avatar">
                             <div class="w-12 rounded-full">
@@ -64,7 +64,7 @@
                             <div *ngFor="let msg of messages" class="flex flex-col" [ngClass]="{ 
                      'items-start': msg.sender_id !== currentUser.id, 
                      'items-end': msg.sender_id === currentUser.id,
-                     'message-new': newMessagesIds?.has?.(msg.id)
+                     'message-new': newMessagesIds.has(msg.id)
                    }">
 
                                 <div class="chat-image avatar mb-1 flex items-center gap-2">
