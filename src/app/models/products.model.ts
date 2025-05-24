@@ -19,4 +19,5 @@ export interface Product {
   category: number;
   category_id: number;
   imageUrl?: string;
+  category_name?: string;
 }
