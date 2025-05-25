@@ -1,59 +1,123 @@
-# AcceShoes
+# 👟 AcceShoes - Plataforma de Comercio Electrónico
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.8.
+**AcceShoes** es una aplicación web moderna desarrollada con **Angular** (frontend), **Python + FastAPI** (backend) y **SQL Server** (base de datos), enfocada en ofrecer una experiencia de compra, venta y subasta de calzado y accesorios completamente optimizada.
 
-## Development server
+Este sistema busca brindar una experiencia fluida y segura para todos los usuarios, incluyendo funcionalidades como búsqueda avanzada, comunicación directa entre compradores y vendedores, promociones, gestión de productos, y subastas en línea.
 
-To start a local development server, run:
+---
+
+## 🔗 Documentación Oficial
+
+Consulta la documentación completa del proyecto en el siguiente enlace:
+
+👉 [https://documentacion-acce-shoes.vercel.app/](https://documentacion-acce-shoes.vercel.app/)
+
+---
+
+## ✅ Requisitos del Sistema
+
+Antes de instalar, asegúrate de contar con:
+
+- Node.js y npm  
+- Python 3.10 o superior  
+- Angular CLI  
+- FastAPI + Uvicorn  
+- SQL Server (o motor de base de datos compatible)  
+- Git
+
+---
+
+## 🚀 Instalación del Proyecto
+
+### 1. Clonar el Repositorio
 
 ```bash
+git clone https://github.com/Varelaso32/Proyect-AcceShoes.git
+cd Proyect-AcceShoes
+```
+
+---
+
+## ⚙️ Backend (FastAPI)
+
+### 2. Crear entorno virtual y activarlo
+
+```bash
+python -m venv venv
+source venv/bin/activate   # En Windows: venv\Scripts\activate
+```
+
+### 3. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Api FastAPI
+
+```bash
+[uvicorn main:app --reload](https://fastacceshoes.onrender.com/docs#/)
+```
+
+---
+
+## 💻 Frontend (Angular)
+
+### 5. Instalar dependencias y levantar Angular
+
+```bash
+cd frontend
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Accede a la app desde: [http://localhost:4200](http://localhost:4200)
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🗄️ Configuración de la Base de Datos
 
-```bash
-ng generate component component-name
+Asegúrate de tener un servidor SQL disponible y configurar tu archivo `.env` o archivo de conexión con los siguientes datos:
+
+```env
+DB_HOST=localhost
+DB_PORT=1433
+DB_NAME=acceshoes
+DB_USER=tu_usuario
+DB_PASSWORD=tu_contraseña
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## 🧩 Funcionalidades Principales
 
-## Building
+- Registro, inicio y recuperación de sesión
+- Publicación, edición y eliminación de productos
+- Subastas en línea con sistema de pujas
+- Carrito de compras
+- Chat integrado entre usuarios
+- Sistema de promociones y puntuaciones
+- Panel de administración (publicaciones, reportes, usuarios, ubicaciones, etc.)
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## 🧪 Tecnologías Utilizadas
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- **Frontend**: Angular 16, TailwindCSS, DaisyUI
+- **Backend**: FastAPI, SQLAlchemy, JWT
+- **Base de datos**: SQL Server
+- **Herramientas de despliegue**: Vercel, Railway, Render
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 👥 Autores
 
-```bash
-ng test
-```
+- Cleves Rueda Daniel Felipe  
+- De la Cruz Juan Manuel  
+- Varela Morales Samuel  
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## 📄 Licencia
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Este proyecto fue desarrollado como parte de un trabajo de grado académico. Su uso, copia o redistribución requiere autorización previa de los autores.
