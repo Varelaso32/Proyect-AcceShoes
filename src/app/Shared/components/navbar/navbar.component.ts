@@ -1,10 +1,12 @@
-import { Component, ViewChild, ElementRef, Renderer2, inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, Renderer2, inject, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
+import { CategoryService } from '../../services/category.service';  // Añadido aquí
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -12,7 +14,7 @@ import { CartService } from '../../services/cart.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {  // Implementamos OnInit
   @ViewChild('searchBox') searchBox!: ElementRef;
   @ViewChild('searchContainer') searchContainer!: ElementRef;
 
@@ -22,13 +24,17 @@ export class NavbarComponent {
   cartItemCount: number = 0;
   showUserDropdown: boolean = false;
   showCategorias = false;
+  categories: any[] = [];
 
   private authService = inject(AuthService);
   private router = inject(Router);
   public cartService = inject(CartService);
 
-  constructor(private renderer: Renderer2, private productService: ProductService) {
-
+  constructor(
+    private renderer: Renderer2,
+    private productService: ProductService,
+    private categoryService: CategoryService  // Inyectamos el servicio de categorías
+  ) {
     this.cartService.cartItems$.subscribe(items => {
       this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
 
@@ -38,10 +44,23 @@ export class NavbarComponent {
           this.showUserDropdown = false;
         }
       });
-    }
-    );
+    });
   }
 
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  loadCategories(): void {
+    this.categoryService.getMainCategories().subscribe({
+      next: (cats) => {
+        this.categories = cats;
+      },
+      error: (err) => {
+        console.error('Error cargando categorías principales:', err);
+      }
+    });
+  }
   toggleSearch() {
     const searchElement = this.searchBox.nativeElement;
     const searchButton = this.searchContainer.nativeElement.querySelector('.search-btn');
@@ -119,7 +138,8 @@ export class NavbarComponent {
       this.showSearchSuggestions = false;
     }, 200);
   }
+
   toggleCategorias() {
-  this.showCategorias = !this.showCategorias;
-}
+    this.showCategorias = !this.showCategorias;
+  }
 }

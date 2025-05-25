@@ -1,0 +1,119 @@
+<div class="max-w-7xl mx-auto p-6">
+    <h2 class="text-4xl font-extrabold mb-8 text-gray-900 tracking-wide">Gestión de Planes</h2>
+
+    <button (click)="abrirModalCrear()"
+        class="btn bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 mb-6 shadow-lg hover:shadow-xl transition">
+        Crear nuevo plan
+    </button>
+
+    <!-- Cards de planes -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let plan of planes" class="card bg-white shadow-xl border border-gray-200">
+            <div class="card-body">
+                <h3 class="card-title text-cyan-700 text-xl font-bold">{{ plan.name }}</h3>
+                <p class="text-gray-600">{{ plan.description || 'Sin descripción' }}</p>
+                <div class="text-sm text-gray-500 mt-2 space-y-1">
+                    <p>💵 Precio: ${{ plan.price }}</p>
+                    <p>📌 Publicaciones activas: {{ plan.maxActivePosts ?? 'Ilimitadas' }}</p>
+                    <p>🎁 Promociones incluidas: {{ plan.promotionsIncluded }}</p>
+                </div>
+                <div class="card-actions justify-end mt-4">
+                    <button (click)="abrirModalEditar(plan)" class="btn btn-sm bg-cyan-500 text-white">Editar</button>
+                    <button (click)="eliminarPlan(plan)" class="btn btn-sm bg-red-600 text-white">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear -->
+<div *ngIf="modalAbierto === 'crear'" class="modal modal-open">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Crear nuevo plan</h3>
+        <form (submit)="$event.preventDefault(); crearPlan()" class="space-y-4">
+
+            <div>
+                <label for="name" class="label font-medium">Nombre del plan</label>
+                <input [(ngModel)]="nuevoPlan.name" id="name" name="name" type="text"
+                    class="input input-bordered w-full" placeholder="Ej: Plan Básico" required />
+            </div>
+
+            <div>
+                <label for="description" class="label font-medium">Descripción</label>
+                <textarea [(ngModel)]="nuevoPlan.description" id="description" name="description"
+                    class="textarea textarea-bordered w-full" placeholder="Descripción del plan..."></textarea>
+            </div>
+
+            <div>
+                <label for="price" class="label font-medium">Precio</label>
+                <input [(ngModel)]="nuevoPlan.price" id="price" name="price" type="number"
+                    class="input input-bordered w-full" placeholder="Ej: 25000" required />
+            </div>
+
+            <div>
+                <label for="maxActivePosts" class="label font-medium">Publicaciones activas</label>
+                <input [(ngModel)]="nuevoPlan.maxActivePosts" id="maxActivePosts" name="maxActivePosts" type="number"
+                    class="input input-bordered w-full" placeholder="Ej: 10 (opcional)" />
+            </div>
+
+            <div>
+                <label for="promotionsIncluded" class="label font-medium">Promociones incluidas</label>
+                <input [(ngModel)]="nuevoPlan.promotionsIncluded" id="promotionsIncluded" name="promotionsIncluded"
+                    type="number" class="input input-bordered w-full" placeholder="Ej: 3" required />
+            </div>
+
+            <div class="modal-action">
+                <button type="button" class="btn" (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="isLoading">Crear</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div *ngIf="modalAbierto === 'crear' || modalAbierto === 'editar'" class="modal modal-open">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">
+            {{ modalAbierto === 'crear' ? 'Crear nuevo plan' : 'Editar plan' }}
+        </h3>
+        <form (submit)="$event.preventDefault(); modalAbierto === 'crear' ? crearPlan() : guardarCambiosPlan()"
+            class="space-y-4">
+            <div>
+                <label for="name" class="label font-medium">Nombre del plan</label>
+                <input [(ngModel)]="nuevoPlan.name" id="name" name="name" type="text"
+                    class="input input-bordered w-full" placeholder="Ej: Plan Básico" required />
+            </div>
+
+            <div>
+                <label for="description" class="label font-medium">Descripción</label>
+                <textarea [(ngModel)]="nuevoPlan.description" id="description" name="description"
+                    class="textarea textarea-bordered w-full" placeholder="Descripción del plan..."></textarea>
+            </div>
+
+            <div>
+                <label for="price" class="label font-medium">Precio</label>
+                <input [(ngModel)]="nuevoPlan.price" id="price" name="price" type="number"
+                    class="input input-bordered w-full" placeholder="Ej: 25000" required />
+            </div>
+
+            <div>
+                <label for="maxActivePosts" class="label font-medium">Publicaciones activas</label>
+                <input [(ngModel)]="nuevoPlan.maxActivePosts" id="maxActivePosts" name="maxActivePosts" type="number"
+                    class="input input-bordered w-full" placeholder="Ej: 10 (opcional)" />
+            </div>
+
+            <div>
+                <label for="promotionsIncluded" class="label font-medium">Promociones incluidas</label>
+                <input [(ngModel)]="nuevoPlan.promotionsIncluded" id="promotionsIncluded" name="promotionsIncluded"
+                    type="number" class="input input-bordered w-full" placeholder="Ej: 3" required />
+            </div>
+
+            <div class="modal-action">
+                <button type="button" class="btn" (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+                    {{ modalAbierto === 'crear' ? 'Crear' : 'Guardar cambios' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

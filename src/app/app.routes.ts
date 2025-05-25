@@ -182,6 +182,30 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'create-product',
+    title: 'Crear Producto',
+    canActivate: [authGuard], // Si requiere autenticación
+    loadComponent: () =>
+      import('./Pages/create-product/create-product.component').then(
+        (m) => m.CreateProductComponent
+      ),
+  },
+  {
+    path: 'all-products',
+    title: 'Todos los Productos',
+    loadComponent: () =>
+      import('./Pages/all-categories/all-categories.component').then(
+        (m) => m.AllCategoriesComponent
+      ),
+  },
+  {
+    path: 'category/:category',
+    loadComponent: () =>
+      import('./Pages/category/category.component').then(
+        (m) => m.CategoryComponent
+      ),
+  },
 
   {
     path: 'admin',
@@ -203,6 +227,78 @@ export const routes: Routes = [
           import(
             './Pages/admin/gestion-categorias/gestion-categorias.component'
           ).then((m) => m.GestionCategoriasComponent),
+      },
+      {
+        path: 'configuracion',
+        title: 'Configuración Admin',
+        loadComponent: () =>
+          import(
+            './Pages/admin/configuracion-admin/configuracion-admin.component'
+          ).then((m) => m.ConfiguracionAdminComponent),
+      },
+      {
+        path: 'planes',
+        title: 'Gestión de Planes',
+        loadComponent: () =>
+          import('./Pages/admin/gestion-planes/gestion-planes.component').then(
+            (m) => m.GestionPlanesComponent
+          ),
+      },
+      {
+        path: 'gestion-pqrsd',
+        title: 'Gestión de PQRSD',
+        loadComponent: () =>
+          import(
+            './Pages/admin/revisiones/gestion-pqrsd/gestion-pqrsd.component'
+          ).then((m) => m.GestionPqrsdComponent),
+      },
+      {
+        path: 'gestion-politicas-privacidad',
+        title: 'Gestión de Políticas de Privacidad',
+        loadComponent: () =>
+          import(
+            './Pages/admin/terminos-legales/politicas-privacidad/politicas-privacidad.component'
+          ).then((m) => m.PoliticasPrivacidadComponent),
+      },
+      {
+        path: 'gestion-terminos-condiciones',
+        title: 'Gestión de Términos y Condiciones',
+        loadComponent: () =>
+          import(
+            './Pages/admin/terminos-legales/terminos-condiciones/terminos-condiciones.component'
+          ).then((m) => m.TerminosCondicionesComponent),
+      },
+      {
+        path: 'gestion-contactenos',
+        title: 'Gestión de Contactenos',
+        loadComponent: () =>
+          import(
+            './Pages/admin/gestion-contactenos/gestion-contactenos.component'
+          ).then((m) => m.GestionContactenosComponent),
+      },
+      {
+        path: 'seguimiento-app',
+        title: 'Hisoriales de la Aplicación',
+        loadComponent: () =>
+          import(
+            './Pages/admin/seguimiento-app/seguimiento-app.component'
+          ).then((m) => m.SeguimientoAppComponent),
+      },
+      {
+        path: 'perfil',
+        title: 'Perfil',
+        loadComponent: () =>
+          import(
+            './Pages/admin/config/perfil-admin/perfil-admin.component'
+          ).then((m) => m.PerfilAdminComponent),
+      },
+      {
+        path: 'reportes-user',
+        title: 'Reportes de Usuarios',
+        loadComponent: () =>
+          import(
+            './Pages/admin/revisiones/reportes-user/reportes-user.component'
+          ).then((m) => m.ReportesUserComponent),
       },
       {
         path: '',

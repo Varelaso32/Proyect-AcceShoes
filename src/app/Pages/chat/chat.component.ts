@@ -12,7 +12,6 @@ import { Conversation, Message } from '../../models/chatMessage.model';
 import { UserService } from '../../Shared/services/user.service';
 import { UserResponse } from '../../models/user.model';
 import { CommonModule } from '@angular/common';
-import { CarruselComponent } from '../../Shared/components/carrusel/carrusel.component';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
@@ -24,7 +23,6 @@ import { interval, Subscription } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule,
-    CarruselComponent,
     FooterComponent,
     NavbarComponent,
     RouterModule,

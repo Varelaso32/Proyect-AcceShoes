@@ -1,0 +1,56 @@
+<div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-xl mt-6">
+
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-3xl font-bold text-cyan-600">📋 Reportes de publicaciones</h2>
+
+        <div class="flex gap-4">
+            <button (click)="setFiltro('todos')" [class.font-bold]="filtro === 'todos'"
+                class="btn btn-sm btn-outline btn-cyan-500">
+                Todos ({{ reportes.length }})
+            </button>
+            <button (click)="setFiltro('aprobados')" [class.font-bold]="filtro === 'aprobados'"
+                class="btn btn-sm btn-success">
+                Aprobados ({{ countAprobados }})
+            </button>
+            <button (click)="setFiltro('rechazados')" [class.font-bold]="filtro === 'rechazados'"
+                class="btn btn-sm btn-error">
+                Rechazados ({{ countRechazados }})
+            </button>
+        </div>
+    </div>
+
+    <!-- Contador de reportes filtrados -->
+    <p class="text-gray-600 text-lg mb-5">
+        Mostrando <span class="font-semibold text-cyan-600">{{ reportesFiltrados.length }}</span> reporte{{
+        reportesFiltrados.length === 1 ? '' : 's' }}
+    </p>
+
+    <div *ngIf="cargando" class="flex justify-center my-4">
+        <span class="loading loading-bars loading-lg text-cyan-500"></span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div *ngFor="let reporte of reportesFiltrados" class="card bg-white shadow-md border border-gray-200">
+            <figure>
+                <img [src]="reporte.imagen" alt="Imagen del reporte" class="w-full h-52 object-cover" />
+            </figure>
+            <div class="card-body">
+                <h3 class="card-title text-cyan-700">{{ reporte.motivo }}</h3>
+
+                <p *ngIf="reporte.visible" class="text-gray-700">{{ reporte.descripcion }}</p>
+
+                <div class="card-actions justify-between items-center mt-4">
+                    <button class="btn btn-sm btn-outline btn-cyan-500" (click)="toggleVerMas(reporte)">
+                        {{ reporte.visible ? 'Ver menos' : 'Ver más' }}
+                    </button>
+                    <div class="flex gap-2">
+                        <button class="btn btn-success btn-sm" (click)="aceptarReporte(reporte)"
+                            [disabled]="reporte.estado !== 'pendiente'">Aceptar</button>
+                        <button class="btn btn-error btn-sm" (click)="rechazarReporte(reporte)"
+                            [disabled]="reporte.estado !== 'pendiente'">Rechazar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

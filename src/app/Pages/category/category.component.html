@@ -13,7 +13,17 @@
     </div>
 
     <h2 class="text-4xl font-bold text-cyan-700">Categoría: {{ categoryName }}</h2>
-
+    <!-- Subcategorías -->
+    <div *ngIf="subcategories$ | async as subcategories" class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-700">Subcategorías:</h3>
+      <div class="flex flex-wrap gap-3 mt-2">
+        <button *ngFor="let sub of subcategories"
+          class="btn btn-outline btn-sm text-cyan-600 border-cyan-400 hover:bg-cyan-100"
+          (click)="navigateToSubcategory(sub.name)">
+          {{ sub.name }}
+        </button>
+      </div>
+    </div>
 
     <!-- Grid de productos -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">

@@ -1,0 +1,108 @@
+<div class="max-w-9xl mx-auto p-6 bg-white rounded-xl shadow-xl mt-6">
+    <h2 class="text-4xl font-extrabold mb-8 text-gray-900 tracking-wide">Gestión de Términos y Condiciones</h2>
+
+    <button (click)="abrirModalCrear()"
+        class="btn bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 mb-6 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition duration-300 font-semibold">
+        Crear nuevo término y condición
+    </button>
+
+    <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-md">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-cyan-600">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        ID
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Descripción
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <tr *ngFor="let term of terminos" class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ term.id }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                        {{ term.description.length > 100 ? (term.description | slice:0:100) + '...' : term.description
+                        }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-2">
+                            <button (click)="abrirModalEditar(term)" class="text-cyan-600 hover:text-cyan-900"
+                                title="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </button>
+                            <button (click)="eliminarTermino(term)" class="text-red-600 hover:text-red-900"
+                                title="Eliminar">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Crear -->
+<div *ngIf="modalAbierto === 'crear'" class="modal modal-open">
+    <div class="modal-box rounded-2xl shadow-2xl border border-gray-200 max-w-4xl w-full">
+        <h3 class="text-2xl font-bold mb-6 text-center text-cyan-700">Crear nuevo término y condición</h3>
+        <form (submit)="$event.preventDefault(); crearTermino()">
+            <div class="mb-4">
+                <label class="label text-gray-700">Descripción</label>
+                <textarea [(ngModel)]="nuevaTermino.description" name="descripcion"
+                    placeholder="Ingrese el texto del término y condición..."
+                    class="textarea textarea-bordered w-full h-64" required></textarea>
+            </div>
+
+            <div class="modal-action mt-6 flex justify-end gap-2">
+                <button type="button" class="btn bg-gray-300 hover:bg-gray-400 text-black" (click)="cerrarModal()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn bg-cyan-600 hover:bg-cyan-700 text-white" [disabled]="isLoading">
+                    Crear
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Editar -->
+<div *ngIf="modalAbierto === 'editar'" class="modal modal-open">
+    <div *ngIf="errorMessage"
+        class="absolute top-4 right-4 bg-red-100 text-red-800 border border-red-300 shadow rounded-md px-4 py-2 z-50">
+        {{ errorMessage }}
+    </div>
+
+    <div class="modal-box rounded-2xl shadow-2xl border border-gray-200 max-w-4xl w-full">
+        <h3 class="text-2xl font-bold mb-6 text-center text-cyan-700">Editar término y condición</h3>
+        <form (submit)="$event.preventDefault(); guardarCambios()">
+            <div class="mb-4">
+                <label class="label text-gray-700">Descripción</label>
+                <textarea [(ngModel)]="editData.description" name="descripcion"
+                    placeholder="Ingrese el texto del término y condición..."
+                    class="textarea textarea-bordered w-full h-64" required></textarea>
+            </div>
+
+            <div class="modal-action mt-6 flex justify-end gap-2">
+                <button type="button" class="btn bg-gray-300 hover:bg-gray-400 text-black" (click)="cerrarModal()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn bg-cyan-600 hover:bg-cyan-700 text-white" [disabled]="isLoading">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white">
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 overflow-y-auto">
+        <!-- Card wrapper -->
+        <div
+            class="max-w-9xl mx-auto p-6 bg-white rounded-xl shadow-xl mt-6 dark:bg-gray-800 dark:border dark:border-gray-700">
+            <h1 class="text-4xl font-extrabold mb-2 text-gray-900 dark:text-white tracking-wide">
+                Configuración del Administrador
+            </h1>
+
+            <!-- Idioma -->
+            <section class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Idioma</h2>
+                <select
+                    class="w-full p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    [(ngModel)]="idiomaSeleccionado" (change)="cambiarIdioma()">
+                    <option *ngFor="let idioma of idiomasDisponibles" [value]="idioma.codigo">
+                        {{ idioma.nombre }}
+                    </option>
+                </select>
+            </section>
+
+            <!-- Tema -->
+            <section class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Tema</h2>
+                <div class="flex gap-4">
+                    <label *ngFor="let tema of ['light', 'dark', 'system']"
+                        class="flex items-center gap-2 text-gray-900 dark:text-white">
+                        <input type="radio" name="tema" [value]="tema" [(ngModel)]="temaSeleccionado"
+                            (change)="cambiarTema()" />
+                        <span class="capitalize">{{ tema }}</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Ubicación -->
+            <section class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Ubicación</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- País -->
+                    <select
+                        class="p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        [(ngModel)]="ubicacion.pais" (change)="cambiarPais()">
+                        <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
+                    </select>
+
+                    <!-- Ciudad -->
+                    <select
+                        class="p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        [(ngModel)]="ubicacion.ciudad">
+                        <option *ngFor="let ciudad of ciudadesPorPais[ubicacion.pais]" [value]="ciudad">{{ ciudad }}
+                        </option>
+                    </select>
+                </div>
+                <button class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                    (click)="guardarUbicacion()">
+                    Guardar ubicación
+                </button>
+            </section>
+
+            <!-- Crear nueva ubicación (solo Admin) -->
+            <section class="mb-6 border-t pt-6 mt-6">
+                <h2 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Crear nueva ubicación</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- País para nueva ubicación -->
+                    <select
+                        class="p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        [(ngModel)]="nuevaUbicacion.pais" (change)="cambiarPaisNuevaUbicacion()">
+                        <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
+                    </select>
+
+                    <!-- Ciudad para nueva ubicación -->
+                    <input type="text"
+                        class="p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        placeholder="Ciudad" [(ngModel)]="nuevaUbicacion.ciudad" />
+
+                    <!-- Nombre -->
+                    <input type="text"
+                        class="p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        placeholder="Nombre del lugar" [(ngModel)]="nuevaUbicacion.nombre" />
+
+                    <!-- Descripción -->
+                    <input type="text"
+                        class="p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        placeholder="Descripción o dirección" [(ngModel)]="nuevaUbicacion.descripcion" />
+                </div>
+                <button class="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                    (click)="crearUbicacion()">
+                    Crear ubicación
+                </button>
+            </section>
+
+            <!-- Cerrar sesión -->
+            <section class="mt-10">
+                <button class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                    (click)="cerrarSesion()">
+                    Cerrar sesión
+                </button>
+            </section>
+        </div>
+    </main>
+</div>
