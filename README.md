@@ -38,29 +38,6 @@ cd Proyect-AcceShoes
 
 ---
 
-## ⚙️ Backend (FastAPI)
-
-### 2. Crear entorno virtual y activarlo
-
-```bash
-python -m venv venv
-source venv/bin/activate   # En Windows: venv\Scripts\activate
-```
-
-### 3. Instalar dependencias
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Api FastAPI
-
-```bash
-[uvicorn main:app --reload](https://fastacceshoes.onrender.com/docs#/)
-```
-
----
-
 ## 💻 Frontend (Angular)
 
 ### 5. Instalar dependencias y levantar Angular
@@ -72,20 +49,6 @@ ng serve
 ```
 
 Accede a la app desde: [http://localhost:4200](http://localhost:4200)
-
----
-
-## 🗄️ Configuración de la Base de Datos
-
-Asegúrate de tener un servidor SQL disponible y configurar tu archivo `.env` o archivo de conexión con los siguientes datos:
-
-```env
-DB_HOST=localhost
-DB_PORT=1433
-DB_NAME=acceshoes
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
-```
 
 ---
 
