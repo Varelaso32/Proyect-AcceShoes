@@ -7,7 +7,7 @@
 <div class="flex justify-center bg-gray-100 px-2 pt-32 min-h-screen pb-20">
   <div class="w-full max-w-[90%] xl:max-w-[1500px] bg-white rounded-xl shadow-xl text-gray-800 px-8 py-10 space-y-6">
     <div class="flex justify-center gap-4 mb-6">
-      
+
       <button (click)="navigateToCreateProduct()" class="btn btn-secondary">
         ➕ Nuevo producto
       </button>
@@ -40,9 +40,18 @@
             <div class="card-body">
               <h3 class="card-title text-cyan-700">{{ product.name }}</h3>
               <p class="text-gray-500">{{ product.description }}</p>
+
+              <p class="text-sm text-gray-600">
+                <strong>Talla:</strong> {{ product.size }}
+              </p>
+              <p class="text-sm text-gray-800">
+                <strong>Precio:</strong> ${{ product.price | number:'1.0-0' }}
+              </p>
+
               <h2 (click)="navigateToCategory(categoryName)" class="cursor-pointer hover:underline">
                 {{ categoryName }}
               </h2>
+
               <div class="mt-4 flex flex-wrap justify-between items-center gap-2">
                 <div class="flex flex-wrap gap-2">
                   <button (click)="addToCart(product)" class="btn btn-sm bg-green-500 text-white hover:bg-green-600">
@@ -55,6 +64,7 @@
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
