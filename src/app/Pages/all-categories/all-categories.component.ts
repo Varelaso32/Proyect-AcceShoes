@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 import { CartService } from '../../Shared/services/cart.service';
 import { Product } from '../../models/products.model';
 import { Category } from '../../models/category.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-all-categories',
@@ -62,6 +63,20 @@ export class AllCategoriesComponent {
 
   addToCart(product: Product): void {
     this.cartService.addToCart(product);
+
+    Swal.fire({
+      title: 'Producto agregado 🛒',
+      html: `
+      <strong>${product.name}</strong><br>
+      Talla: <strong>${product.size}</strong><br>
+      Precio: <strong>$${product.price}</strong>
+    `,
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#10B981', 
+      background: '#f0fdfa', 
+      color: '#064e3b' 
+    });
   }
 
   hideBackButtonTemporarily() {

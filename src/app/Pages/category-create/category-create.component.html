@@ -1,20 +1,33 @@
-<h2 class="text-2xl font-bold mb-4">Crear nueva categoría</h2>
+<app-navbar></app-navbar>
 
-<form (ngSubmit)="onSubmit()" class="space-y-4">
-  <div>
-    <label class="block font-medium">Nombre:</label>
-    <input type="text" [(ngModel)]="name" name="name" required class="input input-bordered w-full" />
+<div class="min-h-[calc(100vh-8rem)] flex items-center justify-center bg-base-200 py-10">
+  <div class="card w-full max-w-xl bg-white shadow-xl p-6 space-y-6">
+    <h2 class="text-2xl font-bold text-center">Crear nueva categoría</h2>
+
+    <form (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block font-medium">Nombre:</label>
+        <input type="text" [(ngModel)]="name" name="name" required class="input input-bordered w-full" />
+      </div>
+
+      <div>
+        <label class="block font-medium">Descripción:</label>
+        <textarea [(ngModel)]="description" name="description" class="textarea textarea-bordered w-full"></textarea>
+      </div>
+
+      <div>
+        <label class="block font-medium">ID de categoría padre (opcional):</label>
+        <input type="number" [(ngModel)]="parent_id" name="parent_id" class="input input-bordered w-full" />
+      </div>
+
+      <div class="flex justify-end gap-4">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          {{ isLoading ? 'Creando...' : 'Crear' }}
+        </button>
+        <button type="button" class="btn btn-outline btn-error" (click)="onCancel()">Cancelar</button>
+      </div>
+    </form>
   </div>
+</div>
 
-  <div>
-    <label class="block font-medium">Descripción:</label>
-    <textarea [(ngModel)]="description" name="description" class="textarea textarea-bordered w-full"></textarea>
-  </div>
-
-  <div>
-    <label class="block font-medium">ID de categoría padre (opcional):</label>
-    <input type="number" [(ngModel)]="parent_id" name="parent_id" class="input input-bordered w-full" />
-  </div>
-
-  <button type="submit" class="btn btn-primary">Crear</button>
-</form>
+<app-footer></app-footer>
