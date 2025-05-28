@@ -34,7 +34,7 @@ export class CategoryService {
     return this.http.get<Category>(`${this.apiUrl}${categoryId}`);
   }
   getAllCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>('/api/categories');
+    return this.http.get<Category[]>(`${this.apiUrl}`); 
   }
 
   // Crear nueva categoría
