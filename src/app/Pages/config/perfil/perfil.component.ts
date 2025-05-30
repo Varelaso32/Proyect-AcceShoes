@@ -9,7 +9,7 @@ import { UserResponse, UpdateUserDto } from './../../../models/user.model';
 import { PqrsService } from '../../../Shared/services/pqrs.service';
 import { Plan } from './../../../models/plan.model';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, combineLatest } from 'rxjs';
 import { Pqrs } from '../../../models/pqrsd.model';
 import { SalesService } from '../../../Shared/services/sales.service';
 import { Product } from '../../../models/products.model';
@@ -62,26 +62,31 @@ export class PerfilComponent implements OnInit {
     this.errorMessage = null;
     this.obtenerMisPqrsd();
 
-    forkJoin({
-      user: this.userService.getCurrentUser(),
-      plans: this.plansService.getPlans(),
-    }).subscribe({
-      next: ({ user, plans }) => {
+    // ✅ Esperamos planes y usuario actual juntos
+    combineLatest([
+      this.userService.currentUser$,
+      this.plansService.getPlans(),
+    ]).subscribe(([user, plans]) => {
+      if (user) {
         this.usuario = user;
-        this.editData = { name: user.name, email: user.email };
-        this.planes = plans;
+        this.editData = { name: user.name, email: user.email, img: user.img };
+      }
 
-        if (user.plan_id) {
-          this.planActual = plans.find((plan) => plan.id === user.plan_id);
-        }
+      this.planes = plans;
+      this.planActual = plans.find((plan) => plan.id === user?.plan_id);
 
-        this.cargarProductosDelUsuario(user.id); // <-- aquí
-        this.isProfileLoading = false;
-        this.isPlansLoading = false;
-      },
-      error: (err) => this.handleProfileError(err),
+      if (user?.id) {
+        this.cargarProductosDelUsuario(user.id);
+      }
+
+      this.isProfileLoading = false;
+      this.isPlansLoading = false;
     });
 
+    // 🔁 Al inicio, hacemos la llamada para que emita el currentUser$
+    this.userService.getCurrentUser().subscribe();
+
+    // ✅ Detectar si se viene de PayPal
     this.checkPaymentStatus();
   }
 
@@ -209,10 +214,16 @@ export class PerfilComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       if (params['payment'] === 'success') {
         this.mostrarExito('¡Pago completado! Tu plan ha sido actualizado.');
-        // Recargar datos del usuario
-        this.cargarPerfilUsuario();
 
-        // Limpiar parámetro de URL
+        this.userService.getCurrentUser().subscribe({
+          next: (user) => {
+            this.userService.setCurrentUser(user);
+            this.usuario = user;
+            this.cargarProductosDelUsuario(user.id);
+          },
+          error: (err) => this.handleProfileError(err),
+        });
+
         this.router.navigate([], {
           queryParams: {},
           replaceUrl: true,

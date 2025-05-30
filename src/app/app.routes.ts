@@ -130,13 +130,6 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'mis-productos',
-        loadComponent: () =>
-          import('./Pages/mis-productos/mis-productos.component').then(
-            (m) => m.MisProductosComponent
-          ),
-      },
-      {
         path: 'usuarios/:id',
         title: 'Perfil de Usuario',
         loadComponent: () =>

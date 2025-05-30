@@ -31,9 +31,9 @@ export class UserService extends BaseHttpService {
   }
 
   getCurrentUser(): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${this.apiUrl}/users/me`).pipe(
-      tap((user) => this.setCurrentUser(user))
-    );
+    return this.http
+      .get<UserResponse>(`${this.apiUrl}/users/me`)
+      .pipe(tap((user) => this.setCurrentUser(user)));
   }
 
   updateCurrentUser(data: UpdateUserDto): Observable<UserResponse> {
@@ -60,9 +60,10 @@ export class UserService extends BaseHttpService {
     return this.http
       .patch<UserResponse>(`${this.apiUrl}/users/me/plan${params}`, {})
       .pipe(
-        tap((response) =>
-          console.log('Respuesta de actualización de plan:', response)
-        )
+        tap((updatedUser) => {
+          this.setCurrentUser(updatedUser); // 🔄 Forzar actualización del BehaviorSubject
+          console.log('Plan actualizado en userService:', updatedUser);
+        })
       );
   }
 
