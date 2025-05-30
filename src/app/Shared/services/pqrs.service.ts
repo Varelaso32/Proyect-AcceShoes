@@ -3,6 +3,7 @@ import { BaseHttpService } from '../../Shared/services/base-http.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuditService } from './audit.service';
+import { Pqrs } from '../../models/pqrsd.model';
 
 interface PqrsForm {
   category: string;
@@ -43,8 +44,8 @@ export class PqrsService extends BaseHttpService {
     );
   }
 
-  getMyPqrs(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/pqrs/my-pqrs`).pipe(
+  getMyPqrs(): Observable<Pqrs[]> {
+    return this.http.get<Pqrs[]>(`${this.apiUrl}/pqrs/my-pqrs`).pipe(
       tap(() => {
         this.auditService.addLog({
           action: 'READ_MINE',

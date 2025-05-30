@@ -6,10 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../Shared/services/user.service';
 import { PlansService } from '../../../Shared/services/plans.service';
 import { UserResponse, UpdateUserDto } from './../../../models/user.model';
+import { PqrsService } from '../../../Shared/services/pqrs.service';
 import { Plan } from './../../../models/plan.model';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-
+import { Pqrs } from '../../../models/pqrsd.model';
 @Component({
   selector: 'app-perfil',
   standalone: true,
@@ -28,7 +29,8 @@ export class PerfilComponent implements OnInit {
   modalAbierto: string | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
-
+  misPqrsd: (Pqrs & { responded: boolean })[] = [];
+  pqrsSeleccionada: any = null;
   //Data de user
   usuario: UserResponse | null = null;
   editData: UpdateUserDto = { name: '', email: '', img: '' };
@@ -45,13 +47,15 @@ export class PerfilComponent implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute,
     private plansService: PlansService,
-    private router: Router
+    private router: Router,
+    private pqrsService: PqrsService
   ) {}
 
   ngOnInit() {
     this.isProfileLoading = true;
     this.isPlansLoading = true;
     this.errorMessage = null;
+    this.obtenerMisPqrsd();
 
     forkJoin({
       user: this.userService.getCurrentUser(),
@@ -73,6 +77,20 @@ export class PerfilComponent implements OnInit {
     });
 
     this.checkPaymentStatus();
+  }
+
+  obtenerMisPqrsd() {
+    this.pqrsService.getMyPqrs().subscribe({
+      next: (pqrs: Pqrs[]) => {
+        this.misPqrsd = pqrs.map((p) => ({
+          ...p,
+          responded: !!p.answered_at,
+        }));
+      },
+      error: (err) => {
+        console.error('Error al cargar PQRSD del usuario:', err);
+      },
+    });
   }
 
   cargarPerfilUsuario() {
@@ -248,8 +266,14 @@ export class PerfilComponent implements OnInit {
     }
   }
 
+  abrirModalPqrs(pqrs: any) {
+    this.pqrsSeleccionada = pqrs;
+    this.abrirModal('pqrsDetalleModal');
+  }
+
   cerrarModal() {
     this.modalAbierto = null;
+    this.pqrsSeleccionada = null;
     // Restauramos los datos originales al cerrar
     if (this.usuario) {
       this.editData = {
