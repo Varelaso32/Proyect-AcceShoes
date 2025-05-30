@@ -4,6 +4,7 @@ export interface Seller {
   email: string;
   role: string;
   plan_id: number;
+  img?: string; 
 }
 
 export interface Product {
