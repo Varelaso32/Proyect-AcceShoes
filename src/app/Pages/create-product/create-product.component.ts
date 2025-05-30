@@ -54,17 +54,6 @@ export class CreateProductComponent {
     });
   }
 
-  /*
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-      this.productForm.patchValue({ image: file });
-      this.productForm.get('image')?.updateValueAndValidity();
-    }
-  }
-  */
-
   onSubmit(): void {
     if (this.productForm.valid) {
       this.isLoading = true;

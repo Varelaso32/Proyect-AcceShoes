@@ -11,6 +11,8 @@ import { Plan } from './../../../models/plan.model';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { Pqrs } from '../../../models/pqrsd.model';
+import { SalesService } from '../../../Shared/services/sales.service';
+import { Product } from '../../../models/products.model';
 @Component({
   selector: 'app-perfil',
   standalone: true,
@@ -31,6 +33,8 @@ export class PerfilComponent implements OnInit {
   successMessage: string | null = null;
   misPqrsd: (Pqrs & { responded: boolean })[] = [];
   pqrsSeleccionada: any = null;
+  productosDelUsuario: Product[] = [];
+  isProductosLoading: boolean = false;
   //Data de user
   usuario: UserResponse | null = null;
   editData: UpdateUserDto = { name: '', email: '', img: '' };
@@ -47,8 +51,9 @@ export class PerfilComponent implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute,
     private plansService: PlansService,
-    private router: Router,
-    private pqrsService: PqrsService
+    public router: Router,
+    private pqrsService: PqrsService,
+    private salesService: SalesService
   ) {}
 
   ngOnInit() {
@@ -70,6 +75,7 @@ export class PerfilComponent implements OnInit {
           this.planActual = plans.find((plan) => plan.id === user.plan_id);
         }
 
+        this.cargarProductosDelUsuario(user.id); // <-- aquí
         this.isProfileLoading = false;
         this.isPlansLoading = false;
       },
@@ -77,6 +83,57 @@ export class PerfilComponent implements OnInit {
     });
 
     this.checkPaymentStatus();
+  }
+
+  setDefaultImage(event: Event) {
+    const element = event.target as HTMLImageElement;
+    element.src = 'assets/no-img.jpg';
+  }
+
+  irAMisProductos() {
+    this.router.navigate(['/mis-productos']);
+  }
+
+  cargarProductosDelUsuario(userId: number): void {
+    this.isProductosLoading = true;
+
+    this.salesService.getAllProducts().subscribe({
+      next: (productos) => {
+        const productosDelUsuario = productos.filter(
+          (p) => p.seller?.id === userId
+        );
+
+        const ids = productosDelUsuario.map((p) => p.id);
+
+        this.salesService.getSaleProductsByList(ids).subscribe({
+          next: (sales) => {
+            const salesMap = new Map<number, any>();
+            sales.forEach((sale: any) => {
+              if (sale?.product?.id) {
+                salesMap.set(sale.product.id, sale);
+              }
+            });
+
+            this.productosDelUsuario = productosDelUsuario.map((prod) => ({
+              ...prod,
+              imageUrl: prod.img || 'assets/no-img.jpg',
+              price: salesMap.get(prod.id)?.price ?? 0,
+              stock: salesMap.get(prod.id)?.stock ?? 0,
+            }));
+
+            this.isProductosLoading = false;
+          },
+          error: (err) => {
+            console.error('Error al cargar ventas:', err);
+            this.isProductosLoading = false;
+          },
+        });
+      },
+      error: (err) => {
+        console.error('Error al cargar productos:', err);
+        this.isProductosLoading = false;
+      },
+    });
   }
 
   obtenerMisPqrsd() {

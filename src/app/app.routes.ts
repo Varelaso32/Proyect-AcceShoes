@@ -117,9 +117,9 @@ export const routes: Routes = [
         path: 'agregar-ventas',
         title: 'Crear Venta de Producto',
         loadComponent: () =>
-          import(
-            './Pages/crear-producto/crear-producto.component'
-          ).then((m) => m.CrearProductoComponent),
+          import('./Pages/crear-producto/crear-producto.component').then(
+            (m) => m.CrearProductoComponent
+          ),
       },
       {
         path: 'perfil',
@@ -127,6 +127,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./Pages/config/perfil/perfil.component').then(
             (m) => m.PerfilComponent
+          ),
+      },
+      {
+        path: 'mis-productos',
+        loadComponent: () =>
+          import('./Pages/mis-productos/mis-productos.component').then(
+            (m) => m.MisProductosComponent
           ),
       },
       {
