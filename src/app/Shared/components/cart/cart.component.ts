@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CartService, CartItem } from '../../services/cart.service';
 import { Location } from '@angular/common';
-import { NavbarComponent } from "../navbar/navbar.component";
-import { FooterComponent } from "../footer/footer.component";
+import { NavbarComponent } from '../navbar/navbar.component';
+import { FooterComponent } from '../footer/footer.component';
 import Swal from 'sweetalert2';
-
 
 @Component({
   standalone: true,
@@ -17,15 +16,20 @@ import Swal from 'sweetalert2';
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
 
-  constructor(private cartService: CartService, private location: Location) { }  // Inyecta el servicio Location
+  constructor(private cartService: CartService, private location: Location) {} // Inyecta el servicio Location
 
   ngOnInit(): void {
-    this.cartService.cartItems$.subscribe(items => {
+    this.cartService.cartItems$.subscribe((items) => {
       this.cartItems = items;
     });
   }
 
-  
+  getTotal(): number {
+    return this.cartItems.reduce(
+      (acc, item) => acc + item.product.price * item.quantity,
+      0
+    );
+  }
 
   removeItem(productId: number): void {
     Swal.fire({
@@ -36,7 +40,7 @@ export class CartComponent implements OnInit {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.cartService.removeFromCart(productId);
@@ -45,7 +49,7 @@ export class CartComponent implements OnInit {
           text: 'Se eliminó correctamente del carrito.',
           icon: 'success',
           timer: 1500,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
       }
     });
@@ -60,7 +64,7 @@ export class CartComponent implements OnInit {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, vaciar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.cartService.clearCart();
@@ -69,7 +73,7 @@ export class CartComponent implements OnInit {
           text: 'Todos los productos han sido eliminados.',
           icon: 'success',
           timer: 1500,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
       }
     });
