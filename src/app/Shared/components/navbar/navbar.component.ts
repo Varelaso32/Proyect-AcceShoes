@@ -1,11 +1,20 @@
-import { Component, ViewChild, ElementRef, Renderer2, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  Renderer2,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
-import { CategoryService } from '../../services/category.service';  // Añadido aquí
+import { CategoryService } from '../../services/category.service'; // Añadido aquí
+import { UserService } from '../../services/user.service';
+import { UserResponse } from '../../../models/user.model';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +23,8 @@ import { CategoryService } from '../../services/category.service';  // Añadido 
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit {  // Implementamos OnInit
+export class NavbarComponent implements OnInit {
+  // Implementamos OnInit
   @ViewChild('searchBox') searchBox!: ElementRef;
   @ViewChild('searchContainer') searchContainer!: ElementRef;
 
@@ -25,7 +35,7 @@ export class NavbarComponent implements OnInit {  // Implementamos OnInit
   showUserDropdown: boolean = false;
   showCategorias = false;
   categories: any[] = [];
-
+  user: UserResponse | null = null;
   private authService = inject(AuthService);
   private router = inject(Router);
   public cartService = inject(CartService);
@@ -33,13 +43,19 @@ export class NavbarComponent implements OnInit {  // Implementamos OnInit
   constructor(
     private renderer: Renderer2,
     private productService: ProductService,
-    private categoryService: CategoryService  // Inyectamos el servicio de categorías
+    private categoryService: CategoryService,
+    private userService: UserService
   ) {
-    this.cartService.cartItems$.subscribe(items => {
-      this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
+    this.cartService.cartItems$.subscribe((items) => {
+      this.cartItemCount = items.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
 
       this.renderer.listen('document', 'click', (event) => {
-        const clickedInside = (event.target as HTMLElement).closest('.user-dropdown');
+        const clickedInside = (event.target as HTMLElement).closest(
+          '.user-dropdown'
+        );
         if (!clickedInside) {
           this.showUserDropdown = false;
         }
@@ -49,6 +65,14 @@ export class NavbarComponent implements OnInit {  // Implementamos OnInit
 
   ngOnInit(): void {
     this.loadCategories();
+    this.userService.getCurrentUser().subscribe({
+      next: (user) => {
+        this.user = user;
+      },
+      error: (err) => {
+        console.error('Error obteniendo el usuario:', err);
+      },
+    });
   }
 
   loadCategories(): void {
@@ -58,12 +82,13 @@ export class NavbarComponent implements OnInit {  // Implementamos OnInit
       },
       error: (err) => {
         console.error('Error cargando categorías principales:', err);
-      }
+      },
     });
   }
   toggleSearch() {
     const searchElement = this.searchBox.nativeElement;
-    const searchButton = this.searchContainer.nativeElement.querySelector('.search-btn');
+    const searchButton =
+      this.searchContainer.nativeElement.querySelector('.search-btn');
 
     if (searchElement.classList.contains('hidden')) {
       this.renderer.removeClass(searchElement, 'hidden');
@@ -102,7 +127,7 @@ export class NavbarComponent implements OnInit {  // Implementamos OnInit
     this.searchQuery = query;
 
     if (query.trim().length > 2) {
-      this.productService.searchProducts(query).subscribe(results => {
+      this.productService.searchProducts(query).subscribe((results) => {
         this.searchSuggestions = results.slice(0, 5);
         this.showSearchSuggestions = this.searchSuggestions.length > 0;
       });
@@ -122,7 +147,7 @@ export class NavbarComponent implements OnInit {  // Implementamos OnInit
 
     if (this.searchQuery.trim()) {
       this.router.navigate(['/search'], {
-        queryParams: { q: this.searchQuery.trim() }
+        queryParams: { q: this.searchQuery.trim() },
       });
       this.showSearchSuggestions = false;
     }
