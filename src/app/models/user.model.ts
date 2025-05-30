@@ -17,6 +17,7 @@ export interface UserResponse {
 export interface UpdateUserDto {
   name?: string;
   email?: string;
+  img?: string;
 }
 
 export interface CreateUserDto {

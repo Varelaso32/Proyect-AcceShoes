@@ -54,7 +54,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'all-products',
+    path: 'all-categories',
     title: 'Todos los Productos',
     loadComponent: () =>
       import('./Pages/all-categories/all-categories.component').then(
@@ -112,6 +112,14 @@ export const routes: Routes = [
           import(
             './Pages/config/terminos-condiciones/terminos-condiciones.component'
           ).then((m) => m.TerminosCondicionesComponent),
+      },
+      {
+        path: 'agregar-ventas',
+        title: 'Crear Venta de Producto',
+        loadComponent: () =>
+          import(
+            './Pages/crear-producto/crear-producto.component'
+          ).then((m) => m.CrearProductoComponent),
       },
       {
         path: 'perfil',

@@ -1,53 +1,81 @@
 <app-navbar></app-navbar>
 
-<div class="container mx-auto px-4 pt-32 min-h-screen">
-  <div class="mb-6">
-    <button (click)="goBack()" class="btn btn-outline btn-accent">
-      ⬅ Volver atrás
-    </button>
-  </div>
+<!-- Botón volver -->
+<button (click)="goBack()" class="fixed top-24 left-4 z-50 btn btn-outline shadow-md hover:scale-105 transition">
+  ⬅ Atrás
+</button>
 
-  <div *ngIf="product; else loading" class="max-w-4xl mx-auto card bg-base-100 shadow-xl p-6">
-    <div class="flex flex-col lg:flex-row gap-6">
-      <img [src]="product.imageUrl" [alt]="product.name" class="w-full lg:w-1/2 h-64 object-cover rounded-xl"
-        onerror="this.src='/api/placeholder/400/400'; this.onerror=null;" />
+<!-- Contenedor general -->
+<div class="flex justify-center bg-gray-100 px-4 pt-28 min-h-screen pb-44">
+  <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl text-gray-800 border-t-12 border-cyan-600 p-6 md:p-10">
 
-      <div class="flex flex-col justify-between">
-        <div>
-          <h2 class="text-3xl font-bold text-cyan-700">{{ product.name }}</h2>
-          <p class="text-gray-600 mt-2">{{ product.description }}</p>
-          <span class="badge badge-outline mt-4">{{ product.category }}</span>
+    <ng-container *ngIf="product; else loading">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+
+        <!-- Imagen del producto -->
+        <div class="flex justify-center">
+          <img [src]="product.imageUrl" [alt]="product.name"
+            class="h-64 w-64 object-cover rounded-xl border shadow"
+            onerror="this.src='/api/placeholder/400/400'; this.onerror=null;" />
         </div>
-        <div class="mt-6">
-          
-        </div>
-        <div class="mt-6 flex items-center gap-4">
-          <button (click)="addToCart()" class="btn bg-green-500 text-white hover:bg-green-600">
-            🛒 Agregar al carrito
-          </button>
+
+        <!-- Detalles -->
+        <div class="flex flex-col space-y-3">
+
+          <!-- Vendedor -->
+          <div class="flex items-center gap-3">
+            <img [src]="product.seller.img || '/assets/avatar-default.png'" alt="avatar"
+              class="w-10 h-10 rounded-full border border-cyan-600 shadow" />
+            <span class="text-gray-700 font-medium text-sm">
+              {{ product.seller.name }}
+              <i class="fa-solid fa-circle-check text-cyan-600 ml-1 text-xs"></i>
+            </span>
+          </div>
+
+          <!-- Nombre -->
+          <h2 class="text-2xl font-bold text-cyan-700">{{ product.name }}</h2>
+          <p class="text-sm text-gray-600">{{ product.description }}</p>
+
+          <!-- Info rápida -->
+          <div class="grid grid-cols-2 gap-2 text-sm text-gray-700 pt-2">
+            <p><strong>Talla:</strong> {{ product.size }}</p>
+            <p><strong>Categoría:</strong> {{ categoryName || 'Sin categoría' }}</p>
+            <p><strong>Creado en:</strong> {{ product.created_at | date:'longDate' }}</p>
+            <p>
+              <strong>Stock:</strong>
+              <span [ngClass]="{
+                'text-red-600 font-bold': product.stock === 0,
+                'text-green-600 font-bold': product.stock > 0
+              }">
+                {{ product.stock === 0 ? 'Agotado' : product.stock }}
+              </span>
+            </p>
+          </div>
+
+          <!-- Precio -->
+          <div class="text-lg font-bold text-green-600">
+            Precio: ${{ product.price | number:'1.0-0' }}
+          </div>
+
+          <!-- Botón -->
+          <div class="pt-4">
+            <button (click)="addToCart()"
+              class="btn bg-cyan-600 text-white hover:bg-cyan-700 w-full md:w-auto shadow-md">
+              <i class="fa-solid fa-cart-plus mr-2"></i> Agregar al carrito
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </ng-container>
 
-  <ng-template #loading>
-    <div class="text-center py-20">
-      <span class="loading loading-spinner text-cyan-600 w-16 h-16"></span>
-    </div>
-  </ng-template>
+    <!-- Loading -->
+    <ng-template #loading>
+      <div class="text-center py-16">
+        <span class="loading loading-spinner text-cyan-600 w-10 h-10"></span>
+        <p class="text-gray-600 mt-4">Cargando producto...</p>
+      </div>
+    </ng-template>
+  </div>
 </div>
-
-<!-- Modal DaisyUI -->
-<dialog #modalRef id="addToCartModal" class="modal">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">Producto agregado al carrito</h3>
-    <p class="py-4">Has agregado <strong>{{ addedProductName }}</strong> al carrito exitosamente.</p>
-    <div class="modal-action">
-      <form method="dialog">
-        <button class="btn">Cerrar</button>
-      </form>
-    </div>
-  </div>
-</dialog>
 
 <app-footer></app-footer>

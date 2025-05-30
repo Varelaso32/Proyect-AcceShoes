@@ -1,59 +1,77 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProductService } from '../../Shared/services/product.service';
 import { CommonModule, Location } from '@angular/common';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { CartService } from '../../Shared/services/cart.service';
 import { Product } from '../../models/products.model';
+import Swal from 'sweetalert2';
+import { SalesService } from '../../Shared/services/sales.service';
+import { CategoryService } from '../../Shared/services/categories.service';
 
 @Component({
   selector: 'app-product-detail',
+  standalone: true,
   imports: [CommonModule, FooterComponent, NavbarComponent],
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.css']
+  styleUrls: ['./product.component.css'],
 })
 export class ProductDetailComponent implements OnInit {
-  product: Product | undefined;
-  @ViewChild('modalRef') modalRef!: ElementRef<HTMLDialogElement>;
-  addedProductName: string = ''; 
+  product: (Product & { price: number; stock: number }) | undefined;
+  categoryName: string = 'Cargando...';
 
-  constructor(
-    private route: ActivatedRoute,
-    private productService: ProductService,
-    private location: Location,
-    private cartService: CartService,
-  ) { }
+  private route = inject(ActivatedRoute);
+  private productService = inject(SalesService);
+  private categoryService: CategoryService = inject(CategoryService);
+  private location = inject(Location);
+  private cartService = inject(CartService);
 
   ngOnInit(): void {
     const productId = Number(this.route.snapshot.paramMap.get('id'));
 
-    if (productId) {
-      this.productService.getProductById(productId).subscribe((product) => {
-        if (product) {
-          this.product = product;
-        } else {
-          console.error('Producto no encontrado');
-        }
-      });
-    } else {
+    if (!productId) {
       console.error('ID de producto no válido');
+      return;
     }
+
+    this.productService.getSaleProduct(productId).subscribe((sale) => {
+      if (sale?.product) {
+        const prod = sale.product;
+        this.product = {
+          ...prod,
+          imageUrl: prod.img,
+          price: sale.price,
+          stock: sale.stock,
+        };
+
+        if (prod.category_id) {
+          this.categoryService.getById(prod.category_id).subscribe({
+            next: (cat) => (this.categoryName = cat.name),
+            error: () => (this.categoryName = 'Sin categoría'),
+          });
+        } else {
+          this.categoryName = 'Sin categoría';
+        }
+      } else {
+        console.error('Producto no encontrado');
+      }
+    });
   }
 
   addToCart(): void {
     if (this.product) {
       this.cartService.addToCart(this.product);
-      this.addedProductName = this.product.name; 
 
-      // Mostrar el modal después de agregar el producto
-      if (this.modalRef?.nativeElement) {
-        this.modalRef.nativeElement.showModal();
-      }
+      Swal.fire({
+        icon: 'success',
+        title: 'Agregado al carrito',
+        text: `${this.product.name} fue agregado correctamente`,
+        confirmButtonColor: '#10B981',
+        confirmButtonText: 'Ok',
+      });
     }
   }
 
-  // Método para volver atrás
   goBack(): void {
     this.location.back();
   }
