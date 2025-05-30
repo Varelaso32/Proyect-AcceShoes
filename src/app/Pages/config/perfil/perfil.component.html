@@ -111,7 +111,7 @@
           </div>
 
           <div *ngIf="misPqrsd.length" class="grid gap-4">
-            <div *ngFor="let pqrs of misPqrsd.slice(0, 3)"
+            <div *ngFor="let pqrs of misPqrsd.slice(0, 2)"
               class="border p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer" (click)="abrirModalPqrs(pqrs)">
               <p class="text-sm font-semibold">{{ pqrs.category }}</p>
               <p class="text-sm truncate">{{ pqrs.description }}</p>
