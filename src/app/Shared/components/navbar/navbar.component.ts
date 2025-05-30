@@ -65,7 +65,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCategories();
-    this.userService.getCurrentUser().subscribe({
+    this.userService.currentUser$.subscribe({
       next: (user) => {
         this.user = user;
       },
@@ -73,6 +73,10 @@ export class NavbarComponent implements OnInit {
         console.error('Error obteniendo el usuario:', err);
       },
     });
+    // Cargar si no está en cache
+    if (!this.userService.getCurrentUserValue()) {
+      this.userService.getCurrentUser().subscribe();
+    }
   }
 
   loadCategories(): void {
