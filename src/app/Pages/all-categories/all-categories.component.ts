@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SalesService } from '../../Shared/services/sales.service';
 import { CategoryService } from '../../Shared/services/category.service';
-import { Observable, combineLatest, map } from 'rxjs';
+import { Observable, combineLatest, map, of, switchMap } from 'rxjs';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { RouterLink, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
   templateUrl: './all-categories.component.html',
 })
 export class AllCategoriesComponent {
-  groupedProducts$: Observable<Record<string, Product[]>>;
+  groupedProducts$: Observable<Record<string, (Product & { stock: number })[]>>;
   private productService = inject(SalesService);
   private categoryService = inject(CategoryService);
   private location = inject(Location);
@@ -30,34 +30,47 @@ export class AllCategoriesComponent {
 
   constructor() {
     this.groupedProducts$ = combineLatest([
-      this.productService.getAllProducts(),
+      this.productService.getAllProducts(), // solo trae info base
       this.categoryService.getMainCategories(),
     ]).pipe(
-      map(([products, categories]) => {
+      switchMap(([products, categories]) => {
+        const ids = products.map((p) => p.id);
+        return combineLatest([
+          of(products),
+          of(categories),
+          this.productService.getSaleProductsByList(ids), // ahora sí con price + stock
+        ]);
+      }),
+      map(([products, categories, sales]) => {
         const categoryMap: Record<number, string> = {};
         categories.forEach((cat) => (categoryMap[cat.id] = cat.name));
 
-        const grouped: Record<string, Product[]> = {};
+        const grouped: Record<string, any[]> = {};
         categories.forEach((cat) => (grouped[cat.name] = []));
         grouped['Sin categoría'] = [];
 
-        products.forEach((product: any) => {
-          const categoryName =
-            categoryMap[product.category_id] ?? 'Sin categoría'; // 🔁 aquí estaba el error
-
-          if (!grouped[categoryName]) {
-            grouped[categoryName] = [];
+        // indexar sales por ID para acceder rápido
+        const salesMap = new Map<number, any>();
+        sales.forEach((sale: any) => {
+          if (sale?.product?.id) {
+            salesMap.set(sale.product.id, sale);
           }
+        });
 
-          grouped[categoryName].push({
+        products.forEach((product: any) => {
+          const sale = salesMap.get(product.id);
+          const categoryName =
+            categoryMap[product.category_id] ?? 'Sin categoría';
+
+          const fullProduct = {
             ...product,
             imageUrl: product.img,
-            price: product.price ?? 0, // en caso de que price venga null
-            size: product.size,
-            name: product.name,
-            description: product.description,
-            id: product.id,
-          });
+            price: sale?.price ?? 0,
+            stock: sale?.stock ?? 0,
+          };
+
+          if (!grouped[categoryName]) grouped[categoryName] = [];
+          grouped[categoryName].push(fullProduct);
         });
 
         return grouped;

@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 export interface SaleProductForm {
   price: number;
@@ -27,6 +28,10 @@ export class SalesService {
   // 🔹 Obtener producto de venta por ID
   getSaleProduct(id: number): Observable<any> {
     return this.http.get(`${this.api}/sales/products/${id}`);
+  }
+
+  getSaleProductsByList(ids: number[]): Observable<any[]> {
+    return forkJoin(ids.map((id) => this.getSaleProduct(id)));
   }
 
   // 🔹 Actualizar producto de venta
