@@ -1,17 +1,20 @@
 <app-navbar (mouseover)="hideBackButtonTemporarily()" (focusin)="hideBackButtonTemporarily()"></app-navbar>
 
+<!-- Botón flotante ➕ -->
+<button (click)="navigateToCreateProduct()"
+  class="fixed bottom-6 right-6 z-50 bg-cyan-600 hover:bg-cyan-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-xl transition-all duration-300 cursor-pointer"
+  title="Nuevo producto">
+  <span class="text-2xl">➕</span>
+</button>
+
+<!-- Botón volver -->
 <button *ngIf="showBackButton" (click)="goBack()" class="fixed top-24 left-4 z-50 btn btn-m btn-accent shadow-md">
   ⬅ Atrás
 </button>
 
+<!-- Contenedor principal -->
 <div class="flex justify-center bg-gray-100 px-2 pt-32 min-h-screen pb-20">
   <div class="w-full max-w-[90%] xl:max-w-[1500px] bg-white rounded-xl shadow-xl text-gray-800 px-8 py-10 space-y-6">
-    <div class="flex justify-center gap-4 mb-6">
-
-      <button (click)="navigateToCreateProduct()" class="btn btn-secondary">
-        ➕ Nuevo producto
-      </button>
-    </div>
 
     <h2 class="text-4xl font-bold text-cyan-700 text-center mb-8">Todos los productos</h2>
 
@@ -31,41 +34,45 @@
 
         <div *ngIf="grouped[categoryName].length > 0"
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+
           <div *ngFor="let product of grouped[categoryName]"
-            class="card bg-base-100 shadow-xl hover:shadow-2xl transition">
-            <figure class="px-4 pt-4">
-              <img [src]="product.imageUrl" [alt]="product.name" class="rounded-xl h-48 w-full object-cover"
+            class="card bg-white shadow-md hover:shadow-xl transition rounded-xl overflow-hidden">
+
+            <!-- Imagen -->
+            <figure class="h-56 w-full overflow-hidden">
+              <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-full object-cover"
                 (error)="product.imageUrl = '/api/placeholder/300/300'" />
             </figure>
-            <div class="card-body">
-              <h3 class="card-title text-cyan-700">{{ product.name }}</h3>
-              <p class="text-gray-500">{{ product.description }}</p>
 
-              <p class="text-sm text-gray-600">
-                <strong>Talla:</strong> {{ product.size }}
-              </p>
-              <p class="text-sm text-gray-800">
-                <strong>Precio:</strong> ${{ product.price | number:'1.0-0' }}
-              </p>
+            <!-- Cuerpo -->
+            <div class="card-body px-4 pt-4 pb-5 space-y-2">
+              <h3 class="text-xl font-bold text-cyan-700 truncate">{{ product.name }}</h3>
+              <p class="text-gray-500 text-sm line-clamp-3">{{ product.description }}</p>
 
-              <h2 (click)="navigateToCategory(categoryName)" class="cursor-pointer hover:underline">
+              <div class="text-sm text-gray-700 space-y-1">
+                <p><strong>Talla:</strong> {{ product.size }}</p>
+                <p><strong>Precio:</strong> ${{ product.price | number:'1.0-0' }}</p>
+              </div>
+
+              <!-- Categoría chip -->
+              <span class="inline-block mt-1 text-xs font-medium bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full">
                 {{ categoryName }}
-              </h2>
+              </span>
 
-              <div class="mt-4 flex flex-wrap justify-between items-center gap-2">
-                <div class="flex flex-wrap gap-2">
-                  <button (click)="addToCart(product)" class="btn btn-sm bg-green-500 text-white hover:bg-green-600">
-                    🛒 Agregar al carrito
-                  </button>
-                  <button class="btn btn-sm bg-cyan-600 text-white hover:bg-cyan-700"
-                    [routerLink]="['/product', product.id]">
-                    Ver detalles
-                  </button>
-                </div>
+              <!-- Botones -->
+              <div class="flex flex-col gap-2 pt-4">
+                <button (click)="addToCart(product)"
+                  class="btn btn-sm bg-green-500 text-white hover:bg-green-600 w-full">
+                  🛒 Agregar al carrito
+                </button>
+                <button [routerLink]="['/product', product.id]"
+                  class="btn btn-sm bg-cyan-600 text-white hover:bg-cyan-700 w-full">
+                  Ver detalles
+                </button>
               </div>
             </div>
-
           </div>
+
         </div>
       </div>
     </ng-container>

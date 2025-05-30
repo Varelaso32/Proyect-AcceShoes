@@ -8,19 +8,32 @@ import {
 import { Observable, tap } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
 import { AuditService } from './audit.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService extends BaseHttpService {
   private readonly BLOCKED_USERS_KEY = 'blocked_users';
+  private currentUserSubject = new BehaviorSubject<UserResponse | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private auditService: AuditService) {
     super();
   }
 
+  setCurrentUser(user: UserResponse) {
+    this.currentUserSubject.next(user);
+  }
+
+  getCurrentUserValue(): UserResponse | null {
+    return this.currentUserSubject.value;
+  }
+
   getCurrentUser(): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${this.apiUrl}/users/me`);
+    return this.http.get<UserResponse>(`${this.apiUrl}/users/me`).pipe(
+      tap((user) => this.setCurrentUser(user))
+    );
   }
 
   updateCurrentUser(data: UpdateUserDto): Observable<UserResponse> {

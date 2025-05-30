@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '../../Shared/services/product.service';
+import { SalesService } from '../../Shared/services/sales.service';
 import { CategoryService } from '../../Shared/services/category.service';
 import { Observable, combineLatest, map } from 'rxjs';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
@@ -20,7 +20,7 @@ import Swal from 'sweetalert2';
 })
 export class AllCategoriesComponent {
   groupedProducts$: Observable<Record<string, Product[]>>;
-  private productService = inject(ProductService);
+  private productService = inject(SalesService);
   private categoryService = inject(CategoryService);
   private location = inject(Location);
   private cartService = inject(CartService);
@@ -30,22 +30,34 @@ export class AllCategoriesComponent {
 
   constructor() {
     this.groupedProducts$ = combineLatest([
-      this.productService.getProducts(),
+      this.productService.getAllProducts(),
       this.categoryService.getMainCategories(),
     ]).pipe(
       map(([products, categories]) => {
         const categoryMap: Record<number, string> = {};
-        categories.forEach(cat => categoryMap[cat.id] = cat.name);
+        categories.forEach((cat) => (categoryMap[cat.id] = cat.name));
 
         const grouped: Record<string, Product[]> = {};
-        categories.forEach(cat => {
-          grouped[cat.name] = [];
-        });
+        categories.forEach((cat) => (grouped[cat.name] = []));
         grouped['Sin categoría'] = [];
 
-        products.forEach(product => {
-          const categoryName = categoryMap[product.category] ?? 'Sin categoría';
-          grouped[categoryName].push(product);
+        products.forEach((product: any) => {
+          const categoryName =
+            categoryMap[product.category_id] ?? 'Sin categoría'; // 🔁 aquí estaba el error
+
+          if (!grouped[categoryName]) {
+            grouped[categoryName] = [];
+          }
+
+          grouped[categoryName].push({
+            ...product,
+            imageUrl: product.img,
+            price: product.price ?? 0, // en caso de que price venga null
+            size: product.size,
+            name: product.name,
+            description: product.description,
+            id: product.id,
+          });
         });
 
         return grouped;
@@ -54,7 +66,9 @@ export class AllCategoriesComponent {
   }
 
   getCategoryNames(grouped: Record<string, Product[]>): string[] {
-    return Object.keys(grouped).filter(name => name !== 'Sin categoría' || grouped[name].length > 0);
+    return Object.keys(grouped).filter(
+      (name) => name !== 'Sin categoría' || grouped[name].length > 0
+    );
   }
 
   goBack(): void {
@@ -73,9 +87,9 @@ export class AllCategoriesComponent {
     `,
       icon: 'success',
       confirmButtonText: 'OK',
-      confirmButtonColor: '#10B981', 
-      background: '#f0fdfa', 
-      color: '#064e3b' 
+      confirmButtonColor: '#10B981',
+      background: '#f0fdfa',
+      color: '#064e3b',
     });
   }
 
@@ -87,7 +101,7 @@ export class AllCategoriesComponent {
   }
 
   navigateToCreateProduct() {
-    this.router.navigate(['/create-product']);
+    this.router.navigate(['/agregar-ventas']);
   }
 
   navigateToCategoryById(categoryId: number): void {

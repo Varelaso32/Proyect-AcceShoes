@@ -6,9 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../Shared/services/user.service';
 import { PlansService } from '../../../Shared/services/plans.service';
 import { UserResponse, UpdateUserDto } from './../../../models/user.model';
+import { PqrsService } from '../../../Shared/services/pqrs.service';
 import { Plan } from './../../../models/plan.model';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
-
+import { forkJoin } from 'rxjs';
+import { Pqrs } from '../../../models/pqrsd.model';
 @Component({
   selector: 'app-perfil',
   standalone: true,
@@ -27,10 +29,11 @@ export class PerfilComponent implements OnInit {
   modalAbierto: string | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
-
+  misPqrsd: (Pqrs & { responded: boolean })[] = [];
+  pqrsSeleccionada: any = null;
   //Data de user
   usuario: UserResponse | null = null;
-  editData: UpdateUserDto = { name: '', email: '' };
+  editData: UpdateUserDto = { name: '', email: '', img: '' };
   isLoading: boolean = false;
   isProfileLoading: boolean = true;
   isCurrentUser: boolean = true;
@@ -44,13 +47,50 @@ export class PerfilComponent implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute,
     private plansService: PlansService,
-    private router: Router
+    private router: Router,
+    private pqrsService: PqrsService
   ) {}
 
   ngOnInit() {
-    this.cargarPerfilUsuario();
-    this.cargarPlanes();
+    this.isProfileLoading = true;
+    this.isPlansLoading = true;
+    this.errorMessage = null;
+    this.obtenerMisPqrsd();
+
+    forkJoin({
+      user: this.userService.getCurrentUser(),
+      plans: this.plansService.getPlans(),
+    }).subscribe({
+      next: ({ user, plans }) => {
+        this.usuario = user;
+        this.editData = { name: user.name, email: user.email };
+        this.planes = plans;
+
+        if (user.plan_id) {
+          this.planActual = plans.find((plan) => plan.id === user.plan_id);
+        }
+
+        this.isProfileLoading = false;
+        this.isPlansLoading = false;
+      },
+      error: (err) => this.handleProfileError(err),
+    });
+
     this.checkPaymentStatus();
+  }
+
+  obtenerMisPqrsd() {
+    this.pqrsService.getMyPqrs().subscribe({
+      next: (pqrs: Pqrs[]) => {
+        this.misPqrsd = pqrs.map((p) => ({
+          ...p,
+          responded: !!p.answered_at,
+        }));
+      },
+      error: (err) => {
+        console.error('Error al cargar PQRSD del usuario:', err);
+      },
+    });
   }
 
   cargarPerfilUsuario() {
@@ -73,13 +113,25 @@ export class PerfilComponent implements OnInit {
     });
   }
 
+  onImageSelectedPerfil(event: Event): void {
+    const file = (event.target as HTMLInputElement)?.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result as string;
+        console.log('🖼️ Imagen base64:', base64); // DEBUG
+        this.editData.img = base64;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   cargarPlanes() {
     this.isPlansLoading = true;
     this.plansService.getPlans().subscribe({
       next: (res) => {
-        this.planes = res; // Guardamos la lista de planes disponibles
+        this.planes = res;
 
-        // Actualizamos el plan actual si el usuario tiene uno asignado
         if (this.usuario?.plan_id) {
           this.planActual = res.find(
             (plan) => plan.id === this.usuario?.plan_id
@@ -142,6 +194,7 @@ export class PerfilComponent implements OnInit {
       .updateCurrentUser({
         name: this.editData.name,
         email: this.editData.email,
+        img: this.editData.img || this.usuario.img,
         // Eliminamos el envío de currentPassword
       })
       .subscribe({
@@ -165,6 +218,7 @@ export class PerfilComponent implements OnInit {
 
   private handleUpdateSuccess(actualizado: UserResponse) {
     this.usuario = actualizado;
+    this.userService.setCurrentUser(actualizado);
     this.mostrarExito('Perfil actualizado correctamente');
     this.cerrarModal();
     this.isLoading = false;
@@ -212,13 +266,20 @@ export class PerfilComponent implements OnInit {
     }
   }
 
+  abrirModalPqrs(pqrs: any) {
+    this.pqrsSeleccionada = pqrs;
+    this.abrirModal('pqrsDetalleModal');
+  }
+
   cerrarModal() {
     this.modalAbierto = null;
+    this.pqrsSeleccionada = null;
     // Restauramos los datos originales al cerrar
     if (this.usuario) {
       this.editData = {
         name: this.usuario.name,
         email: this.usuario.email,
+        img: this.usuario.img,
       };
     }
   }

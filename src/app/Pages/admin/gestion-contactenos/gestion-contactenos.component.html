@@ -28,20 +28,26 @@
             </div>
         </li>
     </ul>
+</div>
 
-    <div *ngIf="correoSeleccionado" class="mt-8 border-t border-gray-300 pt-6 bg-gray-50 rounded-xl shadow-inner p-6">
-        <h3 class="text-xl font-semibold text-cyan-700 mb-4">Detalles del mensaje</h3>
+<!-- Modal Detalle de Correo -->
+<div *ngIf="correoSeleccionado" class="modal modal-open">
+    <div class="modal-box rounded-2xl shadow-2xl border border-gray-200 max-w-2xl relative">
+        <button (click)="cerrarModal()"
+            class="btn btn-sm btn-circle absolute right-2 top-2 text-gray-600 hover:text-black">✕</button>
+
+        <h3 class="text-2xl font-bold mb-4 text-center text-cyan-700">Detalles del mensaje</h3>
+
         <p class="mb-2"><strong class="text-black">De:</strong> {{ correoSeleccionado.remitente }}</p>
         <p class="mb-2"><strong class="text-black">Asunto:</strong> {{ correoSeleccionado.asunto }}</p>
         <p class="mb-4"><strong class="text-black">Mensaje:</strong> {{ correoSeleccionado.mensaje }}</p>
 
         <label class="block text-sm font-medium text-gray-700 mb-1">Respuesta:</label>
-        <textarea [(ngModel)]="respuesta" rows="4"
-            class="w-full border border-gray-300 rounded-md p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-cyan-400"></textarea>
+        <textarea [(ngModel)]="respuesta" rows="4" class="textarea textarea-bordered w-full mb-4"></textarea>
 
-        <button (click)="enviarRespuesta()"
-            class="bg-cyan-600 text-white px-6 py-2 rounded hover:bg-cyan-700 transition">
-            Enviar respuesta
-        </button>
+        <div class="modal-action mt-4 flex justify-end gap-2">
+            <button class="btn bg-gray-300 hover:bg-gray-400 text-black" (click)="cerrarModal()">Cancelar</button>
+            <button class="btn bg-cyan-600 hover:bg-cyan-700 text-white" (click)="enviarRespuesta()">Enviar</button>
+        </div>
     </div>
 </div>

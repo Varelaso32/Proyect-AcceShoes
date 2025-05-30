@@ -114,6 +114,14 @@ export const routes: Routes = [
           ).then((m) => m.TerminosCondicionesComponent),
       },
       {
+        path: 'agregar-ventas',
+        title: 'Crear Venta de Producto',
+        loadComponent: () =>
+          import(
+            './Pages/crear-producto/crear-producto.component'
+          ).then((m) => m.CrearProductoComponent),
+      },
+      {
         path: 'perfil',
         title: 'Perfil',
         loadComponent: () =>
