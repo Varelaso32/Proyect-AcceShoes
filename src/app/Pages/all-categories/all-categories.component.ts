@@ -88,6 +88,15 @@ export class AllCategoriesComponent {
     this.location.back();
   }
 
+  setDefaultImage(event: Event): void {
+    const element = event.target as HTMLImageElement;
+
+    // ✅ Evita bucle si ya tiene la fallback cargada
+    if (!element.src.includes('no-img.jpg')) {
+      element.src = 'assets/no-img.jpg';
+    }
+  }
+
   addToCart(product: Product): void {
     this.cartService.addToCart(product);
 

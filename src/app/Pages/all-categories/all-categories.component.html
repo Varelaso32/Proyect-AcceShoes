@@ -41,7 +41,7 @@
             <figure class="h-56 w-full overflow-hidden bg-gray-100">
               <img [src]="product.imageUrl" [alt]="product.name"
                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                (error)="product.imageUrl = '/api/placeholder/300/300'" />
+                (error)="setDefaultImage($event)" />
             </figure>
 
             <!-- Detalles -->
