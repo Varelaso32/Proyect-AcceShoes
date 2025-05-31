@@ -57,7 +57,8 @@
           <button (click)="clearCart()" class="btn btn-outline btn-warning" [disabled]="cartItems.length === 0">
             Vaciar Carrito
           </button>
-          <button class="btn btn-outline btn-accent" [routerLink]="['/chat']" [disabled]="cartItems.length === 0">
+          <button (click)="enviarMensajesDesdeCarrito()" class="btn btn-outline btn-accent"
+            [disabled]="cartItems.length === 0">
             Enviar Mensajes
           </button>
         </div>
