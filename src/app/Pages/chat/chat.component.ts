@@ -35,6 +35,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('messagesContainer')
   messagesContainer?: ElementRef<HTMLDivElement>;
+  loading = signal<boolean>(true);
 
   conversations = signal<Conversation[]>([]);
   usersMap = new Map<number, UserResponse>();
@@ -61,7 +62,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         if (convoId) {
           this.loadConversationDetails(convoId);
         }
-      });
+      },true);
 
       this.refreshSub = interval(10000).subscribe(() => {
         const selected = this.selectedConversation();
@@ -113,12 +114,15 @@ export class ChatComponent implements OnInit, OnDestroy {
     }, 100); // esperar un poco para que el DOM se actualice
   }
 
-  loadConversations(callback?: () => void) {
+  loadConversations(callback?: () => void, showLoading = false) {
+    if (showLoading) this.loading.set(true);
+
     this.chatService.getConversations().subscribe((convos) => {
       this.loadUsers(convos);
       this.conversations.set(convos);
+      if (showLoading) this.loading.set(false);
       this.cdr.detectChanges();
-      if (callback) callback(); // Ejecuta solo si se envió
+      if (callback) callback();
     });
   }
 
