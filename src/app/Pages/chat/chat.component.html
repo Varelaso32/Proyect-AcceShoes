@@ -11,39 +11,50 @@
         <div class="w-1/3 border-r border-gray-200 overflow-y-auto">
           <div class="p-4 font-bold text-lg border-b">Mensajes</div>
 
-          <div *ngIf="conversations().length === 0" class="p-4 text-gray-500">
-            No hay conversaciones aún.
+          <!-- 🔄 Spinner de carga -->
+          <div *ngIf="loading(); else loadedContent" class="p-4 text-center text-gray-500">
+            <span class="loading loading-spinner loading-md text-cyan-600"></span>
+            <p class="mt-2">Cargando conversaciones...</p>
           </div>
 
-          <div *ngFor="let convo of conversations()" class="flex gap-3 items-start p-3 hover:bg-gray-100 cursor-pointer"
-            [class.bg-gray-100]="selectedConversation()?.id === convo.id" (click)="selectConversation(convo)">
-
-            <div class="avatar">
-              <div class="w-12 rounded-full">
-                <img
-                  [src]="(convo?.seller?.id === currentUser.id ? convo?.buyer?.img : convo?.seller?.img) || 'https://i.pravatar.cc/100?u=' + convo?.id" />
-              </div>
+          <!-- ✅ Contenido cuando ya se cargaron -->
+          <ng-template #loadedContent>
+            <div *ngIf="conversations().length === 0" class="p-4 text-gray-500">
+              No hay conversaciones aún.
             </div>
 
-            <div class="flex-1">
-              <div class="font-semibold text-sm">
-                {{ convo?.seller?.id === currentUser.id ? convo?.buyer?.name : convo?.seller?.name }}
-              </div>
+            <div *ngFor="let convo of conversations()"
+              class="flex gap-3 items-start p-3 hover:bg-gray-100 cursor-pointer"
+              [class.bg-gray-100]="selectedConversation()?.id === convo.id" (click)="selectConversation(convo)">
 
-              <!-- Último mensaje (si existe) -->
-              <ng-container *ngIf="convo?.messages?.length">
-                <div class="text-sm text-gray-500 truncate">
-                  {{ convo.messages[convo.messages.length - 1]?.content }}
+              <div class="avatar">
+                <div class="w-12 rounded-full">
+                  <img
+                    [src]="(convo?.seller?.id === currentUser.id ? convo?.buyer?.img : convo?.seller?.img) || 'https://i.pravatar.cc/100?u=' + convo?.id" />
                 </div>
-              </ng-container>
+              </div>
 
-              <!-- Si no hay mensajes -->
-              <div *ngIf="!convo?.messages?.length" class="text-sm text-gray-400 italic">
-                Aún no hay mensajes
+              <div class="flex-1">
+                <div class="font-semibold text-sm">
+                  {{ convo?.seller?.id === currentUser.id ? convo?.buyer?.name : convo?.seller?.name }}
+                </div>
+
+                <!-- Último mensaje (si existe) -->
+                <ng-container *ngIf="convo?.messages?.length">
+                  <div class="text-sm text-gray-500 truncate">
+                    {{ convo.messages[convo.messages.length - 1]?.content }}
+                  </div>
+                </ng-container>
+
+                <!-- Si no hay mensajes -->
+                <div *ngIf="!convo?.messages?.length" class="text-sm text-gray-400 italic">
+                  Aún no hay mensajes
+                </div>
               </div>
             </div>
-          </div>
+          </ng-template>
         </div>
+
 
         <!-- Detalle del chat -->
         <div class="flex-1 flex flex-col overflow-hidden">

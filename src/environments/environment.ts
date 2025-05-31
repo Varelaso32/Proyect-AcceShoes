@@ -1,5 +1,5 @@
 export const environment = {
-  API_URL: 'https://fastacceshoes.onrender.com',
+  API_URL: 'http://127.0.0.1:8000',
 };
 
 export const environmentPaypal = {
