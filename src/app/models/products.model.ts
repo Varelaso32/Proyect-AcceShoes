@@ -4,7 +4,7 @@ export interface Seller {
   email: string;
   role: string;
   plan_id: number;
-  img?: string; 
+  img?: string;
 }
 
 export interface Product {
@@ -21,4 +21,5 @@ export interface Product {
   category_id: number;
   imageUrl?: string;
   category_name?: string;
+  stock?: number;
 }
