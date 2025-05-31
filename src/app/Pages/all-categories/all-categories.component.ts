@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SalesService } from '../../Shared/services/sales.service';
 import { CategoryService } from '../../Shared/services/category.service';
-import { Observable, combineLatest, map, of, switchMap } from 'rxjs';
+import { Observable, combineLatest, map, of, switchMap, tap } from 'rxjs';
 import { NavbarComponent } from '../../Shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../Shared/components/footer/footer.component';
 import { RouterLink, Router } from '@angular/router';
@@ -19,7 +19,9 @@ import Swal from 'sweetalert2';
   templateUrl: './all-categories.component.html',
 })
 export class AllCategoriesComponent {
-  groupedProducts$: Observable<Record<string, (Product & { stock: number })[]>>;
+  groupedProducts$: Observable<
+    Record<string, (Product & { stock: number; price: number })[]>
+  >;
   private productService = inject(SalesService);
   private categoryService = inject(CategoryService);
   private location = inject(Location);
@@ -29,27 +31,23 @@ export class AllCategoriesComponent {
   showBackButton = true;
 
   constructor() {
-    this.groupedProducts$ = combineLatest([
-      this.productService.getAllProducts(), // solo trae info base
-      this.categoryService.getMainCategories(),
-    ]).pipe(
-      switchMap(([products, categories]) => {
+    this.groupedProducts$ = this.productService.getAllProducts().pipe(
+      switchMap((products) => {
+        if (products.length === 0) {
+          return of([[], [], []]);
+        }
+
         const ids = products.map((p) => p.id);
         return combineLatest([
           of(products),
-          of(categories),
-          this.productService.getSaleProductsByList(ids), // ahora sí con price + stock
+          this.categoryService.getMainCategories(),
+          this.productService.getSaleProductsByList(ids),
         ]);
       }),
       map(([products, categories, sales]) => {
         const categoryMap: Record<number, string> = {};
         categories.forEach((cat) => (categoryMap[cat.id] = cat.name));
 
-        const grouped: Record<string, any[]> = {};
-        categories.forEach((cat) => (grouped[cat.name] = []));
-        grouped['Sin categoría'] = [];
-
-        // indexar sales por ID para acceder rápido
         const salesMap = new Map<number, any>();
         sales.forEach((sale: any) => {
           if (sale?.product?.id) {
@@ -57,7 +55,7 @@ export class AllCategoriesComponent {
           }
         });
 
-        products.forEach((product: any) => {
+        return products.reduce((acc, product) => {
           const sale = salesMap.get(product.id);
           const categoryName =
             categoryMap[product.category_id] ?? 'Sin categoría';
@@ -69,11 +67,11 @@ export class AllCategoriesComponent {
             stock: sale?.stock ?? 0,
           };
 
-          if (!grouped[categoryName]) grouped[categoryName] = [];
-          grouped[categoryName].push(fullProduct);
-        });
+          if (!acc[categoryName]) acc[categoryName] = [];
+          acc[categoryName].push(fullProduct);
 
-        return grouped;
+          return acc;
+        }, {} as Record<string, (Product & { stock: number; price: number })[]>);
       })
     );
   }
@@ -88,16 +86,23 @@ export class AllCategoriesComponent {
     this.location.back();
   }
 
+  setDefaultImage(event: Event): void {
+    const element = event.target as HTMLImageElement;
+    if (!element.src.includes('no-img.jpg')) {
+      element.src = 'assets/no-img.jpg';
+    }
+  }
+
   addToCart(product: Product): void {
     this.cartService.addToCart(product);
 
     Swal.fire({
       title: 'Producto agregado 🛒',
       html: `
-      <strong>${product.name}</strong><br>
-      Talla: <strong>${product.size}</strong><br>
-      Precio: <strong>$${product.price}</strong>
-    `,
+        <strong>${product.name}</strong><br>
+        Talla: <strong>${product.size}</strong><br>
+        Precio: <strong>$${product.price}</strong>
+      `,
       icon: 'success',
       confirmButtonText: 'OK',
       confirmButtonColor: '#10B981',
@@ -120,7 +125,12 @@ export class AllCategoriesComponent {
   navigateToCategoryById(categoryId: number): void {
     this.router.navigate(['/category-products', categoryId]);
   }
+
   navigateToCategory(categoryName: string): void {
     this.router.navigate(['/category', categoryName]);
+  }
+
+  trackByProductId(index: number, product: Product): number {
+    return product.id;
   }
 }

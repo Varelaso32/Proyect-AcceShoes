@@ -1,9 +1,11 @@
+import { UserResponse } from "./user.model";
+
 export interface Conversation {
-  seller_id: number;
-  buyer_id: number;
   id: number;
   created_at: string;
   last_message: string;
+  seller: UserResponse;
+  buyer: UserResponse;
   messages: Message[];
 }
 
