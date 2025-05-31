@@ -17,6 +17,7 @@ import { NavbarComponent } from '../../Shared/components/navbar/navbar.component
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -47,15 +48,21 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private chatService: ChatService,
     private userService: UserService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe((user) => {
       this.currentUser = user;
-      this.loadConversations();
 
-      // Auto refrescar cada 10 segundos
+      this.loadConversations(() => {
+        const convoId = Number(this.route.snapshot.paramMap.get('id'));
+        if (convoId) {
+          this.loadConversationDetails(convoId);
+        }
+      });
+
       this.refreshSub = interval(10000).subscribe(() => {
         const selected = this.selectedConversation();
         if (selected && this.messages.length > 0) {
@@ -106,11 +113,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     }, 100); // esperar un poco para que el DOM se actualice
   }
 
-  loadConversations() {
+  loadConversations(callback?: () => void) {
     this.chatService.getConversations().subscribe((convos) => {
-      this.loadUsers(convos); // Primero cargar usuarios
-      this.conversations.set(convos); // Luego las conversaciones
+      this.loadUsers(convos);
+      this.conversations.set(convos);
       this.cdr.detectChanges();
+      if (callback) callback(); // Ejecuta solo si se envió
     });
   }
 

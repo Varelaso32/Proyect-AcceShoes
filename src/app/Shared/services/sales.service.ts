@@ -68,4 +68,11 @@ export class SalesService {
   sellProductExternally(id: number, amount: number): Observable<any> {
     return this.http.post(`${this.api}/products/${id}/sell`, { amount });
   }
+
+  buyProduct(productId: number, amount: number): Observable<any> {
+    return this.http.post(`${this.api}/sales/products/${productId}/buy`, {
+      product_id: productId,
+      amount,
+    });
+  }
 }

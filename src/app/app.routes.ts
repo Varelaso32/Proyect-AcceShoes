@@ -152,6 +152,11 @@ export const routes: Routes = [
           import('./Pages/chat/chat.component').then((m) => m.ChatComponent),
       },
       {
+        path: 'chat/:id',
+        loadComponent: () =>
+          import('./Pages/chat/chat.component').then((m) => m.ChatComponent),
+      },
+      {
         path: 'metodo-pago',
         title: 'Pasarela de Pago',
         loadComponent: () =>
