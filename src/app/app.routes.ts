@@ -117,9 +117,9 @@ export const routes: Routes = [
         path: 'agregar-ventas',
         title: 'Crear Venta de Producto',
         loadComponent: () =>
-          import(
-            './Pages/crear-producto/crear-producto.component'
-          ).then((m) => m.CrearProductoComponent),
+          import('./Pages/crear-producto/crear-producto.component').then(
+            (m) => m.CrearProductoComponent
+          ),
       },
       {
         path: 'perfil',
@@ -148,6 +148,11 @@ export const routes: Routes = [
       {
         path: 'chat',
         title: 'Chat de Mensajes',
+        loadComponent: () =>
+          import('./Pages/chat/chat.component').then((m) => m.ChatComponent),
+      },
+      {
+        path: 'chat/:id',
         loadComponent: () =>
           import('./Pages/chat/chat.component').then((m) => m.ChatComponent),
       },

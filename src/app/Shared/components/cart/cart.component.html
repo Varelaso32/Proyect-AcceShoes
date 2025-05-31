@@ -1,51 +1,58 @@
 <app-navbar></app-navbar>
-
-<!-- Fondo gris claro y contenedor amplio -->
+<!-- Botón volver -->
+<button (click)="goBack()" class="fixed top-24 left-4 z-50 btn btn-outline shadow-md hover:scale-105 transition">
+  ⬅ Atrás
+</button>
+<!-- Fondo y contenedor -->
 <div class="flex justify-center bg-gray-100 px-2 pt-32 min-h-screen pb-20">
-  <!-- Card grande central -->
-  <div class="w-full max-w-[90%] xl:max-w-[1500px] bg-white rounded-xl shadow-xl text-gray-800 px-8 py-10 space-y-6">
+  <div
+    class="w-full max-w-[90%] xl:max-w-[1400px] bg-white rounded-2xl shadow-xl text-gray-800 px-8 py-10 space-y-8 border-t-4 border-cyan-600">
 
     <h2 class="text-4xl font-bold text-cyan-700">🛒 Tu Carrito</h2>
 
-    <div *ngIf="cartItems.length > 0; else emptyCart" class="space-y-6 pb-40">
-      <div *ngFor="let item of cartItems" class="card bg-base-100 shadow-md">
-        <div class="flex flex-col sm:flex-row gap-6 p-6 items-center">
-          <!-- Imagen -->
-          <img [src]="item.product.imageUrl" [alt]="item.product.name" class="w-32 h-32 object-cover rounded-lg border"
-            onerror="this.src='/api/placeholder/200/200'; this.onerror=null;" />
+    <div *ngIf="cartItems.length > 0; else emptyCart" class="space-y-6 pb-32">
+      <div *ngFor="let item of cartItems"
+        class="bg-base-100 border rounded-xl shadow p-6 flex flex-col md:flex-row items-center gap-6">
 
-          <!-- Detalles -->
-          <div class="flex-1 w-full">
-            <h3 class="text-xl font-semibold text-cyan-800">{{ item.product.name }}</h3>
-            <p class="text-gray-600 text-sm mb-1">{{ item.product.description }}</p>
-            
+        <!-- Imagen -->
+        <img [src]="item.product.imageUrl" [alt]="item.product.name" class="w-28 h-28 object-cover rounded-lg border"
+          onerror="this.src='/api/placeholder/200/200'; this.onerror=null;" />
 
-            <!-- Cantidad -->
-            <div class="flex items-center gap-2 mt-3">
-              <button (click)="decreaseQuantity(item)" class="btn btn-sm btn-outline btn-info">➖</button>
-              <span class="badge badge-neutral px-4">{{ item.quantity }}</span>
-              <button (click)="increaseQuantity(item)" class="btn btn-sm btn-outline btn-info">➕</button>
-            </div>
-          </div>
+        <!-- Detalles -->
+        <div class="flex-1 w-full space-y-1">
+          <h3 class="text-xl font-semibold text-cyan-800">{{ item.product.name }}</h3>
+          <p class="text-sm text-gray-500">{{ item.product.description }}</p>
+          <p class="text-sm"><strong>Precio:</strong> ${{ item.product.price | number:'1.0-0' }}</p>
+          <p class="text-sm"><strong>Subtotal:</strong>
+            <span class="text-green-600 font-bold">
+              ${{ item.product.price * item.quantity | number:'1.0-0' }}
+            </span>
+          </p>
 
-          <!-- Subtotal y eliminar -->
-          <div class="text-right">
-            
-            
-            <button (click)="removeItem(item.product.id)" class="btn btn-sm btn-error mt-2">🗑 Eliminar</button>
+          <!-- Cantidad -->
+          <div class="flex items-center gap-2 mt-2">
+            <button (click)="decreaseQuantity(item)" class="btn btn-sm btn-outline btn-info">➖</button>
+            <span class="badge badge-neutral px-4">{{ item.quantity }}</span>
+            <button (click)="increaseQuantity(item)" class="btn btn-sm btn-outline btn-info">➕</button>
           </div>
         </div>
-      </div>
 
-      <!-- Espacio para el sticky -->
-      <div class="mb-32"></div>
+        <!-- Eliminar -->
+        <div class="flex flex-col items-end gap-2">
+          <button (click)="removeItem(item.product.id)" class="btn btn-sm btn-error">🗑 Eliminar</button>
+        </div>
+      </div>
     </div>
 
-    <!-- Total fijo abajo -->
+    <!-- Total -->
     <div class="sticky bottom-0 bg-base-100 border-t pt-4 pb-6 z-10 shadow-inner">
       <div
-        class="max-w-[95%] xl:max-w-[1600px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        
+        class="max-w-[95%] xl:max-w-[1400px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+
+        <div class="text-lg font-bold text-green-700">
+          Total: ${{ getTotal() | number:'1.0-0' }}
+        </div>
+
         <div class="flex gap-2">
           <button (click)="clearCart()" class="btn btn-outline btn-warning" [disabled]="cartItems.length === 0">
             Vaciar Carrito
@@ -57,6 +64,7 @@
       </div>
     </div>
 
+    <!-- Si está vacío -->
     <ng-template #emptyCart>
       <p class="text-gray-600 text-lg">Tu carrito está vacío.</p>
     </ng-template>
