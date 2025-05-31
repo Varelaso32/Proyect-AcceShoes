@@ -4,7 +4,8 @@ import { Plan } from '../../../models/plan.model';
 import { UserService } from '../../../Shared/services/user.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-
+import { EmailService } from '../../../Shared/services/email.service';
+import { UserResponse } from '../../../models/user.model';
 declare var paypal: any;
 
 @Component({
@@ -20,7 +21,11 @@ export class PaypalComponent implements OnInit {
 
   private readonly clientId = environmentPaypal.paypalClientId;
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private emailService: EmailService
+  ) {}
 
   ngOnInit(): void {
     this.loadPaypalScript().then(() => {
@@ -28,40 +33,55 @@ export class PaypalComponent implements OnInit {
     });
   }
 
-private async handlePaymentSuccess(details: any) {
-  if (this.paymentCompleted) return;
-  this.paymentCompleted = true;
-  this.isLoading = true;
+  private async handlePaymentSuccess(details: any) {
+    if (this.paymentCompleted) return;
+    this.paymentCompleted = true;
+    this.isLoading = true;
 
-  try {
-    await this.updateUserPlan();
+    try {
+      await this.updateUserPlan();
 
-    // ✅ Mostramos un SweetAlert y redirigimos automáticamente
-    await Swal.fire({
-      icon: 'success',
-      title: '¡Pago exitoso!',
-      text: 'Tu plan ha sido actualizado.',
-      timer: 1800,
-      showConfirmButton: false,
-    });
+      // ✅ Obtener el usuario actual
+      const user: UserResponse | null =
+        this.userService.getCurrentUserValue?.();
+      if (!user) throw new Error('No se pudo obtener el usuario actual');
 
-    this.router.navigate(['/perfil'], {
-      queryParams: { payment: 'success' },
-      replaceUrl: true,
-    });
-  } catch (error) {
-    console.error('Error al actualizar el plan:', error);
-    await Swal.fire({
-      icon: 'error',
-      title: 'Error al actualizar el plan',
-      text: 'El pago se procesó pero hubo un fallo al actualizar tu plan.',
-    });
-    this.router.navigate(['/perfil']);
-  } finally {
-    this.isLoading = false;
+      // ✅ Enviar correo con datos del pago
+      await this.emailService.sendInvoiceEmail({
+        to_email: user.email,
+        plan_name: this.plan!.name,
+        description: this.plan!.description,
+        price: `$${(this.plan!.price / 100).toFixed(2)} MXN`,
+        max_posts: this.plan!.maxActivePosts?.toString() ?? 'Ilimitado',
+        promotions: this.plan!.promotionsIncluded.toString(),
+        payment_id: details.id,
+      });
+
+      // ✅ Alerta de éxito
+      await Swal.fire({
+        icon: 'success',
+        title: '¡Pago exitoso!',
+        text: 'Tu plan ha sido actualizado.',
+        timer: 1800,
+        showConfirmButton: false,
+      });
+
+      this.router.navigate(['/perfil'], {
+        queryParams: { payment: 'success' },
+        replaceUrl: true,
+      });
+    } catch (error) {
+      console.error('Error al actualizar el plan:', error);
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error al actualizar el plan',
+        text: 'El pago se procesó pero hubo un fallo al actualizar tu plan.',
+      });
+      this.router.navigate(['/perfil']);
+    } finally {
+      this.isLoading = false;
+    }
   }
-}
-
 
   private async updateUserPlan() {
     if (!this.plan) throw new Error('No plan selected');
