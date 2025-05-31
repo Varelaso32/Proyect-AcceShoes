@@ -68,6 +68,30 @@ export class SeguimientoAppComponent implements OnInit {
     this.formattedChanges = [];
   }
 
+  downloadSQL(): void {
+    const sqlLines = this.logs.map((log) => {
+      return `INSERT INTO audit_logs (action, entity, entity_id, timestamp) VALUES ('${
+        log.action
+      }', '${log.entity}', ${log.entityId ?? 'NULL'}, '${log.timestamp}');`;
+    });
+
+    const blob = new Blob([sqlLines.join('\n')], { type: 'text/sql' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'historial_auditoria.sql';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  downloadBackup() {
+    const fileUrl = '/assets/backup.sql'; // ruta en Angular
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = 'backup.sql';
+    link.click();
+  }
+
   parseDetails(details: any): string[] {
     if (!details) return [];
 

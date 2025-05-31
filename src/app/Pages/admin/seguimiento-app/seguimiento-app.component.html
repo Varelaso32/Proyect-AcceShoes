@@ -1,106 +1,119 @@
 <div class="p-6 min-h-screen">
-    <div class="bg-white rounded-xl shadow-xl overflow-hidden">
-        <!-- Header -->
-        <div class="px-6 py-4 border-b border-gray-200 bg-cyan-600 text-white">
-            <h2 class="text-2xl font-bold">Historial de Actividades</h2>
-            <p class="text-sm opacity-90">Registro de todas las acciones realizadas en el sistema</p>
-        </div>
+  <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+    <!-- Header -->
+    <div class="px-6 py-4 border-b border-gray-200 bg-cyan-600 text-white">
+      <h2 class="text-2xl font-bold">Historial de Actividades</h2>
+      <p class="text-sm opacity-90">Registro de todas las acciones realizadas en el sistema</p>
+    </div>
 
-        <!-- Controls -->
-        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 bg-white">
-            <span class="text-sm text-gray-600">Mostrando {{ logs.length }} registros</span>
-            <button (click)="clearLogs()" class="btn btn-error btn-sm text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                        clip-rule="evenodd" />
-                </svg>
-                Limpiar Historial
-            </button>
-        </div>
+    <!-- Controls -->
+    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 bg-white">
+      <span class="text-sm text-gray-600">Mostrando {{ logs.length }} registros</span>
 
-        <!-- Table -->
-        <div class="px-4 py-2 bg-white">
-            <table class="w-full table-fixed text-sm">
-                <thead class="text-left text-cyan-800 border-b border-gray-200">
-                    <tr>
-                        <th class="py-2 w-1/6">Acción</th>
-                        <th class="py-2 w-1/4">Entidad</th>
-                        <th class="py-2 w-1/6">ID</th>
-                        <th class="py-2 w-1/4">Fecha</th>
-                        <th class="py-2 w-1/6">Detalles</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let log of logs" class="hover:bg-gray-50 text-gray-800">
-                        <!-- Acción -->
-                        <td class="py-2">
-                            <div [ngClass]="{
+      <div class="flex gap-2">
+        <button (click)="downloadBackup()" class="btn btn-accent btn-sm text-white ml-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M3 3a1 1 0 011-1h4v2H5v12h10V4h-3V2h4a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3z" />
+            <path d="M9 7h2v6h3l-4 4-4-4h3V7z" />
+          </svg>
+          Descargar SQL
+        </button>
+
+
+        <button (click)="clearLogs()" class="btn btn-error btn-sm text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+              clip-rule="evenodd" />
+          </svg>
+          Limpiar Historial
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Table -->
+    <div class="px-4 py-2 bg-white">
+      <table class="w-full table-fixed text-sm">
+        <thead class="text-left text-cyan-800 border-b border-gray-200">
+          <tr>
+            <th class="py-2 w-1/6">Acción</th>
+            <th class="py-2 w-1/4">Entidad</th>
+            <th class="py-2 w-1/6">ID</th>
+            <th class="py-2 w-1/4">Fecha</th>
+            <th class="py-2 w-1/6">Detalles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of logs" class="hover:bg-gray-50 text-gray-800">
+            <!-- Acción -->
+            <td class="py-2">
+              <div [ngClass]="{
                 'badge bg-green-100 text-green-700': log.action === 'CREATE',
                 'badge bg-blue-100 text-blue-700': log.action === 'UPDATE',
                 'badge bg-red-100 text-red-700': log.action === 'DELETE',
                 'badge bg-yellow-100 text-yellow-700': log.action !== 'CREATE' && log.action !== 'UPDATE' && log.action !== 'DELETE'
               }" class="px-2 py-1 rounded-full text-xs font-semibold text-center w-max">
-                                {{ log.action }}
-                            </div>
-                        </td>
+                {{ log.action }}
+              </div>
+            </td>
 
-                        <!-- Entidad -->
-                        <td class="py-2">{{ log.entity }}</td>
+            <!-- Entidad -->
+            <td class="py-2">{{ log.entity }}</td>
 
-                        <!-- ID -->
-                        <td class="py-2">{{ log.entityId || 'N/A' }}</td>
+            <!-- ID -->
+            <td class="py-2">{{ log.entityId || 'N/A' }}</td>
 
-                        <!-- Fecha -->
-                        <td class="py-2">{{ formatDate(log.timestamp) }}</td>
+            <!-- Fecha -->
+            <td class="py-2">{{ formatDate(log.timestamp) }}</td>
 
-                        <!-- Detalles -->
-                        <td class="py-2 text-left align-middle">
-                            <button (click)="openDetails(log)">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-5 w-5 text-cyan-600 hover:text-cyan-800 transition duration-150 ease-in-out hover:scale-110 cursor-pointer"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </td>
+            <!-- Detalles -->
+            <td class="py-2 text-left align-middle">
+              <button (click)="openDetails(log)">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 text-cyan-600 hover:text-cyan-800 transition duration-150 ease-in-out hover:scale-110 cursor-pointer"
+                  viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </td>
 
-                    </tr>
+          </tr>
 
-                    <!-- Vacío -->
-                    <tr *ngIf="logs.length === 0">
-                        <td colspan="5" class="text-center text-gray-400 py-4">No hay registros de actividad</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+          <!-- Vacío -->
+          <tr *ngIf="logs.length === 0">
+            <td colspan="5" class="text-center text-gray-400 py-4">No hay registros de actividad</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>
 
 <!-- Modal Detalles -->
 <div *ngIf="selectedLog" class="modal modal-open">
-    <div class="modal-box rounded-2xl shadow-2xl border border-gray-200 max-w-xl w-full">
-        <h3 class="text-2xl font-bold mb-4 text-center text-cyan-700">Detalles de la acción</h3>
+  <div class="modal-box rounded-2xl shadow-2xl border border-gray-200 max-w-xl w-full">
+    <h3 class="text-2xl font-bold mb-4 text-center text-cyan-700">Detalles de la acción</h3>
 
-        <div class="space-y-2 text-sm text-gray-700">
-            <p><strong>Acción:</strong> {{ selectedLog.action }}</p>
-            <p><strong>Entidad:</strong> {{ selectedLog.entity }}</p>
-            <p><strong>Fecha:</strong> {{ formatDate(selectedLog.timestamp) }}</p>
-            <div>
-                <p class="font-semibold mb-1">Cambios:</p>
-                <ul class="list-disc pl-5 space-y-1">
-                    <li *ngFor="let change of formattedChanges">{{ change }}</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Botón cerrar -->
-        <div class="modal-action mt-6 flex justify-end">
-            <button type="button" class="btn bg-gray-300 hover:bg-gray-400 text-black" (click)="closeDetails()">
-                Cerrar
-            </button>
-        </div>
+    <div class="space-y-2 text-sm text-gray-700">
+      <p><strong>Acción:</strong> {{ selectedLog.action }}</p>
+      <p><strong>Entidad:</strong> {{ selectedLog.entity }}</p>
+      <p><strong>Fecha:</strong> {{ formatDate(selectedLog.timestamp) }}</p>
+      <div>
+        <p class="font-semibold mb-1">Cambios:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li *ngFor="let change of formattedChanges">{{ change }}</li>
+        </ul>
+      </div>
     </div>
+
+    <!-- Botón cerrar -->
+    <div class="modal-action mt-6 flex justify-end">
+      <button type="button" class="btn bg-gray-300 hover:bg-gray-400 text-black" (click)="closeDetails()">
+        Cerrar
+      </button>
+    </div>
+  </div>
 </div>
